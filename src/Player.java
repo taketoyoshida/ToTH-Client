@@ -2,7 +2,7 @@ public class Player {
     String name;        //名前
     Status status;      //ステータス
     Material material;  //素材
-    int remainAction;         //残り行動数
+    int remainAction;   //残り行動数
     boolean isDead;     //死亡判定
     int rank;
 
