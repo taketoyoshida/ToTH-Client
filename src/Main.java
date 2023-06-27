@@ -1,17 +1,32 @@
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String args[]) {
+        Game frame = new Game("MyTitle");
+        frame.setVisible(true);
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        /*フルスクリーンに出来るが、画像と画面の大きさと合わない
+        GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+        gd.setFullScreenWindow(frame);
+        DisplayMode[] modelist = gd.getDisplayModes();
+        DisplayMode activeMode = null;
+        for(DisplayMode mode : modelist){
+            System.out.println(mode);
+            if(mode.getWidth()==800&& mode.getHeight()==600 &&
+                    ((activeMode == null)
+                    || activeMode.getBitDepth()<mode.getBitDepth()
+                    ||activeMode.getBitDepth()==mode.getBitDepth() && activeMode.getRefreshRate()<=mode.getRefreshRate())) {
+                activeMode = mode;
+            }
         }
+
+        if(activeMode!=null){
+            gd.setDisplayMode(activeMode);
+        }else{
+            System.out.println("解像度変更失敗");
+        }*/
     }
 }
