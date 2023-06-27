@@ -1,13 +1,14 @@
 public class Enemy {
 
     // 敵の例
-    EnemyStatus mob1 = new EnemyStatus(1,"Mob1", 1,1,1,1,1);
-    EnemyStatus mob2 = new EnemyStatus(2,"Mob2", 2,2,1,1,1);
+    EnemyStatus mob1 = new EnemyStatus(1, "Mob1", 1, 1, 1, 1, 1);
+    EnemyStatus mob2 = new EnemyStatus(2, "Mob2", 2, 2, 1, 1, 1);
 
-    void action(){
+    void action() {
         //動き方
     }
-    void attack(){
+
+    void attack() {
         //射程内にプレイヤーがいたら攻撃する
 
     }
@@ -15,7 +16,7 @@ public class Enemy {
 
 }
 
-class EnemyStatus{
+class EnemyStatus {
     int ID;
     String name;
     int HP;
@@ -24,7 +25,7 @@ class EnemyStatus{
     int RNG;
     int LV;
 
-    public EnemyStatus(int id,String name, int hp, int atk, int mov,int rng, int lv){
+    public EnemyStatus(int id, String name, int hp, int atk, int mov, int rng, int lv) {
         // HPと攻撃
         this.ID = id;
         this.name = name;
