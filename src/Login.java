@@ -87,6 +87,9 @@ public class Login extends JFrame implements MouseListener {
                 //send("0", PW.getText());
                 //System.out.println("confirm!");
                 System.out.println("sol=1");
+                setVisible(false);
+                Client testGame = new Client("MyTitle");
+                testGame.setVisible(true);
                 dispose();
             }
         }
