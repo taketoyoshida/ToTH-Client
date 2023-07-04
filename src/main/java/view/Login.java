@@ -1,5 +1,7 @@
+package view;
 
-import java.awt.*;
+import view.Game;
+
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import javax.swing.*;
@@ -88,7 +90,7 @@ public class Login extends JFrame implements MouseListener {
                 //System.out.println("confirm!");
                 System.out.println("sol=1");
                 setVisible(false);
-                Client testGame = new Client("MyTitle");
+                Game testGame = new Game("MyTitle");
                 testGame.setVisible(true);
                 dispose();
             }
@@ -122,7 +124,7 @@ public class Login extends JFrame implements MouseListener {
 
 
         /*public static void main(String args[]) {
-            String[] mainmenu= {"SignUp","Login"};
+            String[] mainmenu= {"SignUp","view.Login"};
             int choice = JOptionPane.showOptionDialog(null,"MAINMENU","MAINMENU",0,JOptionPane.QUESTION_MESSAGE,null,mainmenu,mainmenu[0]);
             if(choice==0) {
                 new SignIn("新規登録",choice);

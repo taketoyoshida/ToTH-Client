@@ -1,3 +1,5 @@
+package model;
+
 public class Status {
     private int HP;     //HP
     private int ATK;    //攻撃力

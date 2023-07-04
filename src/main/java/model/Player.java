@@ -1,3 +1,8 @@
+package model;
+
+import model.Material;
+import model.Status;
+
 public class Player {
     String name;        //名前
     Status status;      //ステータス
