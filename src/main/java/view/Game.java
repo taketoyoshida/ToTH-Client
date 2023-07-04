@@ -1,3 +1,5 @@
+package view;
+
 import java.awt.event.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
