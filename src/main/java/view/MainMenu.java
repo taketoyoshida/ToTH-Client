@@ -75,6 +75,9 @@ public class MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
+            setVisible(false);
+            Game testGame = new Game("testGame");
+            testGame.setVisible(true);
         }
 
     }
