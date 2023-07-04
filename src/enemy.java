@@ -1,56 +1,57 @@
 import java.util.Random;
 
-public class enemy_place{
-    class EnemyPlace {
-        EnemyStatus ES;
-        int X,Y;
-        public EnemyPlace(EnemyStatus es, int x, int y) {
-            // HPと攻撃
-            this.ES = es;
-            this.X = x;
-            this.Y = y;
-        }
-        static EnemyPlace[] EP;
-    public static void Enemy_make(String rank) {
-        int enemy_number=number();
-        EP  = new EnemyPlace[enemy_number];
 
-        for(int i=0; i<=enemy_number ;i++){
-            int[][] map;
-            map =new int[8][12];
-            EP[i].ES.ID=1;
-            place(EP[i],map);
-
-        }
-    }
-    static int number(){
-        Random rand = new Random();
-        int enemy_number;
-        enemy_number=rand.nextInt(3)+1;
-        return enemy_number;
-    }
-    static int kinds(String rank){
-        int kinds=0;
-        Random rand = new Random();
-        if(rank=="bronze"){
-            kinds=rand.nextInt(3);
-        }else if(rank == "silver"){
-            kinds=rand.nextInt(3)+2;
-        }else if(rank == "gold"){
-            kinds=rand.nextInt(3)+4;
-        }
-        return kinds;
-    }
-    static void place(EnemyPlace ep,int map[][]){
-        Random rand = new Random();
-        do {
-            ep.X = rand.nextInt(12) + 1;
-            ep.Y = rand.nextInt(8) + 1;
-        }while(map[ep.X][ep.Y]==2/*動けない場所*/);
-    }
-
-}
 public class enemy {
+    public class enemy_place{
+        class EnemyPlace {
+            EnemyStatus ES;
+            int X,Y;
+            public EnemyPlace(EnemyStatus es, int x, int y) {
+                // HPと攻撃
+                this.ES = es;
+                this.X = x;
+                this.Y = y;
+            }
+            static EnemyPlace[] EP;
+            public static void Enemy_make(String rank) {
+                int enemy_number=number();
+                EP  = new EnemyPlace[enemy_number];
+
+                for(int i=0; i<=enemy_number ;i++){
+                    int[][] map;
+                    map =new int[8][12];
+                    EP[i].ES.ID=1;
+                    place(EP[i],map);
+
+                }
+            }
+            static int number(){
+                Random rand = new Random();
+                int enemy_number;
+                enemy_number=rand.nextInt(3)+1;
+                return enemy_number;
+            }
+            static int kinds(String rank){
+                int kinds=0;
+                Random rand = new Random();
+                if(rank=="bronze"){
+                    kinds=rand.nextInt(3);
+                }else if(rank == "silver"){
+                    kinds=rand.nextInt(3)+2;
+                }else if(rank == "gold"){
+                    kinds=rand.nextInt(3)+4;
+                }
+                return kinds;
+            }
+            static void place(EnemyPlace ep,int map[][]){
+                Random rand = new Random();
+                do {
+                    ep.X = rand.nextInt(12) + 1;
+                    ep.Y = rand.nextInt(8) + 1;
+                }while(map[ep.X][ep.Y]==2/*動けない場所*/);
+            }
+
+        }
 
 
 
