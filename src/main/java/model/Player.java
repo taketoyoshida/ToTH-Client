@@ -8,7 +8,7 @@ import java.util.Map;
 public class Player {
     private String name;                              // 名前
     private Status status;                            // ステータス
-    private Map<model.Material, Integer> materials;         // 素材
+    private Map<Material, Integer> materials;         // 素材
     private int remainAction;                         // 残り行動数
     private boolean isDead;                           // 死亡判定
     private int rank;                                 // ランク
