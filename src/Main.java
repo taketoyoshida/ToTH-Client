@@ -2,7 +2,7 @@
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String args[]) {
-        Client frame = new Client("MyTitle");
+        Login frame = new Login("MyTitle",0);
         frame.setVisible(true);
 
 
