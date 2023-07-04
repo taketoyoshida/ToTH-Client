@@ -69,6 +69,9 @@ public class MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("そんな装備で大丈夫か？");
+            setVisible(false);
+            Workshop_MainMenu wsTest = new Workshop_MainMenu("testWorkShop");
+            wsTest.setVisible(true);
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");

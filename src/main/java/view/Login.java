@@ -122,15 +122,33 @@ public class Login extends JFrame implements MouseListener {
 
     }
 
+    public static void main(String args[]) {
+        Login frame = new Login("MyTitle",0);
+        frame.setVisible(true);
 
-        /*public static void main(String args[]) {
-            String[] mainmenu= {"SignUp","view.Login"};
-            int choice = JOptionPane.showOptionDialog(null,"MAINMENU","MAINMENU",0,JOptionPane.QUESTION_MESSAGE,null,mainmenu,mainmenu[0]);
-            if(choice==0) {
-                new SignIn("新規登録",choice);
-            }else {
-                new SignIn("ログイン",choice);
+
+        /*フルスクリーンに出来るが、画像と画面の大きさと合わない
+        GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+
+        gd.setFullScreenWindow(frame);
+        DisplayMode[] modelist = gd.getDisplayModes();
+        DisplayMode activeMode = null;
+        for(DisplayMode mode : modelist){
+            System.out.println(mode);
+            if(mode.getWidth()==800&& mode.getHeight()==600 &&
+                    ((activeMode == null)
+                    || activeMode.getBitDepth()<mode.getBitDepth()
+                    ||activeMode.getBitDepth()==mode.getBitDepth() && activeMode.getRefreshRate()<=mode.getRefreshRate())) {
+                activeMode = mode;
             }
+        }
+
+        if(activeMode!=null){
+            gd.setDisplayMode(activeMode);
+        }else{
+            System.out.println("解像度変更失敗");
         }*/
+    }
 }
 
