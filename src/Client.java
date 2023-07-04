@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 public class Client extends JFrame implements KeyListener {
+
     int x = 408, y = 206;//キャラクターの座標
     boolean keyFlag = false;//キーが無限に押されないようにするための変数
     JLayeredPane p = new JLayeredPane();
@@ -133,5 +134,6 @@ public class Client extends JFrame implements KeyListener {
         setContentPane(p);
         addKeyListener(this);
     }
+
 
 }
