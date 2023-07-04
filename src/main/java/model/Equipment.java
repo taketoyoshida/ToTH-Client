@@ -1,5 +1,6 @@
 package model;
 
+import model.Status;
 public class Equipment {
     int ID;
     String name;
