@@ -16,8 +16,10 @@ public class enemy_place{
         EP  = new EnemyPlace[enemy_number];
 
         for(int i=0; i<=enemy_number ;i++){
-            EP[i].ES= ;
-            place(EP[i]);
+            int[][] map;
+            map =new int[8][12];
+            EP[i].ES.ID=1;
+            place(EP[i],map);
 
         }
     }
@@ -39,12 +41,12 @@ public class enemy_place{
         }
         return kinds;
     }
-    static void place(EnemyPlace ep){
+    static void place(EnemyPlace ep,int map[][]){
         Random rand = new Random();
         do {
             ep.X = rand.nextInt(12) + 1;
             ep.Y = rand.nextInt(8) + 1;
-        }while(map[ep.X][ep.Y]==/*動けない場所*/);
+        }while(map[ep.X][ep.Y]==2/*動けない場所*/);
     }
 
 }
@@ -58,7 +60,7 @@ public class enemy {
         EnemyStatus mob1 = new EnemyStatus(1, "Mob1", 1, 1, 1, 1, 1);
         EnemyStatus mob2 = new EnemyStatus(2, "Mob2", 2, 2, 1, 1, 1);
 
-        void action(EnemyStatus mob) {
+        void action(EnemyStatus mob,int map[][]) {
 
             int x=0,y=0;
             Random rand = new Random();
@@ -72,13 +74,13 @@ public class enemy {
 
                 X=X+x;
                 Y=Y+y;
-            }while(x==0&&y==0&&X<0&&Y<0&&X>12&&Y>12&&map[X][Y]==/*通れないマス*/);
+            }while(x==0&&y==0&&X<0&&Y<0&&X>12&&Y>12&&map[X][Y]==2);
             //動き方
         }
 
-        void attack(EnemyStatus mob) {
-            if(map[X+1][Y-1]==||map[X+1][Y]==||map[X+1][Y+1]==||map[X][Y-1]==||map[X][Y]==||map[X][Y+1]==||map[X-1][Y-1]==||map[X-1][Y]==||map[X-1][Y+1]==){
-                Player.HP=Player.HP-mob.ATK;
+        void attack(EnemyStatus mob,int map[][],int HP) {
+            if(map[X+1][Y-1]==1||map[X+1][Y]==1||map[X+1][Y+1]==1||map[X][Y-1]==1||map[X][Y]==1||map[X][Y+1]==1||map[X-1][Y-1]==1||map[X-1][Y]==1||map[X-1][Y+1]==1){
+                HP=HP-mob.ATK;
             }
             //射程内にプレイヤーがいたら攻撃する
 
