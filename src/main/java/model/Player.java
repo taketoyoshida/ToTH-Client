@@ -1,18 +1,16 @@
 package model;
 
-import model.Material;
-import model.Status;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Player {
-    private String name;                              // 名前
-    private Status status;                            // ステータス
-    private Map<Material, Integer> materials;         // 素材
-    private int remainAction;                         // 残り行動数
-    private boolean isDead;                           // 死亡判定
-    private int rank;                                 // ランク
-    private int score;                                // スコア
+    private String name;                        // 名前
+    private Status status;                      // ステータス
+    private Map<Material, Integer> materials;   // 素材
+    private int remainAction;                   // 残り行動数
+    private boolean isDead;                     // 死亡判定
+    private int rank;                           // ランク
+    private int score;                          // スコア
 
     public Player(String name, Status status) {
         this.name = name;
@@ -77,14 +75,13 @@ public class Player {
     }
 
 
-
-    public void removeMaterial(Material material, int quantity) {
+    public boolean removeMaterial(Material material, int quantity) {
         int currentQuantity = materials.getOrDefault(material, 0);
-        if (currentQuantity >= quantity) {
-            materials.put(material, currentQuantity - quantity);
-        } else {
-            System.out.println("Error: Not enough materials.");
+        if (currentQuantity < quantity) {
+            return false;
         }
+        materials.put(material, currentQuantity - quantity);
+        return true;
     }
 
     public int getMaterialQuantity(Material material) {

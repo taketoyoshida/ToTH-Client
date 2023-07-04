@@ -1,45 +1,20 @@
 package model;
 
-import model.Status;
-import java.awt.image.BufferedImage;
+public enum Material {
+    MATERIAL1("Material1"),
+    MATERIAL2("Material2"),
+    MATERIAL3("Material3"),
+    MATERIAL4("Material4"),
+    MATERIAL5("Material5");
 
-public class Material {
-    private String name;                 // 名前
-    private BufferedImage photo;         // 写真
-    private int quantity;                // 数量
+    private final String name;
 
-    public Material(String name, BufferedImage photo) {
+    Material(String name) {
         this.name = name;
-        this.photo = photo;
-        this.quantity = 0;
     }
 
     public String getName() {
         return name;
-    }
-
-    public BufferedImage getPhoto() {
-        return photo;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void increaseQuantity(int amount) {
-        this.quantity += amount;
-    }
-
-    public void decreaseQuantity(int amount) {
-        if (quantity >= amount) {
-            this.quantity -= amount;
-        } else {
-            System.out.println("Error: Not enough materials.");
-        }
     }
 }
 
