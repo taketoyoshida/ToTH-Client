@@ -1,3 +1,5 @@
+package model;
+
 public class Game {
     int turn;   //手番
     int[][] board = new int[8][12];

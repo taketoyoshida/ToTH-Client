@@ -4,6 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
-public class Client extends JFrame implements KeyListener {
+public class Client  {
 
 }
