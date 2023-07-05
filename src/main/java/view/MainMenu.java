@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 public class MainMenu extends JFrame implements MouseListener {
 
     int x = 408, y = 206;//キャラクターの座標
+    WindowBase base;
     JLayeredPane p = new JLayeredPane();
     ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
     ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
@@ -21,21 +22,20 @@ public class MainMenu extends JFrame implements MouseListener {
     JButton b2 = new JButton(bIcon2);
 
 
-    public MainMenu(String title) {
+    public MainMenu(WindowBase base) {
 
-        setTitle(title);
-        setBounds(100, 100, 816, 512);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.base = base;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
 
-        paint();
+        paint(p);
 
+        base.change(p);
 
     }
 
-    public void paint() {//ボタンのみなさんの召喚
+    public void paint(JLayeredPane p) {//ボタンのみなさんの召喚
 
         p.setLayout(null);      //配置の初期化
 
@@ -50,7 +50,6 @@ public class MainMenu extends JFrame implements MouseListener {
         p.add(b2);
 
 
-        setContentPane(p);
         addMouseListener(this);
     }
 
@@ -75,9 +74,7 @@ public class MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
-            setVisible(false);
-            Game testGame = new Game("testGame");
-            testGame.setVisible(true);
+            Game testGame = new Game(base);
         }
 
     }
@@ -92,6 +89,12 @@ public class MainMenu extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
         // TODO 自動生成されたメソッド・スタブ
 
+    }
+
+    public static void main(String args[]) {
+        WindowBase base = new WindowBase("test");
+        MainMenu test = new MainMenu(base);
+        base.setVisible(true);
     }
 }
 

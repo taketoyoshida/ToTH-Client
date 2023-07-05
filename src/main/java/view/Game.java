@@ -8,6 +8,7 @@ import javax.swing.JLayeredPane;
 
 public class Game extends JFrame implements KeyListener {
 
+    WindowBase base;
     int x = 408, y = 206;//キャラクターの座標
     boolean keyFlag = false;//キーが無限に押されないようにするための変数
     JLayeredPane p = new JLayeredPane();
@@ -18,12 +19,49 @@ public class Game extends JFrame implements KeyListener {
     JLabel label2 = new JLabel(icon2);
     //Test7とかいう名前は適当に変えること
 
+    public Game(WindowBase base) {
 
+        this.base = base;
+        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        p.add(label1);
+        p.setLayer(label1, 10);
+
+        //paint();
+        label2.setBounds(x, y, 32, 32);
+        p.add(label2);//数字がでかいほど手前に来る
+        p.setLayer(label2, 20);
+
+        //setContentPane(p);
+        addKeyListener(this);
+
+        base.change(p);
+
+
+    }
+
+    public void paint() {//キャラクターの描画とレイヤーの設定
+        label2.setBounds(x, y, 32, 32);
+
+        //JLabel label2 = new JLabel();
+        //label2.setIcon(icon2);
+
+        //JPanel p = new JPanel();
+        //JLayeredPaneを使うとレイヤー設定ができる
+
+
+        p.add(label2);//数字がでかいほど手前に来る
+        p.setLayer(label2, 20);
+
+        //setContentPane(p);
+        addKeyListener(this);
+    }
+    @Override
     public void keyTyped(KeyEvent e) {
 
 
     }
 
+    @Override
     public void keyPressed(KeyEvent e) { //Keyを押したときの動作
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
@@ -55,6 +93,7 @@ public class Game extends JFrame implements KeyListener {
 
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {//Keyboardを離したときの動作
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
@@ -106,35 +145,10 @@ public class Game extends JFrame implements KeyListener {
     }
 
 
-    public Game(String title) {
-
-        setTitle(title);
-        setBounds(100, 100, 816, 512);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
-        p.add(label1);
-        p.setLayer(label1, 10);
-
-        paint();
-
-
-    }
-
-    public void paint() {//キャラクターの描画とレイヤーの設定
-        label2.setBounds(x, y, 32, 32);
-
-        //JLabel label2 = new JLabel();
-        //label2.setIcon(icon2);
-
-        //JPanel p = new JPanel();
-        //JLayeredPaneを使うとレイヤー設定ができる
-
-
-        p.add(label2);//数字がでかいほど手前に来る
-        p.setLayer(label2, 20);
-
-        setContentPane(p);
-        addKeyListener(this);
+    public static void main(String args[]) {
+        WindowBase base = new WindowBase("test");
+        Game test = new Game(base);
+        base.setVisible(true);
     }
 
 
