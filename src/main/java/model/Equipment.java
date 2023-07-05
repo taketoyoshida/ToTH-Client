@@ -4,7 +4,7 @@ public class Equipment {
     int ID;
     String name;
     int position;   // 0:頭 1:胴 2:右手 3: 左手
-    Status status;
+    Status status;  // 練習
 
     public Equipment(int id, String name, int pos, Status sta) {
         this.ID = id;
