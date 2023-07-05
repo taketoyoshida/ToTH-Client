@@ -9,14 +9,16 @@ public class MainMenu extends JFrame implements MouseListener {
     int x = 408, y = 206;//キャラクターの座標
     JLayeredPane p = new JLayeredPane();
     ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
+    ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
+    ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
 
     JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
     //JLabel label2 = new JLabel(icon2);
     //Test7とかいう名前は適当に変えること
 
-    JButton b1 = new JButton("装備");
-    JButton b2 = new JButton("\n対戦");
+    JButton b1 = new JButton(bIcon1);
+    JButton b2 = new JButton(bIcon2);
 
 
     public MainMenu(String title) {
@@ -38,12 +40,12 @@ public class MainMenu extends JFrame implements MouseListener {
         p.setLayout(null);      //配置の初期化
 
 
-        b1.setBounds(100, -20, 200, 50);
+        b1.setBounds(100, 220, 200, 50);
         b1.addMouseListener(this);
         p.add(b1);
 
 
-        b2.setBounds(100, -70, 200, 200);
+        b2.setBounds(100, 280, 200, 150);
         b2.addMouseListener(this);
         p.add(b2);
 
@@ -67,9 +69,15 @@ public class MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("そんな装備で大丈夫か？");
+            setVisible(false);
+            Workshop_MainMenu wsTest = new Workshop_MainMenu("testWorkShop");
+            wsTest.setVisible(true);
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
+            setVisible(false);
+            Game testGame = new Game("testGame");
+            testGame.setVisible(true);
         }
 
     }
