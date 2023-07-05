@@ -5,7 +5,7 @@ import model.Blueprint;
 import java.util.Random;
 
 public class Gatya {
-    /*public static void main(String[] args){
+    /*public static void main(String[] args){//コメントアウト解除で100連無料ガチャ！
         Player player = new Player();
         player.addCoin(10000);
         Gatya gatya = new Gatya();
@@ -20,12 +20,12 @@ public class Gatya {
         }
     }*/
 
-    public String gatya(Player player, Blueprint[] bp){
-        if(player.getCoin()<100){
+    public String gatya(Player player, Blueprint[] bp){//ガチャを引くシステム
+        if(player.getCoin()<100){//コインが足りない場合
             System.out.println("coinが足りません");
 
-        }else{
-            player.addCoin(-100);
+        }else{//コインがあり、ガチャが引ける場合
+            player.addCoin(-100);//コイン消費
             Random rand = new Random();
             double randomValue = rand.nextDouble();
 
@@ -33,7 +33,7 @@ public class Gatya {
             for (int i = 0; i < bp.length; i++) {
                 cumulativeProbability += bp[i].getRate();
                 if (randomValue <= cumulativeProbability) {
-                    return bp[i].getName();
+                    return bp[i].getName();//ガチャ結果を返す
                 }
             }
 
