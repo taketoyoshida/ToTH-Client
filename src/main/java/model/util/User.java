@@ -1,4 +1,5 @@
 package model.util;
+
 import model.Material;
 
 import java.util.Map;
@@ -25,6 +26,13 @@ public class User {
 
     public int getBalance() {
         return balance;
+    }
+
+    public void mutateBalance(int amount) throws Exception {
+        if (balance + amount < 0) {
+            throw new Exception("残高が足りません");
+        }
+        balance += amount;
     }
 
     public void setRank(int rank) {
