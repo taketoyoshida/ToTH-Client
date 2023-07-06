@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class WindowBase extends JFrame{
+public class WindowBase extends JFrame {
 
     public WindowBase(String title) {
         setTitle(title);

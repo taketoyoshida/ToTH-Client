@@ -32,7 +32,7 @@ public class Game extends JFrame implements KeyListener {
         p.setLayer(label2, 20);
 
         //setContentPane(p);
-        addKeyListener(this);
+        base.addKeyListener(this);
 
         base.change(p);
 
@@ -53,7 +53,7 @@ public class Game extends JFrame implements KeyListener {
         p.setLayer(label2, 20);
 
         //setContentPane(p);
-        addKeyListener(this);
+        //addKeyListener(this);
     }
 
     @Override
