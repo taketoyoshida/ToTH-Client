@@ -1,14 +1,15 @@
-package model;
+package model.util;
+import model.Material;
 
 import java.util.Map;
 
-public class Users {
+public class User {
     int ID;
-    String userName;
+    private String userName;
     //所持装備・素材・設計図
     private Map<Material, Integer> materials;   // 素材
-    int Balance;
-    int rank;
+    private int Balance;
+    private int rank;
 
 
 
