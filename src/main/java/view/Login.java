@@ -127,8 +127,9 @@ public class Login extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        Login frame = new Login(new WindowBase("dummy"));
-        frame.setVisible(true);
+        WindowBase base = new WindowBase("test");
+        Login frame = new Login(base);
+        base.setVisible(true);
 
 
         /*フルスクリーンに出来るが、画像と画面の大きさと合わない
