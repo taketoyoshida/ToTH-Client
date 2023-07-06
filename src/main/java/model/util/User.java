@@ -11,6 +11,27 @@ public class User {
     private int balance;
     private int rank;
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public int getRank() {
+        return rank;
+    }
 }
