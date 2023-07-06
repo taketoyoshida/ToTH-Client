@@ -55,6 +55,7 @@ public class Game extends JFrame implements KeyListener {
         //setContentPane(p);
         addKeyListener(this);
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
