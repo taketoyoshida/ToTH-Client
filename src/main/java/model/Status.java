@@ -1,22 +1,20 @@
 package model;
 
 public class Status {
-    private int HP;     //HP
-    private int ATK;    //攻撃力
-    private int MOV;    //行動力
-    private int EYE;  //視野
-    private int RNG;  //射程
+    private int HP;     // HP
+    private int ATK;    // 攻撃力
+    private int MOV;    // 行動力
+    private int EYE;    // 視野
+    private int RNG;    // 射程
 
-    public Status(int hp, int atk, int mov, int eye, int rng){
-        setStatus(hp,atk,mov,eye,rng);
+    public Status(int HP, int ATK, int MOV, int EYE, int RNG) {
+        this.HP = HP;
+        this.ATK = ATK;
+        this.MOV = MOV;
+        this.EYE = EYE;
+        this.RNG = RNG;
     }
-    public void setStatus(int hp, int atk, int mov, int eye, int rng) {
-        HP = hp;
-        ATK = atk;
-        MOV = mov;
-        EYE = eye;
-        RNG = rng;
-    }
+
     public int getHP() {
         return HP;
     }

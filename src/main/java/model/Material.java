@@ -1,7 +1,20 @@
 package model;
 
-public class Material {
-    String[] MaterialName = new String[10];
-    int[] Possess = new int[10];
+public enum Material {
+    MATERIAL1("Material1"),
+    MATERIAL2("Material2"),
+    MATERIAL3("Material3"),
+    MATERIAL4("Material4"),
+    MATERIAL5("Material5");
 
+    private final String name;
+
+    Material(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
+
