@@ -7,9 +7,10 @@ import java.awt.event.MouseListener;
 
 public class Workshop_MainMenu extends JFrame implements MouseListener {
 
-    int x = 408, y = 206;//キャラクターの座標
-    JLayeredPane p = new JLayeredPane();
-    ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
+    private final WindowBase base;
+    private int x = 408, y = 206;//キャラクターの座標
+    private JLayeredPane p = new JLayeredPane();
+    private ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
     //ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
     //ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
@@ -24,16 +25,16 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     JButton b4 = new JButton("装備する");
 
 
-    public Workshop_MainMenu(String title) {
+    public Workshop_MainMenu(WindowBase base) {
 
-        setTitle(title);
-        setBounds(100, 100, 816, 512);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.base = base;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
 
         paint();
+
+        base.change(p);
 
 
     }
@@ -59,7 +60,7 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
         p.add(b4);
 
 
-        setContentPane(p);
+        //setContentPane(p);
         addMouseListener(this);
     }
 
@@ -77,7 +78,7 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
-                System.out.println("ガチャは悪い文明…！破壊する…！");
+            System.out.println("ガチャは悪い文明…！破壊する…！");
         }
         if (e.getSource() == b2) {
             System.out.println("2-4-11");
@@ -105,32 +106,9 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
 
     public static void main(String args[]) {
-        Workshop_MainMenu frame = new Workshop_MainMenu("MyTitle");
-        frame.setVisible(true);
-
-
-        /*フルスクリーンに出来るが、画像と画面の大きさと合わない
-        GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-
-        gd.setFullScreenWindow(frame);
-        DisplayMode[] modelist = gd.getDisplayModes();
-        DisplayMode activeMode = null;
-        for(DisplayMode mode : modelist){
-            System.out.println(mode);
-            if(mode.getWidth()==800&& mode.getHeight()==600 &&
-                    ((activeMode == null)
-                    || activeMode.getBitDepth()<mode.getBitDepth()
-                    ||activeMode.getBitDepth()==mode.getBitDepth() && activeMode.getRefreshRate()<=mode.getRefreshRate())) {
-                activeMode = mode;
-            }
-        }
-
-        if(activeMode!=null){
-            gd.setDisplayMode(activeMode);
-        }else{
-            System.out.println("解像度変更失敗");
-        }*/
+        WindowBase base = new WindowBase("test");
+        Workshop_MainMenu test = new Workshop_MainMenu(base);
+        base.setVisible(true);
     }
 
 }

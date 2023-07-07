@@ -12,27 +12,22 @@ import javax.swing.JTextField;
 
 
 public class Login extends JFrame implements MouseListener {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
-    int signup_or_login;
-
-    JLabel label1 = new JLabel("SignUp");
-    JLabel label2 = new JLabel("Menual");
-    JTextField ID = new JTextField(16);
-    JTextField PW = new JTextField(16);
-
-
-    JPanel p = (JPanel) getContentPane();
-    JButton button = new JButton("決定");
-    JButton button2 = new JButton("ログインへ");
+    private int signup_or_login;
+    private final WindowBase base;
+    private JLabel label1 = new JLabel("SignUp");
+    private JLabel label2 = new JLabel("Manual");
+    private JTextField ID = new JTextField(16);
+    private JTextField PW = new JTextField(16);
+    private JLayeredPane p = new JLayeredPane();
+    private JButton button = new JButton("決定");
+    private JButton button2 = new JButton("ログインへ");
 
 
-    public Login(String title, int signup_or_login) {
-        super(title);
-        this.signup_or_login = signup_or_login;
+    public Login(WindowBase base) {
+        this.signup_or_login = 0;
+        this.base = base;
         button.addMouseListener(this);
         button2.addMouseListener(this);
 
@@ -50,16 +45,20 @@ public class Login extends JFrame implements MouseListener {
 
         p.setLayout(new FlowLayout());
         p.add(label1);
+        p.setLayer(label1, 0);
         p.add(label2);
+        p.setLayer(label2, 0);
         p.add(ID);
+        p.setLayer(ID, 0);
         p.add(PW);
+        p.setLayer(PW, 0);
         p.add(button);
+        p.setLayer(button, 0);
         p.add(button2);
+        p.setLayer(button2, 0);
 
-        setSize(200, 200);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
+        base.change(p);
+
     }
 
     @Override
@@ -89,9 +88,8 @@ public class Login extends JFrame implements MouseListener {
                 //send("0", PW.getText());
                 //System.out.println("confirm!");
                 System.out.println("sol=1");
-                setVisible(false);
-                MainMenu testMenu = new MainMenu("MyTitle");
-                testMenu.setVisible(true);
+                //setVisible(false);
+                MainMenu testMenu = new MainMenu(base);
                 dispose();
             }
         }
@@ -123,8 +121,9 @@ public class Login extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        Login frame = new Login("MyTitle",0);
-        frame.setVisible(true);
+        WindowBase base = new WindowBase("test");
+        Login frame = new Login(base);
+        base.setVisible(true);
 
 
         /*フルスクリーンに出来るが、画像と画面の大きさと合わない
