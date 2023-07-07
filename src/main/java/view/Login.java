@@ -15,7 +15,7 @@ public class Login extends JFrame implements MouseListener {
     private static final long serialVersionUID = 1L;
 
     private int signup_or_login;
-    private WindowBase base;
+    private final WindowBase base;
     private JLabel label1 = new JLabel("SignUp");
     private JLabel label2 = new JLabel("Manual");
     private JTextField ID = new JTextField(16);
