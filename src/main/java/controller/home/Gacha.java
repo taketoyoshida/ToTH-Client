@@ -16,12 +16,31 @@ public class Gacha {
 
     static {
         probabilitySheet = new TreeMap<>();
-        // this is dummy value
         // orders does not matter as it uses TreeMap
-        probabilitySheet.put(0.2, EquipmentItem.EQUIPMENT1);
-        probabilitySheet.put(0.5, EquipmentItem.EQUIPMENT2);
-        probabilitySheet.put(0.8, EquipmentItem.EQUIPMENT3);
-        probabilitySheet.put(1.0, EquipmentItem.EQUIPMENT4);
+        probabilitySheet.put(0.1, EquipmentItem.leatherHelmet);
+        probabilitySheet.put(0.05, EquipmentItem.copperHelmet);
+        probabilitySheet.put(0.03, EquipmentItem.ironHelmet);
+        probabilitySheet.put(0.01, EquipmentItem.diamondHelmet);
+        probabilitySheet.put(0.07, EquipmentItem.leatherArmor);
+        probabilitySheet.put(0.05, EquipmentItem.copperArmor);
+        probabilitySheet.put(0.03, EquipmentItem.ironArmor);
+        probabilitySheet.put(0.01, EquipmentItem.diamondArmor);
+        probabilitySheet.put(0.08, EquipmentItem.woodSword);
+        probabilitySheet.put(0.04, EquipmentItem.ironSword);
+        probabilitySheet.put(0.01, EquipmentItem.diamondSword);
+        probabilitySheet.put(0.08, EquipmentItem.woodSpear);
+        probabilitySheet.put(0.04, EquipmentItem.ironSpear);
+        probabilitySheet.put(0.01, EquipmentItem.diamondSpear);
+        probabilitySheet.put(0.08, EquipmentItem.woodArrow);
+        probabilitySheet.put(0.04, EquipmentItem.ironArrow);
+        probabilitySheet.put(0.01, EquipmentItem.diamondArrow);
+        probabilitySheet.put(0.08, EquipmentItem.woodShield);
+        probabilitySheet.put(0.04, EquipmentItem.ironShield);
+        probabilitySheet.put(0.01, EquipmentItem.diamondShield);
+        probabilitySheet.put(0.08, EquipmentItem.woodDagger);
+        probabilitySheet.put(0.04, EquipmentItem.ironDagger);
+        probabilitySheet.put(0.01, EquipmentItem.diamondDagger);
+
     }
 
     public static GachaResult play(User user) throws Exception {//ガチャを引くシステム
