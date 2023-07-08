@@ -1,11 +1,11 @@
 package model;
 
 public enum Material {
-    wood("木"),
-    iron("鉄"),
-    diamond("ダイヤ"),
-    leather("皮"),
-    copper("銅");
+    WOOD("木"),
+    IRON("鉄"),
+    DIAMOND("ダイヤ"),
+    LEATHER("皮"),
+    COPPER("銅");
 
     private final String name;
 

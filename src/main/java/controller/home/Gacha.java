@@ -17,29 +17,29 @@ public class Gacha {
     static {
         probabilitySheet = new TreeMap<>();
         // orders does not matter as it uses TreeMap
-        probabilitySheet.put(0.1, EquipmentItem.leatherHelmet);
-        probabilitySheet.put(0.05, EquipmentItem.copperHelmet);
-        probabilitySheet.put(0.03, EquipmentItem.ironHelmet);
-        probabilitySheet.put(0.01, EquipmentItem.diamondHelmet);
-        probabilitySheet.put(0.07, EquipmentItem.leatherArmor);
-        probabilitySheet.put(0.05, EquipmentItem.copperArmor);
-        probabilitySheet.put(0.03, EquipmentItem.ironArmor);
-        probabilitySheet.put(0.01, EquipmentItem.diamondArmor);
-        probabilitySheet.put(0.08, EquipmentItem.woodSword);
-        probabilitySheet.put(0.04, EquipmentItem.ironSword);
-        probabilitySheet.put(0.01, EquipmentItem.diamondSword);
-        probabilitySheet.put(0.08, EquipmentItem.woodSpear);
-        probabilitySheet.put(0.04, EquipmentItem.ironSpear);
-        probabilitySheet.put(0.01, EquipmentItem.diamondSpear);
-        probabilitySheet.put(0.08, EquipmentItem.woodArrow);
-        probabilitySheet.put(0.04, EquipmentItem.ironArrow);
-        probabilitySheet.put(0.01, EquipmentItem.diamondArrow);
-        probabilitySheet.put(0.08, EquipmentItem.woodShield);
-        probabilitySheet.put(0.04, EquipmentItem.ironShield);
-        probabilitySheet.put(0.01, EquipmentItem.diamondShield);
-        probabilitySheet.put(0.08, EquipmentItem.woodDagger);
-        probabilitySheet.put(0.04, EquipmentItem.ironDagger);
-        probabilitySheet.put(0.01, EquipmentItem.diamondDagger);
+        probabilitySheet.put(0.1, EquipmentItem.LEATHER_HELMET);
+        probabilitySheet.put(0.05, EquipmentItem.COPPER_HELMET);
+        probabilitySheet.put(0.03, EquipmentItem.IRON_HELMET);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_HELMET);
+        probabilitySheet.put(0.07, EquipmentItem.LEATHER_ARMOR);
+        probabilitySheet.put(0.05, EquipmentItem.COPPER_ARMOR);
+        probabilitySheet.put(0.03, EquipmentItem.IRON_ARMOR);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_ARMOR);
+        probabilitySheet.put(0.08, EquipmentItem.WOOD_SWORD);
+        probabilitySheet.put(0.04, EquipmentItem.IRON_SWORD);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_SWORD);
+        probabilitySheet.put(0.08, EquipmentItem.WOOD_SPEAR);
+        probabilitySheet.put(0.04, EquipmentItem.IRON_SPEAR);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_SPEAR);
+        probabilitySheet.put(0.08, EquipmentItem.WOOD_ARROW);
+        probabilitySheet.put(0.04, EquipmentItem.IRON_ARROW);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_ARROW);
+        probabilitySheet.put(0.08, EquipmentItem.WOOD_SHIELD);
+        probabilitySheet.put(0.04, EquipmentItem.IRON_SHIELD);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_SHIELD);
+        probabilitySheet.put(0.08, EquipmentItem.WOOD_DAGGER);
+        probabilitySheet.put(0.04, EquipmentItem.IRON_DAGGER);
+        probabilitySheet.put(0.01, EquipmentItem.DIAMOND_DAGGER);
 
     }
 
