@@ -12,23 +12,17 @@ import javax.swing.JTextField;
 
 
 public class Login extends JFrame implements MouseListener {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
-    int signup_or_login;
-    WindowBase base;
-
-    JLabel label1 = new JLabel("SignUp");
-    JLabel label2 = new JLabel("Manual");
-    JTextField ID = new JTextField(16);
-    JTextField PW = new JTextField(16);
-
-
-    JLayeredPane p = new JLayeredPane();
-    JButton button = new JButton("決定");
-    JButton button2 = new JButton("ログインへ");
+    private int signup_or_login;
+    private final WindowBase base;
+    private JLabel label1 = new JLabel("SignUp");
+    private JLabel label2 = new JLabel("Manual");
+    private JTextField ID = new JTextField(16);
+    private JTextField PW = new JTextField(16);
+    private JLayeredPane p = new JLayeredPane();
+    private JButton button = new JButton("決定");
+    private JButton button2 = new JButton("ログインへ");
 
 
     public Login(WindowBase base) {
@@ -51,17 +45,17 @@ public class Login extends JFrame implements MouseListener {
 
         p.setLayout(new FlowLayout());
         p.add(label1);
-        p.setLayer(label1,0);
+        p.setLayer(label1, 0);
         p.add(label2);
-        p.setLayer(label2,0);
+        p.setLayer(label2, 0);
         p.add(ID);
-        p.setLayer(ID,0);
+        p.setLayer(ID, 0);
         p.add(PW);
-        p.setLayer(PW,0);
+        p.setLayer(PW, 0);
         p.add(button);
-        p.setLayer(button,0);
+        p.setLayer(button, 0);
         p.add(button2);
-        p.setLayer(button2,0);
+        p.setLayer(button2, 0);
 
         base.change(p);
 
