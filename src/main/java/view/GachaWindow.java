@@ -15,8 +15,8 @@ import static java.awt.Font.BOLD;
 public class GachaWindow extends JFrame implements MouseListener {
 
     WindowBase base;
-    int coin;
-    String[] puText = new String[5];
+    int coin;                                  //コイン数を格納する配列
+    String[] puText = new String[5];           //新規装備の名前を５つ格納する配列
     JLayeredPane p = new JLayeredPane();             //操作で変化しない部分を表示する
     JLayeredPane p2 = new JLayeredPane();            //操作ごとに変化する部分を格納する
     ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
@@ -38,7 +38,7 @@ public class GachaWindow extends JFrame implements MouseListener {
     JButton b1 = new JButton("１回 回す");
     JButton b2 = new JButton("10回 回す");
 
-    Timer timer = new Timer(false);
+    Timer timer = new Timer(false);        //待機画面表示用のタイマー
 
 
     public GachaWindow(WindowBase base) {
@@ -50,8 +50,6 @@ public class GachaWindow extends JFrame implements MouseListener {
         start();
 
         base.change(p);
-
-
     }
 
     public void menu() {                  //ガチャ画面の基本パーツを召喚する
@@ -87,10 +85,10 @@ public class GachaWindow extends JFrame implements MouseListener {
         addMouseListener(this);
     }
 
-    public void start() {
+    public void start() {         //ガチャ画面の最初の表示を行うメソッド
 
         p2.removeAll();
-        menu();
+        menu();                   //ここで基本パーツを召喚する
 
         textLabel2.setText("[現在ランクで排出される装備]");
         textLabel2.setFont(new Font("ＭＳ ゴシック", BOLD, 24));
@@ -124,21 +122,26 @@ public class GachaWindow extends JFrame implements MouseListener {
         p.setLayer(p2, 10);
     }
 
-    public void gachaWait() {
+    public void gachaWait() {       //ガチャの待機演出を表示するメソッド
         p2.removeAll();
         ImageIcon wIcon = new ImageIcon("./assets/imgs/GachaWait.gif");
         JLabel waitLabel = new JLabel(wIcon);
         waitLabel.setBounds(0, 0, 200, 200);  //中央のガチャ情報の表示
         p2.add(waitLabel);
         p2.setLayer(waitLabel, 0);
+        b1.setEnabled(false);      //待機演出中はガチャボタンは無効化する
+        b2.setEnabled(false);
 
         p2.setBounds(316, 60, 200, 200);
         p.add(p2);
         p.setLayer(p2, 10);
-
     }
 
-    public void gachaSingle() {
+    public void gachaSingle() {    //単発ガチャを回すメソッド
+        /*このメソッドでは、少し待機して処理させる内容をTimerTaskのインスタンスにしている*/
+        /*Timerクラスを用いてTimerTaskを遅れて呼び出すことで、TimerTask内の操作を時間差で実行している*/
+        /*Timerクラスは使い捨てなのでTimerTask内で定義し直す操作も行っている*/
+        /*TimerTaskクラスも使い捨てだが、このメソッドを実行する際にインスタンスを新規生成して使っているので問題ない*/
         TimerTask gachaSingle = new TimerTask() {
             @Override
             public void run() {
@@ -151,6 +154,8 @@ public class GachaWindow extends JFrame implements MouseListener {
                 p2.setBounds(384, 128, 64, 64);
                 p.add(p2);
                 p.setLayer(p2, 10);
+                b1.setEnabled(true);    //忘れずにボタンを有効化する
+                b2.setEnabled(true);
                 base.change(p);
 
                 timer.cancel();
@@ -161,6 +166,8 @@ public class GachaWindow extends JFrame implements MouseListener {
     }
 
     public void gachaTenTimes() {
+        /*やってることはgachaSingleと同じ*/
+        /*TimerTask内に10回分繰り返しがあるくらい*/
         TimerTask gachaTenTimes = new TimerTask() {
             @Override
             public void run() {
@@ -178,6 +185,8 @@ public class GachaWindow extends JFrame implements MouseListener {
                 p2.setBounds(91, 60, 650, 200);
                 p.add(p2);
                 p.setLayer(p2, 10);
+                b1.setEnabled(true);
+                b2.setEnabled(true);
                 base.change(p);
 
                 timer.cancel();
@@ -195,7 +204,6 @@ public class GachaWindow extends JFrame implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO 自動生成されたメソッド・スタブ
 
     }
 
