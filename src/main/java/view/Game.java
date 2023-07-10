@@ -8,15 +8,15 @@ import javax.swing.JLayeredPane;
 
 public class Game extends JFrame implements KeyListener {
 
-    WindowBase base;
-    int x = 408, y = 206;//キャラクターの座標
-    boolean keyFlag = false;//キーが無限に押されないようにするための変数
-    JLayeredPane p = new JLayeredPane();
-    ImageIcon icon1 = new ImageIcon("./assets/imgs/イラスト7.jpg");    //画像のディレクトリは調整してもろて
-    ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
+    private final WindowBase base;
+    private int x = 408, y = 206;//キャラクターの座標
+    private boolean keyFlag = false;//キーが無限に押されないようにするための変数
+    private JLayeredPane p = new JLayeredPane();
+    private ImageIcon icon1 = new ImageIcon("./assets/imgs/イラスト7.jpg");    //画像のディレクトリは調整してもろて
+    private ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
 
-    JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
-    JLabel label2 = new JLabel(icon2);
+    private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
+    private JLabel label2 = new JLabel(icon2);
     //Test7とかいう名前は適当に変えること
 
     public Game(WindowBase base) {

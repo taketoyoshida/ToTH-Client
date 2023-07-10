@@ -1,15 +1,19 @@
 package model;
 
 public class Equipment {
-    int ID;
-    String name;
-    int position;   // 0:頭 1:胴 2:右手 3: 左手
-    Status status;
+    public final EquipmentItem item;
+    private Status status;
 
-    public Equipment(int id, String name, int pos, Status sta) {
-        this.ID = id;
-        this.name = name;
-        this.position = pos;
+    public Equipment(int id, String name, EquipmentItem item, Status sta) {
+        this.item = item;
+        this.status = sta;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void updateStatus(Status sta) {
         this.status = sta;
     }
 }

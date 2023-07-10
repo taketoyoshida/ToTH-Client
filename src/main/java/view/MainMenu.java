@@ -7,19 +7,19 @@ import java.awt.event.MouseListener;
 public class MainMenu extends JFrame implements MouseListener {
 
     int x = 408, y = 206;//キャラクターの座標
-    WindowBase base;
-    JLayeredPane p = new JLayeredPane();
-    ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
-    ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
-    ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
+    private final WindowBase base;
+    private JLayeredPane p = new JLayeredPane();
+    private ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
+    private ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
+    private ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
 
-    JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
+    private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
     //JLabel label2 = new JLabel(icon2);
     //Test7とかいう名前は適当に変えること
 
-    JButton b1 = new JButton(bIcon1);
-    JButton b2 = new JButton(bIcon2);
+    private JButton b1 = new JButton(bIcon1);
+    private JButton b2 = new JButton(bIcon2);
 
 
     public MainMenu(WindowBase base) {
