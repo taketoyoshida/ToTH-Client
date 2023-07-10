@@ -79,6 +79,7 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("ガチャは悪い文明…！破壊する…！");
+            GachaWindow gachaTest = new GachaWindow(base);
         }
         if (e.getSource() == b2) {
             System.out.println("2-4-11");
