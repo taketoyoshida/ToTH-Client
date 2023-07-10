@@ -10,7 +10,7 @@ public class GachaGateway {
         public GachaMock.GachaResult[] play10() throws Exception;
     }
 
-    public class MockGachaGateway implements IGachaGateway {
+    public static class MockGachaGateway implements IGachaGateway {
         public GachaMock.GachaResult play() throws Exception {
             return new GachaMock().play(new User(1234, "test", 1000, 1000));
         }
