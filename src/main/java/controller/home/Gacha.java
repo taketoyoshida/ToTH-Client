@@ -52,12 +52,12 @@ public class Gacha {
         EquipmentItem item = entry.getValue();
         return new GachaResult(new Blueprint(item));
     }
-}
 
-class GachaResult {
-    public final Blueprint bp;
+    public static class GachaResult {
+        public final Blueprint bp;
 
-    public GachaResult(Blueprint bp) {
-        this.bp = bp;
+        public GachaResult(Blueprint bp) {
+            this.bp = bp;
+        }
     }
 }
