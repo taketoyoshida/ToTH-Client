@@ -10,7 +10,7 @@ public class WindowBase extends JFrame {
 
     public WindowBase(String title) {
         setTitle(title);
-        setSize(816, 512);
+        setSize(832, 512);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
