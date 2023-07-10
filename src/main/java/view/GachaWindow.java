@@ -1,5 +1,7 @@
 package view;
 
+import controller.networking.GachaGateway;
+
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.ImageIcon;
@@ -39,6 +41,7 @@ public class GachaWindow extends JFrame implements MouseListener {
     JButton b2 = new JButton("10回 回す");
 
     Timer timer = new Timer(false);
+
 
 
     public GachaWindow(WindowBase base) {

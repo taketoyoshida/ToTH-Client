@@ -1,16 +1,14 @@
 package controller.home;
 
-import graphql.org.antlr.v4.runtime.tree.Tree;
 import model.Blueprint;
 import model.EquipmentItem;
 import model.util.User;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class Gacha {
+public class GachaMock {
 
     private static final TreeMap<Double, EquipmentItem> probabilitySheet;
 
