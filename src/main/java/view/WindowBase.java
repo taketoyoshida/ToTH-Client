@@ -5,14 +5,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class WindowBase extends JFrame {
+    /*あらゆる画面表示に必要となるクラス*/
+    /*いわばこれが皿で、他のクラスからこの皿を呼び出して盛り付けるかんじ*/
 
     public WindowBase(String title) {
         setTitle(title);
-        setSize(816, 512);
+        setSize(832, 512);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void change(JLayeredPane p) {//ボタンのみなさんの召喚
+    public void change(JLayeredPane p) {
+        /*盛り付けたい内容(JLayeredPaneクラス)を引数に入れる*/
+        /*するとメソッド内で今使ってるお皿に盛り付けてくれる*/
         getContentPane().removeAll();
         super.add(p);//パネルの追加
         validate();//更新
