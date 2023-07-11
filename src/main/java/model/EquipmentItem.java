@@ -30,6 +30,7 @@ public enum EquipmentItem {
     public final EquipmentPosition position;
     public final int req_wood, req_iron, req_diamond, req_leather, req_copper;
 
+
     EquipmentItem(
             int id,
             String name,
