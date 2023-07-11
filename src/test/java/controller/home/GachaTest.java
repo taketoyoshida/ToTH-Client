@@ -5,7 +5,7 @@ import model.util.User;
 
 import java.util.EnumMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class GachaTest {
 

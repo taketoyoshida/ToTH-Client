@@ -1,7 +1,7 @@
 package model;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public enum EnemyInfo {
     ENEMY_1(1, "敵1", 10, 7, 1, 1, "test.png",

@@ -1,13 +1,7 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.MediaTracker;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 public class ImageScaling extends JFrame {       //画像の拡大縮小を行うクラス
     ImageIcon icon;

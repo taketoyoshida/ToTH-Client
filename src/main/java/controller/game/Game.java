@@ -30,7 +30,8 @@ public class Game {
         turnNum = 0;
         random = new Random();
         // TODO: Gateway should be properly initialized
-        this.gateway = new GameGateway.IGameGateway() {};
+        this.gateway = new GameGateway.IGameGateway() {
+        };
     }
 
     //ゲームのメインループ
@@ -147,7 +148,7 @@ public class Game {
             if (game.getPiece(ROW, COL) != null
                     || game.getPiecesAround(new Position(ROW, COL)).size() == 0) continue;// 当該マスに障害物含む何かがあったら再生成
             // TODO: Implement Piece
-            game.setPiece(new Position(ROW,COL),new Piece());
+            game.setPiece(new Position(ROW, COL), new Piece());
             break;
         } while (true);// 敵がセットされるまで続く
     }
