@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import static java.awt.Font.BOLD;
+
 public class Workshop extends JFrame implements ActionListener {
 
     private final WindowBase base;
@@ -25,6 +27,7 @@ public class Workshop extends JFrame implements ActionListener {
     JLabel label2 = new JLabel(icon2);
     JLabel label3 = new JLabel(icon3);
     JLabel label4 = new JLabel(icon3);
+    JLabel[] textLabel = new JLabel[6];
 
     JScrollPane sp = new JScrollPane();
     JViewport vp = sp.getViewport();
@@ -38,7 +41,11 @@ public class Workshop extends JFrame implements ActionListener {
         p.add(label1);
         p.setLayer(label1, -10);
 
-        menu();
+        for (int i = 0; i < textLabel.length; i++) {
+            textLabel[i] = new JLabel();
+        }
+
+        start();
 
         base.change(p);
 
@@ -72,11 +79,15 @@ public class Workshop extends JFrame implements ActionListener {
         p.add(b1);
         b1.addActionListener(this);
         p.setLayer(b1, 0);
-        b1.setEnabled(false);
     }
 
     public void start() {
-
+        menu();
+        b1.setEnabled(false);
+        printInfo("装備を選択してください", 0);
+        p2.setBounds(0,0,832,549);
+        p.add(p2);
+        p.setLayer(p2, 10);
     }
 
     public void getList() {
@@ -98,6 +109,16 @@ public class Workshop extends JFrame implements ActionListener {
         }
         listPane.setBounds(16, 16, 176, 10000);
         listPane.setPreferredSize(new Dimension(176, pf));
+    }
+
+    private void printInfo(String info, int n) {
+        System.out.println("test");
+        if (n < 0 || n > textLabel.length) return;
+        textLabel[n].setText(info);
+        textLabel[n].setFont(new Font("ＭＳ ゴシック", BOLD, 22));
+        textLabel[n].setBounds(230, 340 + n * 26, 562, 22);
+        p2.add(textLabel[n]);
+        p2.setLayer(textLabel[n], 10);
     }
 
     public void actionPerformed(ActionEvent e) {
