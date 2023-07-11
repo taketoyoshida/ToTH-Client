@@ -8,9 +8,9 @@ public class EnemyStatus {
     int ATK;
     int MOV;
     int RNG;
-    int LV;
+    int RANK;
 
-    public EnemyStatus(int id, String name, int hp, int atk, int mov, int rng, int lv, Position pos) {
+    public EnemyStatus(int id, String name, int hp, int atk, int mov, int rng, Position pos) {
         // HPと攻撃
         this.ID = id;
         this.name = name;
@@ -18,7 +18,6 @@ public class EnemyStatus {
         this.ATK = atk;
         this.MOV = mov;
         this.RNG = rng;
-        this.LV = lv;
         this.pos = pos;
     }
 }
