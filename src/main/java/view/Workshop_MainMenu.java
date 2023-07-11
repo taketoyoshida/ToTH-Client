@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 public class Workshop_MainMenu extends JFrame implements MouseListener {
 
     private final WindowBase base;
-    private int x = 408, y = 206;//キャラクターの座標
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
     //ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
