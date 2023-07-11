@@ -17,7 +17,7 @@ class GachaTest {
         for (int i = 0; i < 1000; i++) {
             try {
                 var result = GachaMock.play(user);
-                count.put(result.bp.baseItem, count.getOrDefault(result.bp.baseItem, 0) + 1);
+                count.put(result.bp.baseItem(), count.getOrDefault(result.bp.baseItem(), 0) + 1);
             } catch (Exception e) {
                 fail("Gacha.play(user) should not result in error");
             }

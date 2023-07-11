@@ -31,6 +31,7 @@ public enum EquipmentItem {
     public final int req_wood, req_iron, req_diamond, req_leather, req_copper;
     public final String imgPath;
 
+
     EquipmentItem(
             int id,
             String name,
