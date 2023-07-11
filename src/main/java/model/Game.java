@@ -1,6 +1,9 @@
 package model;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Game {
     public static final int BOARD_ROW = 8;
@@ -28,5 +31,20 @@ public class Game {
 
     public Piece getPiece(int x, int y) {
         return board.get(new Position(x, y));
+    }
+
+    // 対象のマスの周囲のコマを返す
+    public Set<Map.Entry<Position, Piece>> getPiecesAround(Position pos) {
+        Set<Map.Entry<Position, Piece>> results = new HashSet<>();
+        for (Map.Entry<Position, Piece> entry : board.entrySet()) {
+            if (entry.getKey().getY() == pos.getY() &&
+                    (entry.getKey().getX() == pos.getX() - 1 || entry.getKey().getX() == pos.getX() + 1)) {
+                results.add(entry);
+            } else if (entry.getKey().getX() == pos.getX() &&
+                    (entry.getKey().getY() == pos.getY() - 1 || entry.getKey().getY() == pos.getY() + 1)) {
+                results.add(entry);
+            }
+        }
+        return results;
     }
 }
