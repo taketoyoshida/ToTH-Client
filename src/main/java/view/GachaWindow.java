@@ -3,15 +3,12 @@ package view;
 import controller.home.GachaMock;
 import controller.networking.GachaGateway;
 
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JButton;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.awt.Font.BOLD;
 
@@ -55,6 +52,12 @@ public class GachaWindow extends JFrame implements MouseListener {
 
         base.change(p);
         gateway = new GachaGateway.MockGachaGateway();
+    }
+
+    public static void main(String args[]) {
+        WindowBase base = new WindowBase("test");
+        GachaWindow test = new GachaWindow(base);
+        base.setVisible(true);
     }
 
     public void menu() {                  //ガチャ画面の基本パーツを召喚する
@@ -159,11 +162,11 @@ public class GachaWindow extends JFrame implements MouseListener {
             @Override
             public void run() {
                 p2.removeAll();
-                ImageIcon iIcon = new ImageIcon(result.bp.baseItem.getAssetPath());
-                if (iIcon.getImageLoadStatus()!= java.awt.MediaTracker.COMPLETE){
+                ImageIcon iIcon = new ImageIcon(result.bp.baseItem().getAssetPath());
+                if (iIcon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
                     iIcon = new ImageIcon("./assets/imgs/TestItemShield.png");
                     System.out.println(iIcon.getImageLoadStatus());
-                    System.out.println("アイテムの画像が見つかりませんでした: " + result.bp.baseItem.getAssetPath());
+                    System.out.println("アイテムの画像が見つかりませんでした: " + result.bp.baseItem().getAssetPath());
                 }
                 JLabel itemLabel = new JLabel(isc.scale(iIcon, 2.0));
                 itemLabel.setBounds(0, 0, 64, 64);  //中央のガチャ情報の表示
@@ -199,10 +202,10 @@ public class GachaWindow extends JFrame implements MouseListener {
                 p2.removeAll();
                 ImageIcon[] iIcon = new ImageIcon[10];
                 for (int i = 0; i < 10; i++) {
-                    iIcon[i] = new ImageIcon(results[i].bp.baseItem.getAssetPath());
+                    iIcon[i] = new ImageIcon(results[i].bp.baseItem().getAssetPath());
                     if (iIcon[i].getImageLoadStatus() != MediaTracker.COMPLETE) {
                         iIcon[i] = new ImageIcon("./assets/imgs/TestItemShield.png");
-                        System.out.println("アイテムの画像が見つかりませんでした: " + results[i].bp.baseItem.getAssetPath());
+                        System.out.println("アイテムの画像が見つかりませんでした: " + results[i].bp.baseItem().getAssetPath());
                     }
                     JLabel itemLabel = new JLabel(isc.scale(iIcon[i], 2.0));
                     if (i < 5) itemLabel.setBounds(55 + 119 * i, 24, 64, 64);
@@ -260,13 +263,6 @@ public class GachaWindow extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
         // TODO 自動生成されたメソッド・スタブ
 
-    }
-
-
-    public static void main(String args[]) {
-        WindowBase base = new WindowBase("test");
-        GachaWindow test = new GachaWindow(base);
-        base.setVisible(true);
     }
 
 }

@@ -21,7 +21,7 @@ public class User {
         this.balance = balance;
         this.rank = rank;
         this.materials = new EnumMap<>(Material.class);
-        this.blueprints =new HashMap<>();
+        this.blueprints = new HashMap<>();
     }
 
     public void setUsername(String username) {

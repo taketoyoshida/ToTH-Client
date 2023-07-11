@@ -1,8 +1,6 @@
 package view;
 
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class WindowBase extends JFrame {
     /*あらゆる画面表示に必要となるクラス*/

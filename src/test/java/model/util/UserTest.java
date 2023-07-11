@@ -3,7 +3,8 @@ package model.util;
 import model.Blueprint;
 import model.EquipmentItem;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class UserTest {
