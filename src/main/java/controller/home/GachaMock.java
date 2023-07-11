@@ -4,12 +4,11 @@ import model.Blueprint;
 import model.EquipmentItem;
 import model.util.User;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class Gacha {
+public class GachaMock {
 
     private static final TreeMap<Double, EquipmentItem> probabilitySheet;
 
@@ -51,12 +50,12 @@ public class Gacha {
         EquipmentItem item = entry.getValue();
         return new GachaResult(new Blueprint(item));
     }
-}
 
-class GachaResult {
-    public final Blueprint bp;
+    public static class GachaResult {
+        public final Blueprint bp;
 
-    public GachaResult(Blueprint bp) {
-        this.bp = bp;
+        public GachaResult(Blueprint bp) {
+            this.bp = bp;
+        }
     }
 }
