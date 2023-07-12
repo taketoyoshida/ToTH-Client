@@ -102,7 +102,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
     public void start() {
         menu();
         //printInfo("装備を選択してください", 0);
-        p2.setBounds(0,0,832,549);
+        p2.setBounds(0, 0, 832, 549);
         p.add(p2);
         p.setLayer(p2, 10);
     }
@@ -128,9 +128,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
         listPane.setPreferredSize(new Dimension(176, pf));
     }
 
-    private void printStatus(){
+    private void printStatus() {
         int testHP = 5;
-        JLabel testLabel2 = new JLabel(" HP:"+String.format("%2d", testHP));
+        JLabel testLabel2 = new JLabel(" HP:" + String.format("%2d", testHP));
         testLabel2.setBounds(112, 354, 1000, 27);
         testLabel2.setFont(new Font("MS ゴシック", BOLD, 22));
         p.add(testLabel2);
