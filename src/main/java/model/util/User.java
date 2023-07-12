@@ -1,7 +1,7 @@
 package model.util;
 
 import model.Material;
-
+import model.Equipment;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +9,9 @@ import java.util.Map;
 public class User {
     int ID;
     private String username;
-    //所持装備・素材・設計図
-    private EnumMap<Material, Integer> materials;   // 素材
+    private Map<Equipment,Integer> equipments;//所持装備
+    // 素材・設計図
+    private EnumMap<Material, Integer> materials;// 素材
     private int balance;
     private int rank;
 
@@ -20,6 +21,7 @@ public class User {
         this.balance = balance;
         this.rank = rank;
         this.materials = new EnumMap<>(Material.class);
+        this.equipments=new HashMap<>();
     }
 
     public void setUsername(String username) {
@@ -66,5 +68,15 @@ public class User {
             throw new Exception("Not enough materials");
         }
         materials.put(material, materials.get(material) - amount);
+    }
+    public boolean equipmentPossesion(Equipment equipment){
+        if(equipments.getOrDefault(equipment,0)>=1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public void addEquipment(Equipment equipment) {
+        equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
     }
 }
