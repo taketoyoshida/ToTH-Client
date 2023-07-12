@@ -1,6 +1,7 @@
 package model.util;
 
 import model.Blueprint;
+import model.Equipment;
 import model.Material;
 
 import java.util.EnumMap;
@@ -11,6 +12,7 @@ public class User {
     int ID;
     private String username;
     private Map<Blueprint, Integer> blueprints; //設計図
+    private Map<Equipment, Integer> equipments;//所持装備
     private EnumMap<Material, Integer> materials;   // 素材
     private int balance;
     private int rank;
@@ -22,6 +24,7 @@ public class User {
         this.rank = rank;
         this.materials = new EnumMap<>(Material.class);
         this.blueprints = new HashMap<>();
+        this.equipments = new HashMap<>();
     }
 
     public void setUsername(String username) {
@@ -74,6 +77,14 @@ public class User {
         materials.put(material, materials.get(material) - amount);
     }
 
+    public void addEquipment(Equipment equipment) {
+        equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
+    }
+
+    public boolean hasEquipment(Equipment equipment) {
+        return equipments.getOrDefault(equipment, 0) > 0;
+    }
+
     public void addBlueprint(Blueprint blueprint, int quantity) {
         blueprints.put(blueprint, blueprints.getOrDefault(blueprint, 0) + quantity);
     }
@@ -91,6 +102,4 @@ public class User {
     public int getBlueprintQuantity(Blueprint blueprint) {
         return blueprints.getOrDefault(blueprint, 0);
     }
-
-
 }

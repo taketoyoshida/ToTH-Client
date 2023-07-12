@@ -28,4 +28,20 @@ public class Status {
     public int getRNG() {
         return RNG;
     }
+
+    public void setHP(int HP) {
+        this.HP = HP;
+    }
+
+    public void setATK(int ATK) {
+        this.ATK = ATK;
+    }
+
+    public void setMOV(int MOV) {
+        this.MOV = MOV;
+    }
+
+    public void setRNG(int RNG) {
+        this.RNG = RNG;
+    }
 }
