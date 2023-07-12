@@ -5,10 +5,10 @@ import model.Equipment;
 import model.EquipmentItem;
 import model.util.User;
 
-public class Equipment_lvup {
+public class Equipment_lvup {//装備を作成完了すぐに後に実行したい
     public Equipment lvup(User user ,Equipment equipment) {
-        if(user.equipmentPossesion(equipment)) {
-            switch (equipment.item.name) {
+        if(user.equipmentPossesion(equipment)) {//装備を持ってい場合実行
+            switch (equipment.item.name) {//装備名で上げ幅を決定
                 case "木の剣":
                 case "木の槍":
                 case "木の弓":
@@ -80,7 +80,7 @@ public class Equipment_lvup {
 
             }
         }else{
-            user.addEquipment(equipment);
+            user.addEquipment(equipment);//持っていなかった場合は装備を追加
         }
         return  equipment;
     }
