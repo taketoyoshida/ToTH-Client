@@ -70,13 +70,20 @@ public class User {
         materials.put(material, materials.get(material) - amount);
     }
     public boolean equipmentPossesion(Equipment equipment){
+
         if(equipments.getOrDefault(equipment,0)>=1){
+
             return true;
+
         }else{
+
             return false;
+
         }
     }
     public void addEquipment(Equipment equipment) {
+
         equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
+
     }
 }
