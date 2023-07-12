@@ -38,7 +38,7 @@ public class GachaWindow extends JFrame implements MouseListener {
     JButton b1 = new JButton("１回 回す");
     JButton b2 = new JButton("10回 回す");
 
-    Timer timer = new Timer(false);
+    Timer timer = new Timer(false);//待機画面表示用のタイマー
     private GachaGateway.IGachaGateway gateway;
 
 
