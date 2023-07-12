@@ -2,15 +2,12 @@ package controller.home;
 
 import model.Status;
 import model.Equipment;
-import model.EquipmentItem;
 import model.util.User;
 
-import static sun.jvm.hotspot.debugger.win32.coff.DebugVC50X86RegisterEnums.DI;
+public class EquipmentUpgrade {//装備を作成完了すぐに後に実行したい
 
-public class Equipment_lvup {//装備を作成完了すぐに後に実行したい
-
-    public Equipment lvup(User user, Equipment equipment) {
-        if (user.equipmentPossesion(equipment)) {//装備を持ってい場合実行
+    public void upgrade(User user, Equipment equipment) {
+        if (user.hasEquipment(equipment)) {//装備を持ってい場合実行
             switch (equipment.item) {//装備名で上げ幅を決定
                 case WOOD_SWORD:
                 case WOOD_SPEAR:
@@ -83,9 +80,9 @@ public class Equipment_lvup {//装備を作成完了すぐに後に実行した�
 
             }
         } else {
-            user.addEquipment(equipment);//持っていなかった場合は装備を追加
+            //持っていなかった場合は装備を追加
+            user.addEquipment(equipment);
         }
-        return equipment;
     }
 }
 
