@@ -71,15 +71,7 @@ public class User {
     }
     public boolean equipmentPossesion(Equipment equipment){
 
-        if(equipments.getOrDefault(equipment,0)>=1){
-
-            return true;
-
-        }else{
-
-            return false;
-
-        }
+       return equipments.getOrDefault(equipment,0)>=1;
     }
     public void addEquipment(Equipment equipment) {
 
