@@ -1,5 +1,7 @@
 package model.util;
 
+import model.Blueprint;
+import model.Equipment;
 import model.Material;
 import model.Equipment;
 import java.util.EnumMap;
@@ -9,9 +11,9 @@ import java.util.Map;
 public class User {
     int ID;
     private String username;
+    private Map<Blueprint, Integer> blueprints; //設計図
     private Map<Equipment,Integer> equipments;//所持装備
-    // 素材・設計図
-    private EnumMap<Material, Integer> materials;// 素材
+    private EnumMap<Material, Integer> materials;   // 素材
     private int balance;
     private int rank;
 
@@ -21,6 +23,7 @@ public class User {
         this.balance = balance;
         this.rank = rank;
         this.materials = new EnumMap<>(Material.class);
+        this.blueprints = new HashMap<>();
         this.equipments=new HashMap<>();
     }
 
@@ -59,6 +62,10 @@ public class User {
         return materials;
     }
 
+    public int getMaterialQuantity(Material material) {
+        return materials.getOrDefault(material, 0);
+    }
+
     public void addMaterial(Material material, int amount) {
         materials.put(material, materials.getOrDefault(material, 0) + amount);
     }
@@ -78,4 +85,24 @@ public class User {
         equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
 
     }
+
+    public void addBlueprint(Blueprint blueprint, int quantity) {
+        blueprints.put(blueprint, blueprints.getOrDefault(blueprint, 0) + quantity);
+    }
+
+
+    public boolean removeBlueprint(Blueprint blueprint, int quantity) {
+        int currentQuantity = blueprints.getOrDefault(blueprint, 0);
+        if (currentQuantity < quantity) {
+            return false;
+        }
+        blueprints.put(blueprint, currentQuantity - quantity);
+        return true;
+    }
+
+    public int getBlueprintQuantity(Blueprint blueprint) {
+        return blueprints.getOrDefault(blueprint, 0);
+    }
+
+
 }

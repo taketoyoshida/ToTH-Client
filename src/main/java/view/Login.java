@@ -1,14 +1,9 @@
 package view;
 
-import view.Game;
-
-import java.awt.FlowLayout;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
 public class Login extends JFrame implements MouseListener {

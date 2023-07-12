@@ -6,7 +6,7 @@ public class Status {
     private int MOV;    // 行動力
     private int RNG;    // 射程
 
-    public Status(int HP, int ATK, int MOV,  int RNG) {
+    public Status(int HP, int ATK, int MOV, int RNG) {
         this.HP = HP;
         this.ATK = ATK;
         this.MOV = MOV;

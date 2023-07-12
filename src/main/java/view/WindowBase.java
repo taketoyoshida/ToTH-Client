@@ -1,8 +1,6 @@
 package view;
 
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class WindowBase extends JFrame {
     /*あらゆる画面表示に必要となるクラス*/
@@ -10,7 +8,7 @@ public class WindowBase extends JFrame {
 
     public WindowBase(String title) {
         setTitle(title);
-        setSize(832, 512);
+        setSize(832, 549);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
