@@ -101,15 +101,15 @@ public class Player {
             unequipItem(item.getPosition());
         }
         equippedItems.put(item.getPosition(), item);
-        totalStatus();
+        resetStatus();
     }
 
     public void unequipItem(EquipmentPosition position) {
         equippedItems.remove(position);
-        totalStatus();
+        resetStatus();
     }
 
-    private void totalStatus() {
+    private void resetStatus() {
         int totalHP = baseHP;
         int totalATK = baseATK;
         int totalMOV = baseMOV;
@@ -137,7 +137,7 @@ public class Player {
     }
 
     private void respawn() {
-        totalStatus();
+        resetStatus();
         isDead = false;
         deadCount++;
     }
