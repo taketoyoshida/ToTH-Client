@@ -12,6 +12,11 @@ public class Player {
     private int rank;                           // ランク
     private int score;                          // スコア
     private Map<EquipmentPosition, Equipment> equippedItems; // 装備
+    private int deadCount = 0;
+    private final int baseHP = 10;
+    private final int baseATK = 5;
+    private final int baseMOV = 1;
+    private final int baseRNG = 1;
 
     public Player(String name, Status status) {
         this.name = name;
@@ -95,19 +100,19 @@ public class Player {
             unequipItem(item.getPosition());
         }
         equippedItems.put(item.getPosition(), item);
-        updateStatus();
+        totalStatus();
     }
 
     public void unequipItem(EquipmentPosition position) {
         equippedItems.remove(position);
-        updateStatus();
+        totalStatus();
     }
 
-    private void updateStatus() {
-        int totalHP = status.getHP();
-        int totalATK = status.getATK();
-        int totalMOV = status.getMOV();
-        int totalRNG = status.getRNG();
+    private void totalStatus() {
+        int totalHP = baseHP;
+        int totalATK = baseATK;
+        int totalMOV = baseMOV;
+        int totalRNG = baseRNG;
 
         for (Equipment equipment : equippedItems.values()) {
             Status equipmentStatus = equipment.getStatus();
@@ -123,5 +128,17 @@ public class Player {
         status.setRNG(totalRNG);
     }
 
+    private void decreaseHP(int damage) {
+        status.setHP(status.getHP() - damage);
+        if (status.getHP() <= 0) {
+            isDead = true;
+        }
+    }
+
+    private void respawn() {
+        totalStatus();
+        isDead = false;
+        deadCount++;
+    }
 }
 
