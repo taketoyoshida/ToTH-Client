@@ -19,8 +19,8 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
     JButton b1 = new JButton("ガチャ");
     JButton b2 = new JButton("製造");
-    JButton b3 = new JButton("強化");
-    JButton b4 = new JButton("装備する");
+    JButton b3 = new JButton("装備");
+    JButton b4 = new JButton("一覧");
 
 
     public Workshop_MainMenu(WindowBase base) {
@@ -81,12 +81,15 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("2-4-11");
+            Workshop workshopTest = new Workshop(base);
         }
         if (e.getSource() == b3) {
-            System.out.println("素晴らしく運がないな君は");
+            System.out.println("ここで装備していくかい？");
+            EquipmentDock dockTest = new EquipmentDock(base);
         }
         if (e.getSource() == b4) {
-            System.out.println("ここで装備していくかい？");
+            System.out.println("宝物庫の鍵を開けてやろう");
+            Warehouse warehouseTest = new Warehouse(base);
         }
 
     }
