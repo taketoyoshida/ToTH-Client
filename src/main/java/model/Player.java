@@ -12,6 +12,7 @@ public class Player {
     private int rank;                           // ランク
     private int score;                          // スコア
     private Map<EquipmentPosition, Equipment> equippedItems; // 装備
+    /* 持ってる装備を格納する変数が必要 */
     private int deadCount = 0;
     private final int baseHP = 10;
     private final int baseATK = 5;
