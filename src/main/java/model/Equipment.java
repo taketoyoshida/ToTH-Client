@@ -19,6 +19,10 @@ public class Equipment {
         this.status = sta;
     }
 
+    public EquipmentPosition getPosition() {
+        return item.position;
+    }
+
     public static Equipment createEquipment(User user, Blueprint blueprint) throws Exception {
         if (user.getMaterialQuantity(Material.WOOD) >= blueprint.baseItem().req_wood
                 && user.getMaterialQuantity(Material.IRON) >= blueprint.baseItem().req_iron

@@ -11,6 +11,7 @@ public class Player {
     private boolean isDead;                     // 死亡判定
     private int rank;                           // ランク
     private int score;                          // スコア
+    private Map<EquipmentPosition, Equipment> equippedItems; // 装備
 
     public Player(String name, Status status) {
         this.name = name;
@@ -20,6 +21,7 @@ public class Player {
         this.isDead = false;
         this.rank = 0;
         this.score = 0;
+        this.equippedItems = new HashMap<>();
     }
 
     public String getName() {
@@ -87,5 +89,39 @@ public class Player {
     public int getMaterialQuantity(Material material) {
         return materials.getOrDefault(material, 0);
     }
+
+    public void equipItem(Equipment item) {
+        if (equippedItems.containsKey(item.getPosition())) {
+            unequipItem(item.getPosition());
+        }
+        equippedItems.put(item.getPosition(), item);
+        updateStatus();
+    }
+
+    public void unequipItem(EquipmentPosition position) {
+        equippedItems.remove(position);
+        updateStatus();
+    }
+
+    private void updateStatus() {
+        int totalHP = status.getHP();
+        int totalATK = status.getATK();
+        int totalMOV = status.getMOV();
+        int totalRNG = status.getRNG();
+
+        for (Equipment equipment : equippedItems.values()) {
+            Status equipmentStatus = equipment.getStatus();
+            totalHP += equipmentStatus.getHP();
+            totalATK += equipmentStatus.getATK();
+            totalMOV += equipmentStatus.getMOV();
+            totalRNG += equipmentStatus.getRNG();
+        }
+
+        status.setHP(totalHP);
+        status.setATK(totalATK);
+        status.setMOV(totalMOV);
+        status.setRNG(totalRNG);
+    }
+
 }
 
