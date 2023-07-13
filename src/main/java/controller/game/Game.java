@@ -1,10 +1,7 @@
 package controller.game;
 
 import controller.networking.GameGateway;
-import model.Piece;
-import model.Player;
-import model.Position;
-import model.Status;
+import model.*;
 
 import java.util.Random;
 
@@ -16,7 +13,7 @@ public class Game {
     private static final int GAME_TURN = 15;
     private int turnNum;
     private final model.Game game;
-    private int[] enemy;
+    private EnemyInfo[] enemy;
     private final GameGateway.IGameGateway gateway;
     private final Player me = new Player("Player1", new Status(1, 1, 1, 1));
     private final Player opponent = new Player("Player2", new Status(1, 1, 1, 1));
@@ -74,22 +71,23 @@ public class Game {
 
     //盤面を更新
     public void refBoard() {
-
+        updateBoard();
+        game.printBoard();
     }
 
     //スコアを更新
     public void refScore() {
-
+        getScore();
     }
 
     //ステータスを更新
     public void refStatus() {
-
+        getStatus();
     }
 
     //プレイヤーが攻撃
     public void atkPlayer() {
-
+        EnemyStatus.hp -= PlayerStatus.atk;
     }
 
     //攻撃が妥当か判定
@@ -103,12 +101,12 @@ public class Game {
 
     //プレイヤーを移動
     public void movePlayer() {
-
+        Player.moveCharacter();
     }
 
     //妥当な移動か（移動できるか）を判定
     public boolean isValidMove() {
-        if (true) {
+        if (getPiece() == null) {   // 移動先にコマがない(?)
             return true;
         } else {
             return false;
@@ -117,7 +115,7 @@ public class Game {
     }
 
     public void printBoard() {
-
+// viewクラスで定義？
     }
 
     //敵をセット
@@ -128,15 +126,19 @@ public class Game {
         } else {
             rank = opponent.getRank();
         }
-        enemy = new int[4];
-        int i;
-        for (i = 1; i <= 4; i++) {
-            enemy[i] = rank * 2 - i;    // とりあえずIDを入れる
-            if (rank * 2 - i <= 0) break;// rank1のみ敵は２種類
+        enemy = new EnemyInfo[4];
+        int i,j=0;
+        for (i = rank*2-1; i >= rank*2-4; i--) {
+            enemy[j] = EnemyInfo.valueOf("ENEMY_"+ i);    // rank1の敵はENEMY_1, ENEMY_2、2以上では4種類
+            if (i <= 0) break;// rank1のみ敵は２種類
+            j++;
         }
         // TODO: Implement this using Piece class
-//        game.board[0][0] = enemy[i - 2];   // rank1以外は１つ前のrankで初登場した敵が対角に初期配置
-//        game.board[7][11] = enemy[i - 1];  // rank1ではrank1の敵２種が配置
+        game.setPiece(new Position(0, 0), new Piece()); // rank1以外は１つ前のrankで初登場した敵が対角に初期配置
+        game.setPiece(new Position(7, 11), new Piece()); // rank1ではrank1の敵２種が配置とやるにはどうすれば良い？？？
+
+//        game.board[0][0] = enemy[j];   // rank1以外は１つ前のrankで初登場した敵が対角に初期配置
+//        game.board[7][11] = enemy[j - 1];  // rank1ではrank1の敵２種が配置
     }
 
     // 敵を特定のマスに置く
@@ -153,24 +155,29 @@ public class Game {
         } while (true);// 敵がセットされるまで続く
     }
 
-    //障害物を最大10個セット
+    //障害物を10個セット
     public void setObstacle() {
         int ROW, COL;
         for (int i = 0; i < 10; i++) {
-            ROW = random.nextInt(0, BOARD_ROW);// ランダムで座標を生成
-            COL = random.nextInt(0, BOARD_COL);
-            // TODO: Implement Piece
-            if (game.getPiecesAround(new Position(ROW, COL)).size() == 0)
-                game.setPiece(new Position(ROW, COL), new Piece());// 周囲1マスに他の障害物が無ければセット
+            do {
+                ROW = random.nextInt(0, BOARD_ROW);// ランダムで座標を生成
+                COL = random.nextInt(0, BOARD_COL);
+                // TODO: Implement Piece
+                if (game.getPiecesAround(new Position(ROW, COL)).size() == 0) {
+                    game.setPiece(new Position(ROW, COL), new Piece());// 周囲1マスに他の障害物が無ければセット
+                    break;
+                }
+            } while (true);// 障害物がセットされるまで続く
         }
     }
 
     public boolean isGameOver() {
-        if (turnNum == GAME_TURN) {
-            return true;
-        } else {
-            return false;
-        }
+        return turnNum == GAME_TURN;
+//        if (turnNum == GAME_TURN) {
+//            return true;
+//        } else {
+//            return false;
+//        }
     }
 
     public int getRandomNum(int min, int max) {
