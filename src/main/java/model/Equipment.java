@@ -5,10 +5,12 @@ import model.util.User;
 public class Equipment {
     public final EquipmentItem item;
     private Status status;
+    private int level;
 
-    public Equipment(EquipmentItem item, Status sta) {
+    public Equipment(EquipmentItem item, Status sta, int level) {
         this.item = item;
         this.status = sta;
+        this.level = level;
     }
 
     public Status getStatus() {
@@ -21,6 +23,18 @@ public class Equipment {
 
     public EquipmentPosition getPosition() {
         return item.position;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void levelUp() {
+        this.level++;
     }
 
     public static Equipment createEquipment(User user, Blueprint blueprint) throws Exception {
@@ -36,7 +50,7 @@ public class Equipment {
             user.consumeMaterial(Material.LEATHER, blueprint.baseItem().req_leather);
             user.removeBlueprint(blueprint, 1);
             // TODO: Dummy Status should be replaced, refer #46
-            return new Equipment(blueprint.baseItem(), new Status(20, 20, 20, 20));
+            return new Equipment(blueprint.baseItem(), new Status(20, 20, 20, 20), 1);
         }
         throw new Exception("素材が足りません");
     }
