@@ -38,7 +38,7 @@ public class Warehouse extends JFrame implements ActionListener {
     JButton[] buttonSelector = new JButton[3];
     itemCompoundButton[] itemButton = new itemCompoundButton[itemVar];
 
-    private class itemCompoundButton{    //アイテム情報が紐づけられたボタンの構造体
+    private class itemCompoundButton {    //アイテム情報が紐づけられたボタンの構造体
         Material material;
         JButton button;
     }
@@ -53,7 +53,7 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(label1, -10);
 
         /*構造体配列の初期化*/
-        for(int i1 = 0;i1<itemVar;i1++){
+        for (int i1 = 0; i1 < itemVar; i1++) {
             itemButton[i1] = new itemCompoundButton();
         }
 
@@ -234,7 +234,7 @@ public class Warehouse extends JFrame implements ActionListener {
             System.out.println("ラストエリクサーなんてないよ");
             getItemList();
         }
-        if(e.getSource() == itemButton[2].button) {
+        if (e.getSource() == itemButton[2].button) {
             System.out.println("テメェ今俺の頭の事なんつったァ!!!");
         }
 
