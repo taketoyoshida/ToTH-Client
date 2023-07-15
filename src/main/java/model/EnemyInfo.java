@@ -61,15 +61,15 @@ public enum EnemyInfo {
     }
 
     private static Map<Material, Double> createDropRatesMap(double woodRate, double ironRate,
-                                                            double diamondRate, double leatherRate, double copperRate) {
+                                                            double diamondRate, double leatherRate, double bronzeRate) {
         Map<Material, Double> dropRates = new HashMap<>();
         dropRates.put(Material.WOOD, woodRate);
         dropRates.put(Material.IRON, ironRate);
         dropRates.put(Material.DIAMOND, diamondRate);
         dropRates.put(Material.LEATHER, leatherRate);
-        dropRates.put(Material.COPPER, copperRate);
+        dropRates.put(Material.BRONZE, bronzeRate);
 
-        double noDropRate = 1.0 - (woodRate + ironRate + diamondRate + leatherRate + copperRate);
+        double noDropRate = 1.0 - (woodRate + ironRate + diamondRate + leatherRate + bronzeRate);
         dropRates.put(null, noDropRate);
 
         return dropRates;
