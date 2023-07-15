@@ -1,5 +1,6 @@
 import view.Login;
 import view.WindowBase;
+import model.util.User;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -11,8 +12,10 @@ public class Main {
         /*表示は額縁側をvisibleにすると中身ごと表示してくれる*/
         /*keyListenerはWindowBaseクラスにつけること*/
 
+        User user = new User(114514,"testUser",45590,3);
+
         WindowBase base = new WindowBase("test");
-        Login frame = new Login(base);
+        Login frame = new Login(base,user);
         base.setVisible(true);
     }
 }

@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.util.User;
 
 import static java.awt.Font.BOLD;
 
 public class EquipmentDock extends JFrame implements ActionListener {
 
     private final WindowBase base;
+    private User user;
     private JLayeredPane menuPane = new JLayeredPane();
     private JLayeredPane infoPane = new JLayeredPane();
     private JLayeredPane listPane = new JLayeredPane();
@@ -41,9 +43,10 @@ public class EquipmentDock extends JFrame implements ActionListener {
     JButton b1 = new JButton(iconButton);
 
 
-    public EquipmentDock(WindowBase base) {
+    public EquipmentDock(WindowBase base, User user) {
 
         this.base = base;
+        this.user = user;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         menuPane.add(label1);
         menuPane.setLayer(label1, -10);
@@ -162,8 +165,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
     }
 
     public static void main(String args[]) {
+        User user = new User(114514,"testUser",45590,3);
         WindowBase base = new WindowBase("test");
-        EquipmentDock test = new EquipmentDock(base);
+        EquipmentDock test = new EquipmentDock(base,user);
         base.setVisible(true);
     }
 

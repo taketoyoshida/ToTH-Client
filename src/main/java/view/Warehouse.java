@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import model.util.User;
 
 public class Warehouse extends JFrame implements ActionListener {
 
+    private User user;
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
     private JLayeredPane equipInfoPane = new JLayeredPane();
@@ -33,9 +35,10 @@ public class Warehouse extends JFrame implements ActionListener {
     JButton[] buttonSelector = new JButton[3];
 
 
-    public Warehouse(WindowBase base) {
+    public Warehouse(WindowBase base, User user) {
 
         this.base = base;
+        this.user = user;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         menuPanel.add(label1);
         menuPanel.setLayer(label1, -10);
@@ -197,8 +200,9 @@ public class Warehouse extends JFrame implements ActionListener {
     }
 
     public static void main(String args[]) {
+        User user = new User(114514,"testUser",45590,3);
         WindowBase base = new WindowBase("test");
-        Warehouse test = new Warehouse(base);
+        Warehouse test = new Warehouse(base,user);
         base.setVisible(true);
     }
 

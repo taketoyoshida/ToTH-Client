@@ -9,11 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import model.util.User;
 
 import static java.awt.Font.BOLD;
 
 public class GachaWindow extends JFrame implements MouseListener {
 
+    private User user;
     WindowBase base;
     int coin;                                  //コイン数を格納する配列
     String[] puText = new String[5];           //新規装備の名前を５つ格納する配列
@@ -42,11 +44,12 @@ public class GachaWindow extends JFrame implements MouseListener {
     private GachaGateway.IGachaGateway gateway;
 
 
-    public GachaWindow(WindowBase base) {
+    public GachaWindow(WindowBase base, User user) {
         /*実際の運用ではコイン数を管理するクラスからメソッドでコイン数をもらいたい*/
         /*コイン数の増減も同様にメソッドにすべきかも？要検討　7/6 */
         this.coin = 0;
         this.base = base;
+        this.user = user;
 
         start();
 
@@ -55,8 +58,9 @@ public class GachaWindow extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
+        User user = new User(114514,"testUser",45590,3);
         WindowBase base = new WindowBase("test");
-        GachaWindow test = new GachaWindow(base);
+        GachaWindow test = new GachaWindow(base,user);
         base.setVisible(true);
     }
 
