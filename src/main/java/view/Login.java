@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import model.util.User;
 
 
@@ -23,7 +24,7 @@ public class Login extends JFrame implements MouseListener {
     private JButton button2 = new JButton("ログインへ");
 
 
-    public Login(WindowBase base,User user) {
+    public Login(WindowBase base, User user) {
         this.signup_or_login = 0;
         this.base = base;
         this.user = user;
@@ -88,7 +89,7 @@ public class Login extends JFrame implements MouseListener {
                 //System.out.println("confirm!");
                 System.out.println("sol=1");
                 //setVisible(false);
-                MainMenu testMenu = new MainMenu(base,user);
+                MainMenu testMenu = new MainMenu(base, user);
                 dispose();
             }
         }
@@ -120,9 +121,9 @@ public class Login extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        Login frame = new Login(base,user);
+        Login frame = new Login(base, user);
         base.setVisible(true);
 
 

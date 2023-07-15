@@ -12,10 +12,10 @@ public class Main {
         /*表示は額縁側をvisibleにすると中身ごと表示してくれる*/
         /*keyListenerはWindowBaseクラスにつけること*/
 
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
 
         WindowBase base = new WindowBase("test");
-        Login frame = new Login(base,user);
+        Login frame = new Login(base, user);
         base.setVisible(true);
     }
 }

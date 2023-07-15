@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import model.util.User;
 
 public class Warehouse extends JFrame implements ActionListener {
@@ -200,9 +201,9 @@ public class Warehouse extends JFrame implements ActionListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        Warehouse test = new Warehouse(base,user);
+        Warehouse test = new Warehouse(base, user);
         base.setVisible(true);
     }
 

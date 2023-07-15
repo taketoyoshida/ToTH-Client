@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import model.util.User;
 
 public class Workshop_MainMenu extends JFrame implements MouseListener {
@@ -25,7 +26,7 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     JButton b4 = new JButton("一覧");
 
 
-    public Workshop_MainMenu(WindowBase base,User user) {
+    public Workshop_MainMenu(WindowBase base, User user) {
 
         this.base = base;
         this.user = user;
@@ -80,19 +81,19 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("ガチャは悪い文明…！破壊する…！");
-            GachaWindow gachaTest = new GachaWindow(base,user);
+            GachaWindow gachaTest = new GachaWindow(base, user);
         }
         if (e.getSource() == b2) {
             System.out.println("2-4-11");
-            Workshop workshopTest = new Workshop(base,user);
+            Workshop workshopTest = new Workshop(base, user);
         }
         if (e.getSource() == b3) {
             System.out.println("ここで装備していくかい？");
-            EquipmentDock dockTest = new EquipmentDock(base,user);
+            EquipmentDock dockTest = new EquipmentDock(base, user);
         }
         if (e.getSource() == b4) {
             System.out.println("宝物庫の鍵を開けてやろう");
-            Warehouse warehouseTest = new Warehouse(base,user);
+            Warehouse warehouseTest = new Warehouse(base, user);
         }
 
     }
@@ -111,9 +112,9 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        Workshop_MainMenu test = new Workshop_MainMenu(base,user);
+        Workshop_MainMenu test = new Workshop_MainMenu(base, user);
         base.setVisible(true);
     }
 

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import model.util.User;
 
 import static java.awt.Font.BOLD;
@@ -165,9 +166,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        EquipmentDock test = new EquipmentDock(base,user);
+        EquipmentDock test = new EquipmentDock(base, user);
         base.setVisible(true);
     }
 

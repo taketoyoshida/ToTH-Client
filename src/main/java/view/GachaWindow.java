@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import model.util.User;
 
 import static java.awt.Font.BOLD;
@@ -58,9 +59,9 @@ public class GachaWindow extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        GachaWindow test = new GachaWindow(base,user);
+        GachaWindow test = new GachaWindow(base, user);
         base.setVisible(true);
     }
 

@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import model.util.User;
 
 public class MainMenu extends JFrame implements MouseListener {
@@ -23,7 +24,7 @@ public class MainMenu extends JFrame implements MouseListener {
     private JButton b2 = new JButton(bIcon2);
 
 
-    public MainMenu(WindowBase base,User user) {
+    public MainMenu(WindowBase base, User user) {
 
         this.base = base;
         this.user = user;
@@ -70,7 +71,7 @@ public class MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("そんな装備で大丈夫か？");
-            Workshop_MainMenu wsTest = new Workshop_MainMenu(base,user);
+            Workshop_MainMenu wsTest = new Workshop_MainMenu(base, user);
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
@@ -92,9 +93,9 @@ public class MainMenu extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514,"testUser",45590,3);
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        MainMenu test = new MainMenu(base,user);
+        MainMenu test = new MainMenu(base, user);
         base.setVisible(true);
     }
 }
