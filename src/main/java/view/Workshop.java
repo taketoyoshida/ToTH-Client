@@ -17,6 +17,7 @@ public class Workshop extends JFrame implements ActionListener {
     private ImageIcon iconList = new ImageIcon("./assets/imgs/TestEquipBaseList.png");
     private ImageIcon iconEquipPickArea = new ImageIcon("./assets/imgs/TestWorkshopText.png");
     private ImageIcon iconUpgradeSelection = new ImageIcon("./assets/imgs/TestEquipSlot.png");
+    private ImageIcon iconSlot = new ImageIcon("./assets/imgs/TestEquipSlot4.png");
     private ImageIcon iconUpgrade = new ImageIcon("./assets/imgs/TestButton3.png");
     private ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
 
@@ -94,7 +95,13 @@ public class Workshop extends JFrame implements ActionListener {
     public void getList() {
         int limit = 15, pf = 480;
         for (int i = 0; i < limit; i++) {
+            JLabel itemSlot = new JLabel(iconSlot);
+            itemSlot.setBounds(16 + 80 * (i % 2), 16 + 80 * (i / 2), 64, 64);
+            listPane.add(itemSlot);
+            listPane.setLayer(itemSlot, 0);
             JButton itemButton = new JButton(isc.scale(iconItem, 2.0));
+            itemButton.setBorderPainted(false);
+            itemButton.setContentAreaFilled(false);
             itemButton.setBounds(16 + 80 * (i % 2), 16 + 80 * (i / 2), 64, 64);
             listPane.add(itemButton);
             listPane.setLayer(itemButton, 10);
@@ -105,7 +112,7 @@ public class Workshop extends JFrame implements ActionListener {
             JLabel listLabel = new JLabel(iconList);
             listLabel.setBounds(0, i * 80 - 64, 176, 80);
             listPane.add(listLabel);
-            listPane.setLayer(listLabel, 0);
+            listPane.setLayer(listLabel, -10);
         }
         listPane.setBounds(16, 16, 176, 10000);
         listPane.setPreferredSize(new Dimension(176, pf));
