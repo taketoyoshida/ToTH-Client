@@ -14,7 +14,7 @@ public class Warehouse extends JFrame implements ActionListener {
 
     private User user;
     /*アイテムの種類数を規定する変数*/
-    int itemVar = 5,equipVar = 23;
+    int itemVar = 5, equipVar = 23;
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
     private JLayeredPane itemInfoPane = new JLayeredPane();
@@ -66,7 +66,7 @@ public class Warehouse extends JFrame implements ActionListener {
         for (int i1 = 0; i1 < itemVar; i1++) {
             itemButton[i1] = new itemCompoundButton();
         }
-        for(int i2=0;i2<equipVar;i2++){
+        for (int i2 = 0; i2 < equipVar; i2++) {
             bpButton[i2] = new blueprintCompoundButton();
         }
 
@@ -279,7 +279,7 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(scrollPane, 10);
     }
 
-    public void putBpInfo(int n){       //原型の情報を表示するメソッド
+    public void putBpInfo(int n) {       //原型の情報を表示するメソッド
         itemInfoPane.removeAll();
 
         /*アイテム名の表示*/
@@ -321,7 +321,7 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(itemInfoPane, 10);
     }
 
-    public void putItemInfo(int n){       //素材アイテムの情報を表示するメソッド
+    public void putItemInfo(int n) {       //素材アイテムの情報を表示するメソッド
         itemInfoPane.removeAll();
 
         /*アイテム名の表示*/
@@ -373,13 +373,13 @@ public class Warehouse extends JFrame implements ActionListener {
             System.out.println("ラストエリクサーなんてないよ");
             getItemList();
         }
-        for(int i=0;i<itemVar;i++){
-            if(e.getSource() == itemButton[i].button){
+        for (int i = 0; i < itemVar; i++) {
+            if (e.getSource() == itemButton[i].button) {
                 putItemInfo(i);
             }
         }
-        for(int i=0;i<equipVar;i++){
-            if(e.getSource() == bpButton[i].button){
+        for (int i = 0; i < equipVar; i++) {
+            if (e.getSource() == bpButton[i].button) {
                 putBpInfo(i);
             }
         }
