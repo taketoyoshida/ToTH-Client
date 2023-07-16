@@ -77,11 +77,11 @@ public class User {
         materials.put(material, materials.get(material) - amount);
     }
 
-    public void upgradeEquipment(EquipmentItem equipment) {
-        equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
+    public void upgradeEquipment(EquipmentItem equipmentItem) {
+        equipments.put(equipmentItem, equipments.getOrDefault(equipmentItem, 0) + 1);
     }
 
-    public int getEquipment(EquipmentItem equipment) {
+    public int getEquipmentLevel(EquipmentItem equipment) {
         return equipments.getOrDefault(equipment, 0);
     }
 
@@ -101,5 +101,23 @@ public class User {
 
     public int getBlueprintQuantity(Blueprint blueprint) {
         return blueprints.getOrDefault(blueprint, 0);
+    }
+
+    public void createEquipment(EquipmentItem equipmentItem) throws Exception {
+        if (this.getMaterialQuantity(Material.WOOD) >= equipmentItem.req_wood
+                && this.getMaterialQuantity(Material.IRON) >= equipmentItem.req_iron
+                && this.getMaterialQuantity(Material.DIAMOND) >= equipmentItem.req_diamond
+                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_copper &&
+                this.getMaterialQuantity(Material.LEATHER) >= equipmentItem.req_leather) {
+            this.consumeMaterial(Material.WOOD, equipmentItem.req_wood);
+            this.consumeMaterial(Material.IRON, equipmentItem.req_iron);
+            this.consumeMaterial(Material.DIAMOND, equipmentItem.req_diamond);
+            this.consumeMaterial(Material.BRONZE, equipmentItem.req_copper);
+            this.consumeMaterial(Material.LEATHER, equipmentItem.req_leather);
+            this.removeBlueprint(new Blueprint(equipmentItem), 1);
+            this.upgradeEquipment(equipmentItem);
+            return;
+        }
+        throw new Exception("素材が足りません");
     }
 }
