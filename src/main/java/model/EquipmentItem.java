@@ -52,4 +52,41 @@ public enum EquipmentItem {
     public String getAssetPath() {
         return "./assets/imgs/equips/" + this.imgPath;
     }
+
+    public Status getBaseStatus() {
+        // TODO: Equipmentに応じて値を変更する必要がある。
+        return new Status(20, 20, 20, 20);
+    }
+
+    public Status getStatus(int level) {
+        level -= 1;
+        Status status = this.getBaseStatus();
+        switch (this) {//装備名で上げ幅を決定
+            case WOOD_SWORD, WOOD_SPEAR, WOOD_ARROW, WOOD_DAGGER -> {
+                status.setHP(status.getHP() + level);
+                status.setATK(status.getATK() + level);
+            }
+            case IRON_SWORD, IRON_ARROW, IRON_SPEAR, IRON_DAGGER -> {
+                status.setHP(status.getHP() + level * 3);
+                status.setATK(status.getATK() + level * 3);
+            }
+            case DIAMOND_SWORD, DIAMOND_SPEAR, DIAMOND_ARROW, DIAMOND_DAGGER -> {
+                status.setHP(status.getHP() + level * 5);
+                status.setATK(status.getATK() + level * 5);
+            }
+            case WOOD_SHIELD, LEATHER_HELMET, LEATHER_ARMOR -> {
+                status.setHP(status.getHP() + level);
+            }
+            case IRON_SHIELD, IRON_ARMOR, IRON_HELMET -> {
+                status.setHP(status.getHP() + level * 3);
+            }
+            case DIAMOND_HELMET, DIAMOND_SHIELD, DIAMOND_ARMOR -> {
+                status.setHP(status.getHP() + level * 5);
+            }
+            case COPPER_ARMOR, COPPER_HELMET -> {
+                status.setHP(status.getHP() + level * 2);
+            }
+        }
+        return status;
+    }
 }
