@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import model.util.User;
+
 public class MainMenu extends JFrame implements MouseListener {
 
-    int x = 408, y = 206;//キャラクターの座標
+    User user;
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
@@ -22,9 +24,10 @@ public class MainMenu extends JFrame implements MouseListener {
     private JButton b2 = new JButton(bIcon2);
 
 
-    public MainMenu(WindowBase base) {
+    public MainMenu(WindowBase base, User user) {
 
         this.base = base;
+        this.user = user;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
@@ -68,7 +71,7 @@ public class MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("そんな装備で大丈夫か？");
-            Workshop_MainMenu wsTest = new Workshop_MainMenu(base);
+            Workshop_MainMenu wsTest = new Workshop_MainMenu(base, user);
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
@@ -90,8 +93,9 @@ public class MainMenu extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        MainMenu test = new MainMenu(base);
+        MainMenu test = new MainMenu(base, user);
         base.setVisible(true);
     }
 }

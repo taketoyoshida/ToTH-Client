@@ -41,12 +41,12 @@ public class Equipment {
         if (user.getMaterialQuantity(Material.WOOD) >= blueprint.baseItem().req_wood
                 && user.getMaterialQuantity(Material.IRON) >= blueprint.baseItem().req_iron
                 && user.getMaterialQuantity(Material.DIAMOND) >= blueprint.baseItem().req_diamond
-                && user.getMaterialQuantity(Material.COPPER) >= blueprint.baseItem().req_copper &&
+                && user.getMaterialQuantity(Material.BRONZE) >= blueprint.baseItem().req_copper &&
                 user.getMaterialQuantity(Material.LEATHER) >= blueprint.baseItem().req_leather) {
             user.consumeMaterial(Material.WOOD, blueprint.baseItem().req_wood);
             user.consumeMaterial(Material.IRON, blueprint.baseItem().req_iron);
             user.consumeMaterial(Material.DIAMOND, blueprint.baseItem().req_diamond);
-            user.consumeMaterial(Material.COPPER, blueprint.baseItem().req_copper);
+            user.consumeMaterial(Material.BRONZE, blueprint.baseItem().req_copper);
             user.consumeMaterial(Material.LEATHER, blueprint.baseItem().req_leather);
             user.removeBlueprint(blueprint, 1);
             // TODO: Dummy Status should be replaced, refer #46

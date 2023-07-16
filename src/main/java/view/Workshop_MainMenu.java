@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import model.util.User;
+
 public class Workshop_MainMenu extends JFrame implements MouseListener {
 
+    private User user;
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
@@ -23,9 +26,10 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     JButton b4 = new JButton("一覧");
 
 
-    public Workshop_MainMenu(WindowBase base) {
+    public Workshop_MainMenu(WindowBase base, User user) {
 
         this.base = base;
+        this.user = user;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
@@ -77,19 +81,19 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("ガチャは悪い文明…！破壊する…！");
-            GachaWindow gachaTest = new GachaWindow(base);
+            GachaWindow gachaTest = new GachaWindow(base, user);
         }
         if (e.getSource() == b2) {
             System.out.println("2-4-11");
-            Workshop workshopTest = new Workshop(base);
+            Workshop workshopTest = new Workshop(base, user);
         }
         if (e.getSource() == b3) {
             System.out.println("ここで装備していくかい？");
-            EquipmentDock dockTest = new EquipmentDock(base);
+            EquipmentDock dockTest = new EquipmentDock(base, user);
         }
         if (e.getSource() == b4) {
             System.out.println("宝物庫の鍵を開けてやろう");
-            Warehouse warehouseTest = new Warehouse(base);
+            Warehouse warehouseTest = new Warehouse(base, user);
         }
 
     }
@@ -108,8 +112,9 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
 
     public static void main(String args[]) {
+        User user = new User(114514, "testUser", 45590, 3);
         WindowBase base = new WindowBase("test");
-        Workshop_MainMenu test = new Workshop_MainMenu(base);
+        Workshop_MainMenu test = new Workshop_MainMenu(base, user);
         base.setVisible(true);
     }
 
