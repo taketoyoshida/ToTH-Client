@@ -11,6 +11,7 @@ import model.util.User;
 public class Warehouse extends JFrame implements ActionListener {
 
     private User user;
+    /*アイテムの種類数を規定する変数*/
     int itemVar = 5;
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
@@ -35,7 +36,8 @@ public class Warehouse extends JFrame implements ActionListener {
     // viewportにscrollPaneの中のコンテンツを格納
     // scrollPane>viewport>listPane>itemButton
     JViewport viewport = scrollPane.getViewport();
-    JButton[] buttonSelector = new JButton[3];
+    JButton[] buttonSelector = new JButton[3];    //表示する対象を切り替えるボタン
+    /*各アイテムの種類ごとのボタン*/
     itemCompoundButton[] itemButton = new itemCompoundButton[itemVar];
 
     private class itemCompoundButton {    //アイテム情報が紐づけられたボタンの構造体
@@ -70,6 +72,7 @@ public class Warehouse extends JFrame implements ActionListener {
 
         menuPanel.setLayout(null);      //ボタン配置の設定
 
+        /*表示する対象を選択するボタンの召喚*/
         buttonSelector[0] = new JButton("装備");
         buttonSelector[1] = new JButton("原型");
         buttonSelector[2] = new JButton("素材");
@@ -80,6 +83,7 @@ public class Warehouse extends JFrame implements ActionListener {
             menuPanel.setLayer(buttonSelector[i], 0);
         }
 
+        /*アイテム情報表示欄の召喚*/
         itemInfoLabel.setBounds(546, 32, 256, 464);
         menuPanel.add(itemInfoLabel);
         menuPanel.setLayer(itemInfoLabel, -5);
@@ -88,15 +92,15 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(infoSlotLabel, 0);
     }
 
-    public void start() {
+    public void start() {    //始めに画面を呼び出したときに表示する内容の召喚
         menu();
 
         getEquipmentList();
     }
 
-    public void getEquipmentList() {
+    public void getEquipmentList() {   //装備一覧の取得と表示
         listPane.removeAll();
-        buttonSelector[0].setEnabled(false);
+        buttonSelector[0].setEnabled(false);   //ボタンの状態の切り替え
         buttonSelector[1].setEnabled(true);
         buttonSelector[2].setEnabled(true);
         int limit = 43, pf = 366;
@@ -203,6 +207,7 @@ public class Warehouse extends JFrame implements ActionListener {
             listPane.add(num);
             listPane.setLayer(num, 20);
         }
+        /*アイテム数の表示*/
         int n = ((int) Math.ceil((double) itemVar / 6.0)) * 80 + 16;
         if (n > 366) pf = n;
         for (int i = 0; i * 80 - 64 <= pf; i++) {
@@ -211,6 +216,7 @@ public class Warehouse extends JFrame implements ActionListener {
             listPane.add(listLabel);
             listPane.setLayer(listLabel, -10);
         }
+        /*リストを画面本体に配置する*/
         listPane.setBounds(0, 0, 496, 10000);
         listPane.setPreferredSize(new Dimension(496, pf));
         viewport.setView(listPane);
