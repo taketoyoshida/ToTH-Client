@@ -1,7 +1,7 @@
 package model.util;
 
 import model.Blueprint;
-import model.Equipment;
+import model.EquipmentItem;
 import model.Material;
 
 import java.util.EnumMap;
@@ -12,7 +12,7 @@ public class User {
     int ID;
     private String username;
     private Map<Blueprint, Integer> blueprints; //設計図
-    private Map<Equipment, Integer> equipments;//所持装備
+    private EnumMap<EquipmentItem, Integer> equipments;//所持装備
     private EnumMap<Material, Integer> materials;   // 素材
     private int balance;
     private int rank;
@@ -24,7 +24,7 @@ public class User {
         this.rank = rank;
         this.materials = new EnumMap<>(Material.class);
         this.blueprints = new HashMap<>();
-        this.equipments = new HashMap<>();
+        this.equipments = new EnumMap<>(EquipmentItem.class);
     }
 
     public void setUsername(String username) {
@@ -77,12 +77,12 @@ public class User {
         materials.put(material, materials.get(material) - amount);
     }
 
-    public void addEquipment(Equipment equipment) {
-        equipments.put(equipment, equipments.getOrDefault(equipment, 0) + 1);
+    public void upgradeEquipment(EquipmentItem equipmentItem) {
+        equipments.put(equipmentItem, equipments.getOrDefault(equipmentItem, 0) + 1);
     }
 
-    public boolean hasEquipment(Equipment equipment) {
-        return equipments.getOrDefault(equipment, 0) > 0;
+    public int getEquipmentLevel(EquipmentItem equipment) {
+        return equipments.getOrDefault(equipment, 0);
     }
 
     public void addBlueprint(Blueprint blueprint, int quantity) {
@@ -101,5 +101,23 @@ public class User {
 
     public int getBlueprintQuantity(Blueprint blueprint) {
         return blueprints.getOrDefault(blueprint, 0);
+    }
+
+    public void createEquipment(EquipmentItem equipmentItem) throws Exception {
+        if (this.getMaterialQuantity(Material.WOOD) >= equipmentItem.req_wood
+                && this.getMaterialQuantity(Material.IRON) >= equipmentItem.req_iron
+                && this.getMaterialQuantity(Material.DIAMOND) >= equipmentItem.req_diamond
+                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_copper &&
+                this.getMaterialQuantity(Material.LEATHER) >= equipmentItem.req_leather) {
+            this.consumeMaterial(Material.WOOD, equipmentItem.req_wood);
+            this.consumeMaterial(Material.IRON, equipmentItem.req_iron);
+            this.consumeMaterial(Material.DIAMOND, equipmentItem.req_diamond);
+            this.consumeMaterial(Material.BRONZE, equipmentItem.req_copper);
+            this.consumeMaterial(Material.LEATHER, equipmentItem.req_leather);
+            this.removeBlueprint(new Blueprint(equipmentItem), 1);
+            this.upgradeEquipment(equipmentItem);
+            return;
+        }
+        throw new Exception("素材が足りません");
     }
 }
