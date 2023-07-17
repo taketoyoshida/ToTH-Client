@@ -5,60 +5,83 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import model.EquipmentItem;
 import model.Material;
 import model.util.User;
+import model.Blueprint;
 
 public class Warehouse extends JFrame implements ActionListener {
 
     private User user;
-    int itemVar = 5;
     private final WindowBase base;
-    private JLayeredPane menuPanel = new JLayeredPane();
-    private JLayeredPane itemInfoPane = new JLayeredPane();
-    private JLayeredPane listPane = new JLayeredPane();
-    private ImageIcon iconBackground = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
-    private ImageIcon iconList = new ImageIcon("./assets/imgs/TestItemList.png");
-    private ImageIcon iconItemInfo = new ImageIcon("./assets/imgs/TestItemInfo.png");
-    private ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/TestEquipSlot2.png");
-    private ImageIcon iconSlot = new ImageIcon("./assets/imgs/TestEquipSlot4.png");
-    private ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
+    private final JLayeredPane menuPanel = new JLayeredPane();
+    private final JLayeredPane itemInfoPane = new JLayeredPane();
+    private final JLayeredPane listPane = new JLayeredPane();
+    private final ImageIcon iconBackground = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
+    private final ImageIcon iconList = new ImageIcon("./assets/imgs/TestItemList.png");
+    private final ImageIcon iconItemInfo = new ImageIcon("./assets/imgs/TestItemInfo.png");
+    private final ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/TestEquipSlot2.png");
+    private final ImageIcon iconSlot = new ImageIcon("./assets/imgs/TestEquipSlot4.png");
+    private final ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
 
-    //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
     ImageScaling isc = new ImageScaling();
 
     JLabel label1 = new JLabel(iconBackground);        //画像はlabelで取り込む
     JLabel itemInfoLabel = new JLabel(iconItemInfo);
     JLabel infoSlotLabel = new JLabel(iconInfoSlot);
-    JLabel[] textLabel = new JLabel[6];
+    JLabel[] textLabels = new JLabel[6];
 
     JScrollPane scrollPane = new JScrollPane();
     // viewportにscrollPaneの中のコンテンツを格納
     // scrollPane>viewport>listPane>itemButton
     JViewport viewport = scrollPane.getViewport();
-    JButton[] buttonSelector = new JButton[3];
-    itemCompoundButton[] itemButton = new itemCompoundButton[itemVar];
 
-    private class itemCompoundButton {    //アイテム情報が紐づけられたボタンの構造体
-        Material material;
-        JButton button;
+    MenuButton[] menuButtons = new MenuButton[3];    //表示する対象を切り替えるボタン
+    /*各アイテムの種類ごとのボタン*/
+    BlueprintCompoundButton[] bpButtons = new BlueprintCompoundButton[EquipmentItem.LENGTH];
+    MaterialCompoundButton[] materialButtons = new MaterialCompoundButton[Material.LENGTH];
+
+
+    private class MenuButton extends JButton {    //表示する対象を切り替えるボタンの構造体
+        MenuState state;
+
+        MenuButton(String label, MenuState state) {
+            super(label);
+            this.state = state;
+        }
     }
 
+    private static class BlueprintCompoundButton extends JButton {   //原型が紐づけられたボタンの構造体
+        final Blueprint blueprint;
+
+        BlueprintCompoundButton(Icon icon, Blueprint blueprint) {
+            super(icon);
+            this.blueprint = blueprint;
+        }
+    }
+
+    private static class MaterialCompoundButton extends JButton {    //アイテム情報が紐づけられたボタンの構造体
+        final Material material;
+
+        MaterialCompoundButton(Icon icon, Material material) {
+            super(icon);
+            this.material = material;
+        }
+    }
+
+    private enum MenuState {
+        EQUIPMENT, BLUEPRINT, MATERIAL
+    }
 
     public Warehouse(WindowBase base, User user) {
-
         this.base = base;
         this.user = user;
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         menuPanel.add(label1);
         menuPanel.setLayer(label1, -10);
 
-        /*構造体配列の初期化*/
-        for (int i1 = 0; i1 < itemVar; i1++) {
-            itemButton[i1] = new itemCompoundButton();
-        }
-
-        for (int i = 0; i < textLabel.length; i++) {
-            textLabel[i] = new JLabel();
+        for (int i = 0; i < textLabels.length; i++) {
+            textLabels[i] = new JLabel();
         }
 
         start();
@@ -70,16 +93,18 @@ public class Warehouse extends JFrame implements ActionListener {
 
         menuPanel.setLayout(null);      //ボタン配置の設定
 
-        buttonSelector[0] = new JButton("装備");
-        buttonSelector[1] = new JButton("原型");
-        buttonSelector[2] = new JButton("素材");
-        for (int i = 0; i < buttonSelector.length; i++) {
-            buttonSelector[i].setBounds(16 + i * 177, 64, 160, 32);
-            buttonSelector[i].addActionListener(this);
-            menuPanel.add(buttonSelector[i]);
-            menuPanel.setLayer(buttonSelector[i], 0);
+        /*表示する対象を選択するボタンの召喚*/
+        menuButtons[0] = new MenuButton("装備", MenuState.EQUIPMENT);
+        menuButtons[1] = new MenuButton("原型", MenuState.BLUEPRINT);
+        menuButtons[2] = new MenuButton("素材", MenuState.MATERIAL);
+        for (int i = 0; i < menuButtons.length; i++) {
+            menuButtons[i].setBounds(16 + i * 177, 64, 160, 32);
+            menuButtons[i].addActionListener(this);
+            menuPanel.add(menuButtons[i]);
+            menuPanel.setLayer(menuButtons[i], 0);
         }
 
+        /*アイテム情報表示欄の召喚*/
         itemInfoLabel.setBounds(546, 32, 256, 464);
         menuPanel.add(itemInfoLabel);
         menuPanel.setLayer(itemInfoLabel, -5);
@@ -88,17 +113,38 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(infoSlotLabel, 0);
     }
 
-    public void start() {
-        menu();
-
-        getEquipmentList();
+    //ボタンの状態の切り替え
+    private void switchMenu(MenuState state) {
+        listPane.removeAll();
+        switch (state) {
+            case EQUIPMENT -> {
+                menuButtons[0].setEnabled(false);
+                menuButtons[1].setEnabled(true);
+                menuButtons[2].setEnabled(true);
+                showEquipmentList();
+            }
+            case BLUEPRINT -> {
+                menuButtons[0].setEnabled(true);
+                menuButtons[1].setEnabled(false);
+                menuButtons[2].setEnabled(true);
+                showBlueprintList();
+            }
+            case MATERIAL -> {
+                menuButtons[0].setEnabled(true);
+                menuButtons[1].setEnabled(true);
+                menuButtons[2].setEnabled(false);
+                showMaterialList();
+            }
+        }
     }
 
-    public void getEquipmentList() {
-        listPane.removeAll();
-        buttonSelector[0].setEnabled(false);
-        buttonSelector[1].setEnabled(true);
-        buttonSelector[2].setEnabled(true);
+    public void start() {    //始めに画面を呼び出したときに表示する内容の召喚
+        menu();
+
+        showEquipmentList();
+    }
+
+    public void showEquipmentList() {   //装備一覧の取得と表示
         int limit = 43, pf = 366;
         for (int i = 0; i < limit; i++) {
             JLabel itemSlot = new JLabel(iconSlot);
@@ -128,82 +174,41 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(scrollPane, 10);
     }
 
-    public void getEquipBaseList() {
-        listPane.removeAll();
-        buttonSelector[0].setEnabled(true);
-        buttonSelector[1].setEnabled(false);
-        buttonSelector[2].setEnabled(true);
-        int limit = 28, pf = 366;
-        for (int i = 0; i < limit; i++) {
-            JLabel itemSlot = new JLabel(iconSlot);
-            itemSlot.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
-            listPane.add(itemSlot);
-            listPane.setLayer(itemSlot, 0);
-            JButton itemButton = new JButton(isc.scale(iconItem, 2.0));
-            itemButton.setBorderPainted(false);
-            itemButton.setContentAreaFilled(false);
-            itemButton.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
-            listPane.add(itemButton);
-            listPane.setLayer(itemButton, 10);
-        }
-        int n = ((int) Math.ceil((double) limit / 6.0)) * 80 + 16;
-        if (n > 366) pf = n;
-        for (int i = 0; i * 80 - 64 <= pf; i++) {
-            JLabel listLabel = new JLabel(iconList);
-            listLabel.setBounds(0, i * 80 - 64, 496, 80);
-            listPane.add(listLabel);
-            listPane.setLayer(listLabel, -10);
-        }
-        listPane.setBounds(0, 0, 496, 10000);
-        listPane.setPreferredSize(new Dimension(496, pf));
-        viewport.setView(listPane);
-        scrollPane.setBounds(16, 112, 496 + 18, 366 + 18);
-        menuPanel.add(scrollPane);
-        menuPanel.setLayer(scrollPane, 10);
-    }
+    public void showBlueprintList() {
+        int pf = 366;
 
-    public void getItemList() {         //素材アイテムをリストとして表示する
-        listPane.removeAll();
-        buttonSelector[0].setEnabled(true);  //押せるボタンの切り替え
-        buttonSelector[1].setEnabled(true);
-        buttonSelector[2].setEnabled(false);
-        int pf = 366;             //アイテムの数とスクロールの最大値
+        /*原型情報の格納*/
+        ImageIcon[] bpIcon = new ImageIcon[EquipmentItem.LENGTH];
+        EquipmentItem[] eItems = EquipmentItem.values();
 
-        /*各アイテムの数量とアイコンを取得する下準備*/
-        int[] itemNum = new int[itemVar];
-        ImageIcon[] itemIcon = new ImageIcon[itemVar];
-        Material[] material = new Material[itemVar];
-        material[0] = Material.WOOD;
-        material[1] = Material.IRON;
-        material[2] = Material.DIAMOND;
-        material[3] = Material.LEATHER;
-        material[4] = Material.BRONZE;
-
-        for (int i = 0; i < itemVar; i++) {
+        for (int i = 0; i < eItems.length; i++) {
+            EquipmentItem targetItem = eItems[i];
             /*背景の枠の表示*/
             JLabel itemSlot = new JLabel(iconSlot);
             itemSlot.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
             listPane.add(itemSlot);
             listPane.setLayer(itemSlot, 0);
-            /*itemCompoundButtonを用いたアイテム用ボタンの表示*/
-            itemIcon[i] = new ImageIcon(material[i].getAssetPath());
-            itemButton[i].material = material[i];
-            itemButton[i].button = new JButton(isc.scale(new ImageIcon(material[i].getAssetPath()), 2.0));
-            itemButton[i].button.setBorderPainted(false);
-            itemButton[i].button.setContentAreaFilled(false);
-            itemButton[i].button.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
-            listPane.add(itemButton[i].button);
-            itemButton[i].button.addActionListener(this);
-            listPane.setLayer(itemButton[i].button, 10);
-            /*アイテムの数の表示*/
-            itemNum[i] = user.getMaterialQuantity(material[i]);
-            JLabel num = new JLabel(String.valueOf(itemNum[i]));
-            num.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
-            num.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
-            listPane.add(num);
-            listPane.setLayer(num, 20);
+            /*blueprintCompoundButtonを用いたボタン表示*/
+            bpIcon[i] = new ImageIcon(targetItem.getAssetPath());
+            BlueprintCompoundButton newButton = new BlueprintCompoundButton(isc.scale(bpIcon[i], 2.0), new Blueprint(targetItem));
+            newButton.setBorderPainted(false);
+            newButton.setContentAreaFilled(false);
+            newButton.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
+            newButton.addActionListener(this);
+            listPane.add(newButton);
+            listPane.setLayer(newButton, 10);
+            bpButtons[i] = newButton;
+
+            /*アイテム数の表示*/
+            String bqQuantity = String.valueOf(user.getBlueprintQuantity(new Blueprint(targetItem)));
+            JLabel numLabel = new JLabel(bqQuantity);
+            numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
+            numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+            listPane.add(numLabel);
+            listPane.setLayer(numLabel, 20);
         }
-        int n = ((int) Math.ceil((double) itemVar / 6.0)) * 80 + 16;
+        /*背景の表示*/
+        int n = ((int) Math.ceil((double) EquipmentItem.LENGTH / 6.0)) * 80 + 16;
         if (n > 366) pf = n;
         for (int i = 0; i * 80 - 64 <= pf; i++) {
             JLabel listLabel = new JLabel(iconList);
@@ -211,6 +216,7 @@ public class Warehouse extends JFrame implements ActionListener {
             listPane.add(listLabel);
             listPane.setLayer(listLabel, -10);
         }
+        /*リストを本体に配置*/
         listPane.setBounds(0, 0, 496, 10000);
         listPane.setPreferredSize(new Dimension(496, pf));
         viewport.setView(listPane);
@@ -219,11 +225,103 @@ public class Warehouse extends JFrame implements ActionListener {
         menuPanel.setLayer(scrollPane, 10);
     }
 
-    public void putItemInfo(int n){       //素材アイテムの情報を表示するメソッド
+    public void showMaterialList() {         //素材アイテムをリストとして表示する
+        int pf = 366;             //アイテムの数とスクロールの最大値
+
+        /*各アイテムの数量とアイコンを取得する下準備*/
+        Material[] materials = Material.values();
+        for (int i = 0; i < materials.length; i++) {
+            /*背景の枠の表示*/
+            JLabel itemSlot = new JLabel(iconSlot);
+            itemSlot.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
+            listPane.add(itemSlot);
+            listPane.setLayer(itemSlot, 0);
+
+            /*MaterialCompoundButtonを用いたアイテム用ボタンの表示*/
+            ImageIcon materialIcon = new ImageIcon(materials[i].getAssetPath());
+            MaterialCompoundButton newButton = new MaterialCompoundButton(isc.scale(materialIcon, 2.0), materials[i]);
+            newButton.setBorderPainted(false);
+            newButton.setContentAreaFilled(false);
+            newButton.setBounds(16 + 80 * (i % 6), 16 + 80 * (i / 6), 64, 64);
+            newButton.addActionListener(this);
+            listPane.add(newButton);
+            listPane.setLayer(newButton, 10);
+            materialButtons[i] = newButton;
+
+            /*アイテムの数の表示*/
+            String itemQuantity = String.valueOf(user.getMaterialQuantity(materials[i]));
+            JLabel numLabel = new JLabel(itemQuantity);
+
+            numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
+            numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+            listPane.add(numLabel);
+            listPane.setLayer(numLabel, 20);
+        }
+        /*背景の表示*/
+        int n = ((int) Math.ceil((double) model.Material.LENGTH / 6.0)) * 80 + 16;
+        if (n > 366) pf = n;
+        for (int i = 0; i * 80 - 64 <= pf; i++) {
+            JLabel listLabel = new JLabel(iconList);
+            listLabel.setBounds(0, i * 80 - 64, 496, 80);
+            listPane.add(listLabel);
+            listPane.setLayer(listLabel, -10);
+        }
+        /*リストを画面本体に配置する*/
+        listPane.setBounds(0, 0, 496, 10000);
+        listPane.setPreferredSize(new Dimension(496, pf));
+        viewport.setView(listPane);
+        scrollPane.setBounds(16, 112, 496 + 18, 366 + 18);
+        menuPanel.add(scrollPane);
+        menuPanel.setLayer(scrollPane, 10);
+    }
+
+    public void putBpInfo(Blueprint bp) {       //原型の情報を表示するメソッド
         itemInfoPane.removeAll();
 
         /*アイテム名の表示*/
-        JLabel itemName = new JLabel(itemButton[n].material.getName());
+        JLabel bpName = new JLabel(bp.baseItem().name);
+        bpName.setBounds(0, 0, 256, 32);
+        bpName.setHorizontalAlignment(JLabel.CENTER);
+        bpName.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 24));
+        itemInfoPane.add(bpName);
+        itemInfoPane.setLayer(bpName, 0);
+
+        /*アイコン表示*/
+        JLabel bpIcon = new JLabel(isc.scale(new ImageIcon(bp.baseItem().getAssetPath()), 4.0));
+        bpIcon.setBounds(64, 32, 128, 128);
+        itemInfoPane.add(bpIcon);
+        itemInfoPane.setLayer(bpIcon, 0);
+
+        /*アイテムの所持数の表示*/
+        JLabel bpNum = new JLabel("所持数：" + user.getBlueprintQuantity(bp));
+        bpNum.setBounds(0, 160, 256, 32);
+        bpNum.setHorizontalAlignment(JLabel.CENTER);
+        bpNum.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+        itemInfoPane.add(bpNum);
+        itemInfoPane.setLayer(bpNum, 0);
+
+        /*説明文の表示*/
+        String txt = "<html>" + bp.baseItem().name +
+                "の設計図<br>" + "このままでは装備できない<br><br>"
+                + "素材を集めることで、装備を製造することができる<br>"
+                + "装備を製造すると、設計図は消費される";
+        JLabel bpTxt = new JLabel(txt);
+        bpTxt.setBounds(0, 192, 256, 256);
+        bpTxt.setVerticalAlignment(JLabel.TOP);
+        bpTxt.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 16));
+        itemInfoPane.add(bpTxt);
+        itemInfoPane.setLayer(bpTxt, 0);
+
+        itemInfoPane.setBounds(546, 32, 256, 464);
+        menuPanel.add(itemInfoPane);
+        menuPanel.setLayer(itemInfoPane, 10);
+    }
+
+    public void putItemInfo(Material material) {       //素材アイテムの情報を表示するメソッド
+        itemInfoPane.removeAll();
+
+        /*アイテム名の表示*/
+        JLabel itemName = new JLabel(material.getName());
         itemName.setBounds(0, 0, 256, 32);
         itemName.setHorizontalAlignment(JLabel.CENTER);
         itemName.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 24));
@@ -231,13 +329,13 @@ public class Warehouse extends JFrame implements ActionListener {
         itemInfoPane.setLayer(itemName, 0);
 
         /*アイコン表示*/
-        JLabel itemIcon = new JLabel(isc.scale(new ImageIcon(itemButton[n].material.getAssetPath()), 4.0));
+        JLabel itemIcon = new JLabel(isc.scale(new ImageIcon(material.getAssetPath()), 4.0));
         itemIcon.setBounds(64, 32, 128, 128);
         itemInfoPane.add(itemIcon);
         itemInfoPane.setLayer(itemIcon, 0);
 
         /*アイテムの所持数の表示*/
-        JLabel itemNum = new JLabel("所持数：" + user.getMaterialQuantity(itemButton[n].material));
+        JLabel itemNum = new JLabel("所持数：" + user.getMaterialQuantity(material));
         itemNum.setBounds(0, 160, 256, 32);
         itemNum.setHorizontalAlignment(JLabel.CENTER);
         itemNum.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
@@ -245,7 +343,7 @@ public class Warehouse extends JFrame implements ActionListener {
         itemInfoPane.setLayer(itemNum, 0);
 
         /*フレーバーテキストの表示*/
-        JLabel itemTxt = new JLabel(itemButton[n].material.getTxt());
+        JLabel itemTxt = new JLabel(material.getTxt());
         itemTxt.setBounds(0, 192, 256, 256);
         itemTxt.setVerticalAlignment(JLabel.TOP);
         itemTxt.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 16));
@@ -258,25 +356,27 @@ public class Warehouse extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        // Upgradeボタンが押されたときの処理
-        if (e.getSource() == buttonSelector[0]) {
-            System.out.println("装だよ(便乗)");
-            getEquipmentList();
-        }
-        if (e.getSource() == buttonSelector[1]) {
-            System.out.println("原型は製造しないと使えないぜっ！");
-            getEquipBaseList();
-        }
-        if (e.getSource() == buttonSelector[2]) {
-            System.out.println("ラストエリクサーなんてないよ");
-            getItemList();
-        }
-        for(int i=0;i<itemVar;i++){
-            if(e.getSource() == itemButton[i].button){
-                putItemInfo(i);
-            }
+        Object source = e.getSource();
+
+        // MenuButtonが押されたときの処理(切り替えボタン)
+        if (source instanceof MenuButton) {
+            switchMenu(((MenuButton) source).state);
+            return;
         }
 
+        // BlueprintListのボタンが押されたときの処理
+        if (source instanceof BlueprintCompoundButton) {
+            putBpInfo(((BlueprintCompoundButton) source).blueprint);
+            return;
+        }
+
+        // MaterialListのボタンが押されたときの処理
+        if (source instanceof MaterialCompoundButton) {
+            putItemInfo(((MaterialCompoundButton) source).material);
+            return;
+        }
+
+        // TODO: Upgradeボタンが押されたときの処理
     }
 
     public static void main(String args[]) {
