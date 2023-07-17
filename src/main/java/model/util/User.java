@@ -107,12 +107,12 @@ public class User {
         if (this.getMaterialQuantity(Material.WOOD) >= equipmentItem.req_wood
                 && this.getMaterialQuantity(Material.IRON) >= equipmentItem.req_iron
                 && this.getMaterialQuantity(Material.DIAMOND) >= equipmentItem.req_diamond
-                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_copper &&
+                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_bronze &&
                 this.getMaterialQuantity(Material.LEATHER) >= equipmentItem.req_leather) {
             this.consumeMaterial(Material.WOOD, equipmentItem.req_wood);
             this.consumeMaterial(Material.IRON, equipmentItem.req_iron);
             this.consumeMaterial(Material.DIAMOND, equipmentItem.req_diamond);
-            this.consumeMaterial(Material.BRONZE, equipmentItem.req_copper);
+            this.consumeMaterial(Material.BRONZE, equipmentItem.req_bronze);
             this.consumeMaterial(Material.LEATHER, equipmentItem.req_leather);
             this.removeBlueprint(new Blueprint(equipmentItem), 1);
             this.upgradeEquipment(equipmentItem);
