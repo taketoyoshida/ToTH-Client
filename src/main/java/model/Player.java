@@ -1,5 +1,7 @@
 package model;
 
+import model.game.Equipment;
+
 import java.util.HashMap;
 import java.util.Map;
 
