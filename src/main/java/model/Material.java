@@ -22,6 +22,8 @@ public enum Material {
             + "鉄ほどの強度はないが、その分扱いやすい<br>" +
             "そのために、銅の鎧は駆け出しの狩人に適する");
 
+    public static final int LENGTH = Material.values().length;
+
     private final String name;
     public final String imgPath;
     public final String txt;
