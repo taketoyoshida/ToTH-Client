@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import model.Material;
 import model.util.User;
 import model.Blueprint;
 import model.EquipmentItem;
@@ -14,11 +15,13 @@ import static java.awt.Font.BOLD;
 public class Workshop extends JFrame implements ActionListener {
 
     private User user;
-    int bpVar = 23;                 //装備原型の種類の数
+    int itemVar = 5, bpVar = 23;                 //装備原型と素材の種類の数
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
     private JLayeredPane equipInfoPane = new JLayeredPane();
     private JLayeredPane listPane = new JLayeredPane();
+    private JLayeredPane setPane = new JLayeredPane();
+    private JLayeredPane upgradePane = new JLayeredPane();
     private ImageIcon iconBackground = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
     private ImageIcon iconList = new ImageIcon("./assets/imgs/TestEquipBaseList.png");
     private ImageIcon iconEquipPickArea = new ImageIcon("./assets/imgs/TestWorkshopText.png");
@@ -34,7 +37,7 @@ public class Workshop extends JFrame implements ActionListener {
     JLabel label2 = new JLabel(iconEquipPickArea);
     JLabel labelUpgradeBefore = new JLabel(iconUpgradeSelection);
     JLabel labelUpgradeAfter = new JLabel(iconUpgradeSelection);
-    JLabel[] textLabel = new JLabel[6];
+    JLabel textLabel = new JLabel();
 
     JScrollPane scrollPane = new JScrollPane();
     // viewportにscrollPaneの中のコンテンツを格納
@@ -42,6 +45,7 @@ public class Workshop extends JFrame implements ActionListener {
     JViewport viewport = scrollPane.getViewport();
     JButton buttonUpgrade = new JButton(iconUpgrade);
     blueprintCompoundButton[] bpButton = new blueprintCompoundButton[bpVar];
+    Blueprint slottedBp;
 
     private class blueprintCompoundButton {   //原型が紐づけられたボタンの構造体
         Blueprint blueprint;
@@ -61,13 +65,9 @@ public class Workshop extends JFrame implements ActionListener {
             bpButton[i] = new blueprintCompoundButton();
         }
 
-        for (int i = 0; i < textLabel.length; i++) {
-            textLabel[i] = new JLabel();
-        }
-
         start();
 
-        this.base.change(menuPanel);
+        base.change(menuPanel);
 
     }
 
@@ -99,10 +99,18 @@ public class Workshop extends JFrame implements ActionListener {
     public void start() {
         menu();
         buttonUpgrade.setEnabled(false);
-        printInfo("装備を選択してください", 0);
         equipInfoPane.setBounds(0, 0, 832, 549);
         menuPanel.add(equipInfoPane);
         menuPanel.setLayer(equipInfoPane, 10);
+
+        /*最初にテキストボックスに表示するメッセージ*/
+        textLabel.setText("<html>製造する装備の設計図を選択してください<br>"
+        + "中央の「製造」ボタンから製造することができます");
+        textLabel.setVerticalAlignment(JLabel.TOP);
+        textLabel.setFont(new Font("ＭＳ ゴシック", BOLD, 22));
+        textLabel.setBounds(234, 344, 558, 144);
+        equipInfoPane.add(textLabel);
+        equipInfoPane.setLayer(textLabel, 0);
     }
 
     public void getList() {
@@ -133,6 +141,7 @@ public class Workshop extends JFrame implements ActionListener {
         bp[20] = new Blueprint(EquipmentItem.WOOD_DAGGER);
         bp[21] = new Blueprint(EquipmentItem.IRON_DAGGER);
         bp[22] = new Blueprint(EquipmentItem.DIAMOND_DAGGER);
+        /*一つ以上所持している設計図のみを表示する*/
         for (int i = 0; i < bpVar; i++) {
             if (user.getBlueprintQuantity(bp[i]) > 0) {
                 bpButton[exist].blueprint = bp[i];
@@ -199,14 +208,79 @@ public class Workshop extends JFrame implements ActionListener {
     }
 
     //装備の情報を表示する
-    private void printInfo(String info, int n) {
-        System.out.println("test");
-        if (n < 0 || n > textLabel.length) return;
-        textLabel[n].setText(info);
-        textLabel[n].setFont(new Font("ＭＳ ゴシック", BOLD, 22));
-        textLabel[n].setBounds(230, 340 + n * 26, 562, 22);
-        equipInfoPane.add(textLabel[n]);
-        equipInfoPane.setLayer(textLabel[n], 10);
+    private void printReq(Blueprint bp, boolean warning) {
+        equipInfoPane.removeAll();
+
+        int[] req = new int[itemVar];
+        int exist = 1;
+        Material[] mt = new Material[itemVar];
+        JLabel[] reqLabel = new JLabel[itemVar + 1];
+        for (int i = 0; i < itemVar + 1; i++) {
+            reqLabel[i] = new JLabel();
+            reqLabel[i].setText("");
+        }
+
+        req[0] = bp.baseItem().req_wood;
+        req[1] = bp.baseItem().req_iron;
+        req[2] = bp.baseItem().req_diamond;
+        req[3] = bp.baseItem().req_leather;
+        req[4] = bp.baseItem().req_bronze;
+        mt[0] = Material.WOOD;
+        mt[1] = Material.IRON;
+        mt[2] = Material.DIAMOND;
+        mt[3] = Material.LEATHER;
+        mt[4] = Material.BRONZE;
+
+        if (warning == true) {
+            reqLabel[0].setText("<html>素材が足りません！");
+            reqLabel[0].setForeground(Color.RED);
+        } else reqLabel[0].setText("<html>[" + bp.baseItem().name + "の設計図]");
+
+        String matTxt;
+        for (int i = 0; i < itemVar; i++) {
+            if (req[i] > 0) {
+                int n = user.getMaterialQuantity(mt[i]);
+                matTxt = mt[i].getName() + " " + n + "/" + req[i];
+                reqLabel[exist].setText(matTxt);
+                if (n < req[i]) reqLabel[exist].setForeground(Color.RED);
+                else reqLabel[exist].setForeground(Color.BLACK);
+                exist = exist + 1;
+            }
+        }
+
+        for (int i = 0; i < exist; i++) {
+            reqLabel[i].setFont(new Font("ＭＳ ゴシック", BOLD, 22));
+            reqLabel[i].setBounds(234, 344 + i * 26, 558, 22);
+            equipInfoPane.add(reqLabel[i]);
+            equipInfoPane.setLayer(reqLabel[i], 10);
+        }
+
+        base.change(menuPanel);
+
+    }
+
+    public void setBlueprint(Blueprint bp){
+
+        setPane.removeAll();
+        ImageIcon setBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
+        JLabel setBpLabel = new JLabel(isc.scale(setBpIcon,6.0));
+        setBpLabel.setBounds(0, 0, 192, 192);
+        setPane.add(setBpLabel);
+        setPane.setBounds(242, 72, 192, 192);
+
+        upgradePane.removeAll();
+        ImageIcon upgradeBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
+        JLabel upgradeBpLabel = new JLabel(isc.scale(upgradeBpIcon,6.0));
+        upgradeBpLabel.setBounds(0, 0, 192, 192);
+        upgradePane.add(upgradeBpLabel);
+        upgradePane.setBounds(592, 72, 192, 192);
+
+        buttonUpgrade.setEnabled(true);
+
+        menuPanel.add(setPane);
+        menuPanel.setLayer(setPane, 10);
+        menuPanel.add(upgradePane);
+        menuPanel.setLayer(upgradePane, 10);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -214,15 +288,25 @@ public class Workshop extends JFrame implements ActionListener {
         if (e.getSource() == buttonUpgrade) {
             System.out.println("力が…欲しいか…？");
         }
+        for (int i = 0; i < bpVar; i++) {
+            if (e.getSource() == bpButton[i].button) {
+                equipInfoPane.removeAll();
+                printReq(bpButton[i].blueprint, false);
+                setBlueprint(bpButton[i].blueprint);
+            }
+        }
 
     }
 
     public static void main(String args[]) {
         User user = new User(114514, "testUser", 45590, 3);
 
-        user.addBlueprint(new Blueprint(EquipmentItem.WOOD_SWORD),3);
-        user.addBlueprint(new Blueprint(EquipmentItem.IRON_SWORD),1);
-        user.addBlueprint(new Blueprint(EquipmentItem.DIAMOND_SWORD),2);
+        user.addBlueprint(new Blueprint(EquipmentItem.WOOD_SWORD), 3);
+        user.addBlueprint(new Blueprint(EquipmentItem.IRON_SWORD), 1);
+        user.addBlueprint(new Blueprint(EquipmentItem.DIAMOND_SWORD), 2);
+
+        user.addMaterial(Material.WOOD, 5);
+        user.addMaterial(Material.IRON, 2);
 
         WindowBase base = new WindowBase("test");
         Workshop test = new Workshop(base, user);

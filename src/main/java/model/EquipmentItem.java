@@ -28,7 +28,7 @@ public enum EquipmentItem {
     public final int ID;
     public final String name;
     public final EquipmentPosition position;
-    public final int req_wood, req_iron, req_diamond, req_leather, req_copper;
+    public final int req_wood, req_iron, req_diamond, req_leather, req_bronze;
     public final String imgPath;
 
 
@@ -36,7 +36,7 @@ public enum EquipmentItem {
             int id,
             String name,
             EquipmentPosition pos,
-            int wood, int iron, int diamond, int leather, int copper, String imgPath
+            int wood, int iron, int diamond, int leather, int bronze, String imgPath
     ) {
         this.ID = id;
         this.name = name;
@@ -45,7 +45,7 @@ public enum EquipmentItem {
         this.req_iron = iron;
         this.req_diamond = diamond;
         this.req_leather = leather;
-        this.req_copper = copper;
+        this.req_bronze = bronze;
         this.imgPath = imgPath;
     }
 
