@@ -52,6 +52,22 @@ public enum EnemyInfo {
         this.dropRates = dropRates;
     }
 
+    public int getID() {
+        return ID;
+    }
+    public int getATK() {
+        return ATK;
+    }
+    public int getHP() {
+        return HP;
+    }
+    public int getMOV() {
+        return MOV;
+    }
+    public int getRNG() {
+        return RNG;
+    }
+
     public String getAssetPath() {
         return "./assets/imgs/enemy" + this.imgPath;
     }
