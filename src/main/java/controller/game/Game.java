@@ -6,6 +6,7 @@ import model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import static model.Game.BOARD_COL;
 import static model.Game.BOARD_ROW;
@@ -14,7 +15,7 @@ import model.util.User;
 
 public class Game {
     private Random random;
-    private static final int GAME_TURN = 15;
+    private static final int GAME_TURN = 2;
     private int turnNum;
     private final model.Game game;
     private List<Integer> enemies;
@@ -35,8 +36,10 @@ public class Game {
 
         game = new model.Game();
         setObstacle();
-        setEnemy();
-        turnNum = 0;
+        //setEnemy();
+        game.setPiece(new Position(0, 0), new Piece(Piece.PieceType.ENEMY));
+
+        turnNum = 1;
         this.random = new Random();
         // TODO: Gateway should be properly initialized
         this.gateway = new GameGateway.IGameGateway() {
@@ -45,17 +48,22 @@ public class Game {
 
     //ゲームのメインループ
     public void playGame() {
+        System.out.println("ゲームを開始します");
+        System.out.println("Player1: " + Player1.getName());
+        Player1.printStatus();
+        System.out.println("Player2: " + Player2.getName());
+        Player2.printStatus();
+        Scanner scanner = new Scanner(System.in);
 
         while (!isGameOver()) {
             System.out.println("Turn: " + turnNum);
-            System.out.println("Player1: " + Player1.getScore());
-            System.out.println("Player2: " + Player2.getScore());
-            System.out.println("プレイヤーのターンです");
+            System.out.println("Player1_Score: " + Player1.getScore());
+            System.out.println("Player2_Score: " + Player2.getScore());
+            System.out.println("プレイヤー1のターンです");
             System.out.println("移動先を選択してください");
             // TODO: Player should be properly initialized
-            if (isValidMove()) {
-                movePlayer();
-            }
+            // Player1の行動
+            // Player2の行動
             // 2人の行動が終わったら
             refBoard(); //敵プレイやの動きを加味してボードの書き換え
 
@@ -69,38 +77,51 @@ public class Game {
 
             /* 敵の行動 */
             // TODO: 敵の行動を処理するプログラムの追加
-            while (enemies.size() < 3) {
-                setEnemy();
-            }
-            for (int enemyId : enemies) {
-                EnemyInfo enemyInfo = null;
-                for (EnemyInfo info : EnemyInfo.values()) {
-                    if (info.getID() == enemyId) {
-                        enemyInfo = info;
-                        break;
-                    }
-                }
-                if (enemyInfo == null) {
-                    System.out.println("敵の情報が見つかりません: " + enemyId);
-                    continue;
-                }
-                moveEnemy();
-                atkEnemy();
-            }
+//            while (enemies.size() < 3) {
+//                setEnemy();
+//            }
+//            for (int enemyId : enemies) {
+//                EnemyInfo enemyInfo = null;
+//                for (EnemyInfo info : EnemyInfo.values()) {
+//                    if (info.getID() == enemyId) {
+//                        enemyInfo = info;
+//                        break;
+//                    }
+//                }
+//                if (enemyInfo == null) {
+//                    //System.out.println("敵の情報が見つかりません: " + enemyId);
+//                    continue;
+//                }
+//                moveEnemy();
+//                atkEnemy();
+//            }
 
             refBoard();
             refStatus();
+
+            Player1.increaseAliveTurn();
+            Player2.increaseAliveTurn();
 
             if (Player1.isDead()) {
                 System.out.println(Player1.getName() + "は死にました");
                 Player1.setScore(Player1.getScore() - 500);
                 Player1.increaseDeadCount();
+                Player1.setAliveTurn(0);
             }
             if (Player2.isDead()) {
                 System.out.println(Player2.getName() + "は死にました");
                 Player2.setScore(Player2.getScore() - 500);
-                Player1.increaseDeadCount();
+                Player2.increaseDeadCount();
+                Player2.setAliveTurn(0);
             }
+
+            //生存ボーナス
+            System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
+            Player1.increaseScore(10 * Player1.getAliveTurn());
+            System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
+            Player2.increaseScore(10 * Player2.getAliveTurn());
+
+            printBoard();
             turnNum++;
         }
 
@@ -123,6 +144,10 @@ public class Game {
             Player2.setReward(Player2.getScore() / 10);
         }
 
+        System.out.println("Player1の得点: " + Player1.getScore());
+        System.out.println("Player2の得点: " + Player2.getScore());
+        System.out.println("Player1の報酬: " + Player1.getReward());
+        System.out.println("Player2の報酬: " + Player2.getReward());
 
     }
 
@@ -179,7 +204,14 @@ public class Game {
     }
 
     public void printBoard() {
-        //これはviewクラスで定義するのか、、？
+        System.out.println("盤面表示");
+        for (int i = 0; i < BOARD_ROW; i++) {
+            System.out.print(" ");
+            for (int j = 0; j < BOARD_COL; j++) {
+                game.printPiece(new Position(i, j));
+            }
+            System.out.println();
+        }
     }
 
     //敵をセット
@@ -238,7 +270,7 @@ public class Game {
                     || game.getPiecesAround(new Position(ROW, COL)).size() == 0) continue;// 当該マスに障害物含む何かがあったら再生成
             // TODO: Implement Piece
             // enemyInfoに対応する敵をセット
-            game.setPiece(new Position(ROW, COL), new Piece());
+            game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.ENEMY));
             break;
         } while (true);// 敵がセットされるまで続く
     }
@@ -250,14 +282,16 @@ public class Game {
         for (int i = 0; i < 10; i++) {
             ROW = random.nextInt(BOARD_ROW);// ランダムで座標を生成
             COL = random.nextInt(BOARD_COL);
+            game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
             // TODO: Implement Piece
-            if (game.getPiecesAround(new Position(ROW, COL)).size() == 0)
-                game.setPiece(new Position(ROW, COL), new Piece());// 周囲1マスに他の障害物が無ければセット
+//            if (game.getPiecesAround(new Position(ROW, COL)).size() == 0)
+//                game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));// 周囲1マスに他の障害物が無ければセット
         }
     }
 
     public boolean isGameOver() {
-        return turnNum == GAME_TURN;
+        if (turnNum > GAME_TURN) return true;
+        else return false;
     }
 
     public int getRandomNum(int min, int max) {

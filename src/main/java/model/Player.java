@@ -14,6 +14,7 @@ public class Player {
     private int rank;                           // ランク
     private int score;                          // スコア
     private int reward;                         // ゲーム終了後の報酬（ゴールド）
+    private int aliveTurn;                      // 生存ターン数
     private Map<EquipmentPosition, Equipment> equippedItems; // 装備
     /* 持ってる装備を格納する変数が必要 */
     private int deadCount = 0;
@@ -24,7 +25,7 @@ public class Player {
     private final int baseRNG = 1;
     */
 
-    public Player(String name, Status status,int rank) {
+    public Player(String name, Status status, int rank) {
         this.name = name;
         this.status = status;
         this.materials = new HashMap<>();
@@ -32,6 +33,8 @@ public class Player {
         this.isDead = false;
         this.rank = 0;
         this.score = 0;
+        this.reward = 0;
+        this.aliveTurn = 0;
         this.equippedItems = new HashMap<>();
     }
 
@@ -41,6 +44,13 @@ public class Player {
 
     public Status getStatus() {
         return status;
+    }
+
+    public void printStatus() {
+        System.out.println("HP: " + status.getHP());
+        System.out.println("ATK: " + status.getATK());
+        System.out.println("MOV: " + status.getMOV());
+        System.out.println("RNG: " + status.getRNG());
     }
 
     public Map<Material, Integer> getMaterials() {
@@ -86,11 +96,25 @@ public class Player {
     public void increaseScore(int points) {
         this.score += points;
     }
+
     public int getReward() {
         return reward;
     }
+
     public void setReward(int reward) {
         this.reward = reward;
+    }
+
+    public int getAliveTurn() {
+        return aliveTurn;
+    }
+
+    public void setAliveTurn(int aliveTurn) {
+        this.aliveTurn = aliveTurn;
+    }
+
+    public void increaseAliveTurn() {
+        this.aliveTurn++;
     }
 
     public void addMaterial(Material material, int quantity) {

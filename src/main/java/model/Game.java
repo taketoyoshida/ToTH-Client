@@ -33,6 +33,12 @@ public class Game {
         return board.get(new Position(x, y));
     }
 
+    public void printPiece(Position pos) {
+        if (getPiece(pos) == null) {
+            System.out.print("空");
+        }
+    }
+
     // 対象のマスの周囲のコマを返す
     public Set<Map.Entry<Position, Piece>> getPiecesAround(Position pos) {
         Set<Map.Entry<Position, Piece>> results = new HashSet<>();
