@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import model.Player;
+import model.Status;
 import model.util.User;
 
 public class MainMenu extends JFrame implements MouseListener {
@@ -75,7 +77,9 @@ public class MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
-            Game testGame = new Game(base);
+            Status status = new Status(20, 1, 4, 2);
+            Player player = new Player("testUser", status);
+            Game testGame = new Game(base, player);
         }
 
     }

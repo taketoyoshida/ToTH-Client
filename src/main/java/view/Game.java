@@ -4,51 +4,117 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import model.Player;
+import model.Status;
+
 public class Game extends JFrame implements KeyListener {
 
+    private final Player player;
     private final WindowBase base;
-    private int x = 408, y = 206;//キャラクターの座標
-    private boolean keyFlag = false;//キーが無限に押されないようにするための変数
-    private JLayeredPane p = new JLayeredPane();
-    private ImageIcon icon1 = new ImageIcon("./assets/imgs/イラスト7.jpg");    //画像のディレクトリは調整してもろて
-    private ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
+    private int charPosX, charPosY, limX = 12, limY = 8;          //キャラクターの座標とマスの縦横サイズ
+    private int cursorPosX, cursorPosY;                    //カーソルの座標
+    private boolean keyFlag = false, allowCursor = false;  //キーとカーソル用の変数
+    private JLayeredPane bgPanel = new JLayeredPane();
+    private JLayeredPane gamePanel = new JLayeredPane();
+    private ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
+    private ImageIcon charIcon = new ImageIcon("./assets/imgs/エルフ.jpg");
+    private ImageIcon bgIcon = new ImageIcon("./assets/imgs/TestGameBG.png");
+    private ImageIcon cursorIcon = new ImageIcon("./assets/imgs/TestCursor.png");
 
     private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
-    private JLabel label2 = new JLabel(icon2);
-    //Test7とかいう名前は適当に変えること
+    private JLabel charLabel = new JLabel(charIcon);
+    JLabel cursorLabel = new JLabel(cursorIcon);
 
-    public Game(WindowBase base) {
+    public Game(WindowBase base, Player player) {
 
+        this.player = player;
         this.base = base;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
-        p.add(label1);
-        p.setLayer(label1, 10);
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
+        bgPanel.add(label1);
+        bgPanel.setLayer(label1, -10);
 
-        //paint();
-        label2.setBounds(x, y, 32, 32);
-        p.add(label2);//数字がでかいほど手前に来る
-        p.setLayer(label2, 20);
+        gamePanel.setBounds(64, 32, 384, 256);
+        bgPanel.add(gamePanel);
+        bgPanel.setLayer(gamePanel, 0);
 
-        //setContentPane(p);
+        start();
+
         base.addKeyListener(this);
 
-        base.change(p);
+        base.change(bgPanel);
 
 
     }
 
+    public void start() {
+        setGameBG();
+        setChar(4, 4);
+    }
+
+    public void setChar(int x, int y) {
+        charPosX = x;
+        charPosY = y;
+        gamePanel.add(charLabel);
+        charLabel.setBounds(charPosX * 32, charPosY * 32, 32, 32);
+        gamePanel.setLayer(charLabel, 10);
+    }
+
+    public void setCursor(int x, int y) {
+        cursorPosX = x;
+        cursorPosY = y;
+        cursorLabel.setBounds(cursorPosX * 32, cursorPosY * 32, 32, 32);
+        gamePanel.add(cursorLabel);
+        gamePanel.setLayer(cursorLabel, 20);
+        allowCursor = true;
+    }
+
+    public void moveCursor(int x, int y, int MOV) {   //カーソルを動かすメソッド
+        /*始めにカーソルが枠外に出ないか判定する*/
+        int posX = cursorPosX + x;
+        int posY = cursorPosY + y;
+        if (posX < 0 || posX > limX - 1) return;
+        if (posY < 0 || posY > limY - 1) return;
+        /*枠内なら、行動指定可能範囲内か判定する*/
+        int movX = Math.abs(posX - charPosX);
+        int movY = Math.abs(posY - charPosY);
+        if (movX + movY < MOV) {
+            setCursor(cursorPosX + x, cursorPosY + y);
+        }
+    }
+
+    public void removeCursor() {
+        gamePanel.remove(gamePanel.getIndexOf(cursorLabel));
+        allowCursor = false;
+    }
+
+    public void getCursorAction(int x, int y, boolean isAttack) {
+        if (isAttack) {   //攻撃処理
+            removeCursor();
+        } else {   //移動処理
+            setChar(x, y);
+            removeCursor();
+        }
+    }
+
+    public void setGameBG() {
+        for (int x = 0; x < 12; x++)
+            for (int y = 0; y < 8; y++) {
+                JLabel label = new JLabel();
+                label.setIcon(bgIcon);
+                label.setBounds(x * 32, y * 32, 32, 32);
+                gamePanel.add(label);
+                gamePanel.setLayer(label, -10);
+            }
+    }
+
     public void paint() {//キャラクターの描画とレイヤーの設定
-        label2.setBounds(x, y, 32, 32);
+        //charLabel.setBounds(posX*32, posY*32, 32, 32);
 
         //JLabel label2 = new JLabel();
         //label2.setIcon(icon2);
 
         //JPanel p = new JPanel();
         //JLayeredPaneを使うとレイヤー設定ができる
-
-
-        p.add(label2);//数字がでかいほど手前に来る
-        p.setLayer(label2, 20);
 
         //setContentPane(p);
         //addKeyListener(this);
@@ -63,31 +129,47 @@ public class Game extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) { //Keyを押したときの動作
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W:
-                if (!keyFlag) {
-                    moveCharacter(0, -32);
-                    keyFlag = true;
+            case KeyEvent.VK_1:
+                if (allowCursor == false) {
+                    allowCursor = true;
+                    setCursor(charPosX, charPosY);
                 }
 
                 break;
-            case KeyEvent.VK_S:
-                if (!keyFlag) {
-                    moveCharacter(0, 32);
-                    keyFlag = true;
-                }
-                break;
-            case KeyEvent.VK_A:
-                if (!keyFlag) {
-                    moveCharacter(-32, 0);
-                    keyFlag = true;
-                }
-                break;
-            case KeyEvent.VK_D:
-                if (!keyFlag) {
-                    moveCharacter(32, 0);
-                    keyFlag = true;
-                }
-                break;
+        }
+        if (allowCursor == true) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    if (!keyFlag) {
+                        moveCursor(0, -1, player.getStatus().getMOV());
+                        keyFlag = true;
+                    }
+
+                    break;
+                case KeyEvent.VK_S:
+                    if (!keyFlag) {
+                        moveCursor(0, 1, player.getStatus().getMOV());
+                        keyFlag = true;
+                    }
+                    break;
+                case KeyEvent.VK_A:
+                    if (!keyFlag) {
+                        moveCursor(-1, 0, player.getStatus().getMOV());
+                        keyFlag = true;
+                    }
+                    break;
+                case KeyEvent.VK_D:
+                    if (!keyFlag) {
+                        moveCursor(1, 0, player.getStatus().getMOV());
+                        keyFlag = true;
+                    }
+                    break;
+                case KeyEvent.VK_F:
+                    if (!keyFlag) {
+                        getCursorAction(cursorPosX, cursorPosY, false);
+                        keyFlag = true;
+                    }
+            }
         }
 
     }
@@ -115,38 +197,28 @@ public class Game extends JFrame implements KeyListener {
     }
 
     public void moveCharacter(int X, int Y) {//キャラクターを動かす。
-        if (Y < 0 && X == 0) {
-            for (int i = 0; i < -1 * Y; i++) {
-                y--;
-                paint();
-            }
+        if (Y == -1 && X == 0 && charPosY > 0) {
+            setChar(charPosX, charPosY - 1);
             System.out.println("Wが押されました");
-        } else if (y > 0 && X == 0) {
-            for (int i = 0; i < Y; i++) {
-                y++;
-                paint();
-            }
+        } else if (Y == 1 && X == 0 && charPosY < limY - 1) {
+            setChar(charPosX, charPosY + 1);
             System.out.println("Sが押されました");
 
-        } else if (X < 0 && Y == 0) {
-            for (int i = 0; i < -1 * X; i++) {
-                x--;
-                paint();
-            }
+        } else if (X == -1 && Y == 0 && charPosX > 0) {
+            setChar(charPosX - 1, charPosY);
             System.out.println("Aが押されました");
-        } else if (X > 0 && Y == 0) {
-            for (int i = 0; i < X; i++) {
-                x++;
-                paint();
-            }
+        } else if (X == 1 && Y == 0 && charPosX < limX - 1) {
+            setChar(charPosX + 1, charPosY);
             System.out.println("dが押されました");
         }
     }
 
 
     public static void main(String args[]) {
+        Status status = new Status(20, 1, 4, 2);
+        Player player = new Player("testUser", status);
         WindowBase base = new WindowBase("test");
-        Game test = new Game(base);
+        Game test = new Game(base, player);
         base.setVisible(true);
     }
 
