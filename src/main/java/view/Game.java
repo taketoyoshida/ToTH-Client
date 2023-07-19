@@ -14,21 +14,25 @@ public class Game extends JFrame implements KeyListener {
     private int charPosX, charPosY, limX = 12, limY = 8;          //キャラクターの座標とマスの縦横サイズ
     private int cursorPosX, cursorPosY;                    //カーソルの座標
     private boolean keyFlag = false, allowCursor = false;  //キーとカーソル用の変数
+    private boolean isAttack = false;       //カーソルの操作指定用変数
     private JLayeredPane bgPanel = new JLayeredPane();
     private JLayeredPane gamePanel = new JLayeredPane();
+    private JLayeredPane cursorGuidePanel = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
     private ImageIcon charIcon = new ImageIcon("./assets/imgs/エルフ.jpg");
     private ImageIcon bgIcon = new ImageIcon("./assets/imgs/TestGameBG.png");
     private ImageIcon cursorIcon = new ImageIcon("./assets/imgs/TestCursor.png");
+    private ImageIcon moveGuideIcon = new ImageIcon("./assets/imgs/TestGuide1.png");
 
     private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
     private JLabel charLabel = new JLabel(charIcon);
-    JLabel cursorLabel = new JLabel(cursorIcon);
+    private JLabel cursorLabel = new JLabel(cursorIcon);
 
     public Game(WindowBase base, Player player) {
 
         this.player = player;
         this.base = base;
+
         label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         bgPanel.add(label1);
         bgPanel.setLayer(label1, -10);
@@ -36,6 +40,9 @@ public class Game extends JFrame implements KeyListener {
         gamePanel.setBounds(64, 32, 384, 256);
         bgPanel.add(gamePanel);
         bgPanel.setLayer(gamePanel, 0);
+        cursorGuidePanel.setBounds(0, 0, 384, 256);
+        gamePanel.add(cursorGuidePanel);
+        gamePanel.setLayer(cursorGuidePanel, 10);
 
         start();
 
@@ -57,6 +64,8 @@ public class Game extends JFrame implements KeyListener {
         gamePanel.add(charLabel);
         charLabel.setBounds(charPosX * 32, charPosY * 32, 32, 32);
         gamePanel.setLayer(charLabel, 10);
+        cursorGuidePanel.removeAll();
+        base.change(bgPanel);
     }
 
     public void setCursor(int x, int y) {
@@ -67,6 +76,24 @@ public class Game extends JFrame implements KeyListener {
         gamePanel.setLayer(cursorLabel, 20);
         allowCursor = true;
     }
+
+    public void setGuide(int MOV) {                 //カーソルの可動域を表示するメソッド
+        int posX, posY, movX, movY;
+        for (posX = 0; posX < limX; posX++)
+            for (posY = 0; posY < limY; posY++) {
+                movX = Math.abs(posX - charPosX);
+                movY = Math.abs(posY - charPosY);
+                if (movX + movY < MOV && (posX != cursorPosX || posY != cursorPosY)) {
+                    JLabel guideLabel = new JLabel(moveGuideIcon);
+                    guideLabel.setBounds(posX * 32, posY * 32, 32, 32);
+                    cursorGuidePanel.add(guideLabel);
+                    cursorGuidePanel.setLayer(guideLabel, 0);
+                }
+            }
+        //gamePanel.add(cursorGuidePanel);
+        //gamePanel.setLayer(cursorGuidePanel, 10);
+    }
+
 
     public void moveCursor(int x, int y, int MOV) {   //カーソルを動かすメソッド
         /*始めにカーソルが枠外に出ないか判定する*/
@@ -80,6 +107,7 @@ public class Game extends JFrame implements KeyListener {
         if (movX + movY < MOV) {
             setCursor(cursorPosX + x, cursorPosY + y);
         }
+        setGuide(MOV);
     }
 
     public void removeCursor() {
@@ -133,6 +161,7 @@ public class Game extends JFrame implements KeyListener {
                 if (allowCursor == false) {
                     allowCursor = true;
                     setCursor(charPosX, charPosY);
+                    setGuide(player.getStatus().getMOV());
                 }
 
                 break;
