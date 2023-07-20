@@ -3,6 +3,8 @@ package view;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import model.Player;
 import model.Status;
@@ -11,22 +13,27 @@ public class Game extends JFrame implements KeyListener {
 
     private final Player player;
     private final WindowBase base;
-    private int charPosX, charPosY, limX = 12, limY = 8;          //キャラクターの座標とマスの縦横サイズ
+    private int charPosX, charPosY;          //キャラクターの座標とマスの縦横サイズ
+    private final int limX = 12, limY = 8;
     private int cursorPosX, cursorPosY;                    //カーソルの座標
     private boolean keyFlag = false, allowCursor = false;  //キーとカーソル用の変数
     private boolean isAttack = false;       //カーソルの操作指定用変数
+    private Timer timer = new Timer(false);
     private JLayeredPane bgPanel = new JLayeredPane();
     private JLayeredPane gamePanel = new JLayeredPane();
     private JLayeredPane cursorGuidePanel = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
     private ImageIcon charIcon = new ImageIcon("./assets/imgs/エルフ.jpg");
     private ImageIcon bgIcon = new ImageIcon("./assets/imgs/TestGameBG.png");
-    private ImageIcon cursorIcon = new ImageIcon("./assets/imgs/TestCursor.png");
+    private ImageIcon attackIcon = new ImageIcon("./assets/imgs/TestAttack.gif");
+    private ImageIcon moveCursorIcon = new ImageIcon("./assets/imgs/TestCursor1.png");
+    private ImageIcon attackCursorIcon = new ImageIcon("./assets/imgs/TestCursor2.png");
     private ImageIcon moveGuideIcon = new ImageIcon("./assets/imgs/TestGuide1.png");
+    private ImageIcon attackGuideIcon = new ImageIcon("./assets/imgs/TestGuide2.png");
 
     private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
     private JLabel charLabel = new JLabel(charIcon);
-    private JLabel cursorLabel = new JLabel(cursorIcon);
+    private JLabel cursorLabel = new JLabel();
 
     public Game(WindowBase base, Player player) {
 
@@ -64,11 +71,13 @@ public class Game extends JFrame implements KeyListener {
         gamePanel.add(charLabel);
         charLabel.setBounds(charPosX * 32, charPosY * 32, 32, 32);
         gamePanel.setLayer(charLabel, 10);
-        cursorGuidePanel.removeAll();
-        base.change(bgPanel);
     }
 
     public void setCursor(int x, int y) {
+        /*攻撃か移動かでカーソルを変更する*/
+        if (isAttack == false) cursorLabel.setIcon(moveCursorIcon);
+        else cursorLabel.setIcon(attackCursorIcon);
+        /*引数の場所にカーソルを設置する*/
         cursorPosX = x;
         cursorPosY = y;
         cursorLabel.setBounds(cursorPosX * 32, cursorPosY * 32, 32, 32);
@@ -77,14 +86,40 @@ public class Game extends JFrame implements KeyListener {
         allowCursor = true;
     }
 
-    public void setGuide(int MOV) {                 //カーソルの可動域を表示するメソッド
-        int posX, posY, movX, movY;
+    public void showAttackParticle(int x, int y) {
+        /*表示されているカーソルを消去する*/
+        removeCursor();
+        /*攻撃の演出を表示する*/
+        JLabel attackLabel = new JLabel(attackIcon);
+        attackLabel.setBounds(x * 32, y * 32, 32, 32);
+        gamePanel.add(attackLabel);
+        gamePanel.setLayer(attackLabel, 30);
+        /*遅れて攻撃演出の消去を設定する*/
+        TimerTask attack = new TimerTask() {
+            @Override
+            public void run() {
+                gamePanel.remove(gamePanel.getIndexOf(attackLabel));
+                timer.cancel();
+                timer = new Timer(false);
+                base.change(bgPanel);
+            }
+        };
+        timer.schedule(attack, 2000);
+    }
+
+    public void setGuide(Status status) {                 //カーソルの可動域を表示するメソッド
+        int posX, posY, movX, movY, LIM;
+        /*移動と攻撃の処理のどちらかを判別する*/
+        if (isAttack == false) LIM = status.getMOV();
+        else LIM = status.getATK();
         for (posX = 0; posX < limX; posX++)
             for (posY = 0; posY < limY; posY++) {
                 movX = Math.abs(posX - charPosX);
                 movY = Math.abs(posY - charPosY);
-                if (movX + movY < MOV && (posX != cursorPosX || posY != cursorPosY)) {
-                    JLabel guideLabel = new JLabel(moveGuideIcon);
+                if (movX + movY < LIM && (posX != cursorPosX || posY != cursorPosY)) {
+                    JLabel guideLabel;
+                    if (isAttack == false) guideLabel = new JLabel(moveGuideIcon);
+                    else guideLabel = new JLabel(attackGuideIcon);
                     guideLabel.setBounds(posX * 32, posY * 32, 32, 32);
                     cursorGuidePanel.add(guideLabel);
                     cursorGuidePanel.setLayer(guideLabel, 0);
@@ -95,8 +130,12 @@ public class Game extends JFrame implements KeyListener {
     }
 
 
-    public void moveCursor(int x, int y, int MOV) {   //カーソルを動かすメソッド
-        /*始めにカーソルが枠外に出ないか判定する*/
+    public void moveCursor(int x, int y, Status status) {   //カーソルを動かすメソッド
+        /*始めに攻撃と移動どちらの処理か決定する*/
+        int LIM;
+        if (isAttack == false) LIM = status.getMOV();
+        else LIM = status.getATK();
+        /*次にカーソルが枠外に出ないか判定する*/
         int posX = cursorPosX + x;
         int posY = cursorPosY + y;
         if (posX < 0 || posX > limX - 1) return;
@@ -104,20 +143,22 @@ public class Game extends JFrame implements KeyListener {
         /*枠内なら、行動指定可能範囲内か判定する*/
         int movX = Math.abs(posX - charPosX);
         int movY = Math.abs(posY - charPosY);
-        if (movX + movY < MOV) {
+        if (movX + movY < LIM) {
             setCursor(cursorPosX + x, cursorPosY + y);
         }
-        setGuide(MOV);
+        setGuide(status);
     }
 
     public void removeCursor() {
         gamePanel.remove(gamePanel.getIndexOf(cursorLabel));
         allowCursor = false;
+        cursorGuidePanel.removeAll();
+        base.change(bgPanel);
     }
 
-    public void getCursorAction(int x, int y, boolean isAttack) {
+    public void getCursorAction(int x, int y) {
         if (isAttack) {   //攻撃処理
-            removeCursor();
+            showAttackParticle(x, y);
         } else {   //移動処理
             setChar(x, y);
             removeCursor();
@@ -161,41 +202,46 @@ public class Game extends JFrame implements KeyListener {
                 if (allowCursor == false) {
                     allowCursor = true;
                     setCursor(charPosX, charPosY);
-                    setGuide(player.getStatus().getMOV());
+                    setGuide(player.getStatus());
                 }
 
+                break;
+            case KeyEvent.VK_2:
+                if (isAttack == false) {
+                    isAttack = true;
+                } else isAttack = false;
                 break;
         }
         if (allowCursor == true) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_W:
                     if (!keyFlag) {
-                        moveCursor(0, -1, player.getStatus().getMOV());
+                        moveCursor(0, -1, player.getStatus());
                         keyFlag = true;
                     }
 
                     break;
                 case KeyEvent.VK_S:
                     if (!keyFlag) {
-                        moveCursor(0, 1, player.getStatus().getMOV());
+                        moveCursor(0, 1, player.getStatus());
                         keyFlag = true;
                     }
                     break;
                 case KeyEvent.VK_A:
                     if (!keyFlag) {
-                        moveCursor(-1, 0, player.getStatus().getMOV());
+                        moveCursor(-1, 0, player.getStatus());
                         keyFlag = true;
                     }
                     break;
                 case KeyEvent.VK_D:
                     if (!keyFlag) {
-                        moveCursor(1, 0, player.getStatus().getMOV());
+                        moveCursor(1, 0, player.getStatus());
                         keyFlag = true;
                     }
                     break;
                 case KeyEvent.VK_F:
                     if (!keyFlag) {
-                        getCursorAction(cursorPosX, cursorPosY, false);
+                        getCursorAction(cursorPosX, cursorPosY);
                         keyFlag = true;
                     }
             }
@@ -244,7 +290,7 @@ public class Game extends JFrame implements KeyListener {
 
 
     public static void main(String args[]) {
-        Status status = new Status(20, 1, 4, 2);
+        Status status = new Status(20, 3, 5, 2);
         Player player = new Player("testUser", status);
         WindowBase base = new WindowBase("test");
         Game test = new Game(base, player);

@@ -18,11 +18,10 @@ public class GachaWindow extends JFrame implements MouseListener {
 
     private User user;
     WindowBase base;
-    int coin;                                  //コイン数を格納する配列
     String[] puText = new String[5];           //新規装備の名前を５つ格納する配列
     JLayeredPane p = new JLayeredPane();             //操作で変化しない部分を表示する
     JLayeredPane p2 = new JLayeredPane();            //操作ごとに変化する部分を格納する
-    ImageIcon icon1 = new ImageIcon("./assets/imgs/MainMenuTest.png");    //画像のディレクトリは調整してもろて
+    ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
     ImageIcon cIcon = new ImageIcon("./assets/imgs/TestCoin.png");
     ImageIcon icon2 = new ImageIcon("./assets/imgs/TestGachaInfo.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
@@ -48,7 +47,6 @@ public class GachaWindow extends JFrame implements MouseListener {
     public GachaWindow(WindowBase base, User user) {
         /*実際の運用ではコイン数を管理するクラスからメソッドでコイン数をもらいたい*/
         /*コイン数の増減も同様にメソッドにすべきかも？要検討　7/6 */
-        this.coin = 0;
         this.base = base;
         this.user = user;
 
@@ -59,7 +57,7 @@ public class GachaWindow extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514, "testUser", 45590, 3);
+        User user = new User(114514, "testUser", 1984, 3);
         WindowBase base = new WindowBase("test");
         GachaWindow test = new GachaWindow(base, user);
         base.setVisible(true);
@@ -77,9 +75,13 @@ public class GachaWindow extends JFrame implements MouseListener {
         cLabel.setBounds(600, 20, 32, 32);  //右上のコイン数の表示
         p.add(cLabel);
         p.setLayer(cLabel, 0);
-        textLabel1.setText("×" + coin);
+        int coin = user.getBalance();
+        if (coin > 9999) {
+            textLabel1.setText("×9999+");
+            textLabel1.setForeground(Color.RED);
+        } else textLabel1.setText("×" + String.format("%4d", coin));
         textLabel1.setFont(new Font("ＭＳ ゴシック", BOLD, 32));
-        textLabel1.setBounds(632, 20, 100, 32);
+        textLabel1.setBounds(632, 20, 500, 32);
         p.add(textLabel1);
         p.setLayer(textLabel1, 10);
 
@@ -163,6 +165,7 @@ public class GachaWindow extends JFrame implements MouseListener {
             System.out.println("ガチャの結果が取得できませんでした");
             return;
         }
+        gachaWait();
         TimerTask gachaSingle = new TimerTask() {
             @Override
             public void run() {
@@ -201,6 +204,7 @@ public class GachaWindow extends JFrame implements MouseListener {
             System.out.println("ガチャに失敗しました。");
             return;
         }
+        gachaWait();
         TimerTask gachaTenTimes = new TimerTask() {
             @Override
             public void run() {
@@ -247,12 +251,10 @@ public class GachaWindow extends JFrame implements MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (e.getSource() == b1) {
             System.out.println("単発に願いをこめて");
-            gachaWait();
             gachaSingle();
         }
         if (e.getSource() == b2) {
             System.out.println("物量こそ正義");
-            gachaWait();
             gachaTenTimes();
         }
 
