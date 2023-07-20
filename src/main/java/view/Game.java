@@ -207,9 +207,12 @@ public class Game extends JFrame implements KeyListener {
 
                 break;
             case KeyEvent.VK_2:
-                if (isAttack == false) {
-                    isAttack = true;
-                } else isAttack = false;
+                if(allowCursor== false){
+                    if (isAttack == false) {
+                        isAttack = true;
+                    } else isAttack = false;
+                }
+
                 break;
         }
         if (allowCursor == true) {
