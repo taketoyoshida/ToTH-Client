@@ -16,7 +16,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
     private JLayeredPane menuPane = new JLayeredPane();
     private JLayeredPane infoPane = new JLayeredPane();
     private JLayeredPane listPane = new JLayeredPane();
-    private ImageIcon iconBackground = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
+    private ImageIcon iconBackground = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
     private ImageIcon iconList = new ImageIcon("./assets/imgs/TestEquipBaseList2.png");
     private ImageIcon iconSlot1 = new ImageIcon("./assets/imgs/TestEquipSlot2.png");
     private ImageIcon iconSector = new ImageIcon("./assets/imgs/TestPlayerSlot.png");

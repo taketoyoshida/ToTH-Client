@@ -21,9 +21,10 @@ public class GachaWindow extends JFrame implements MouseListener {
     String[] puText = new String[5];           //新規装備の名前を５つ格納する配列
     JLayeredPane p = new JLayeredPane();             //操作で変化しない部分を表示する
     JLayeredPane p2 = new JLayeredPane();            //操作ごとに変化する部分を格納する
-    ImageIcon icon1 = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
+
+    ImageIcon icon1 = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
     ImageIcon cIcon = new ImageIcon("./assets/imgs/TestCoin.png");
-    ImageIcon icon2 = new ImageIcon("./assets/imgs/TestGachaInfo.png");
+    ImageIcon icon2 = new ImageIcon("./assets/imgs/Gachaikei.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
     ImageScaling isc = new ImageScaling();
 
