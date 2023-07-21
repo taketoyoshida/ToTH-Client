@@ -15,6 +15,7 @@ import static java.awt.Font.BOLD;
 public class Workshop extends JFrame implements ActionListener {
 
     private User user;
+    private BackButton bButton = new BackButton();
     int itemVar = 5, bpVar = 23;                 //装備原型と素材の種類の数
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
@@ -56,7 +57,7 @@ public class Workshop extends JFrame implements ActionListener {
 
         this.base = base;
         this.user = user;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         menuPanel.add(label1);
         menuPanel.setLayer(label1, -10);
 
@@ -94,6 +95,9 @@ public class Workshop extends JFrame implements ActionListener {
         menuPanel.add(buttonUpgrade);
         buttonUpgrade.addActionListener(this);
         menuPanel.setLayer(buttonUpgrade, 0);
+
+        bButton.setButtonLeft(menuPanel);
+        bButton.button().addActionListener(this);
     }
 
     public void start() {
@@ -105,7 +109,7 @@ public class Workshop extends JFrame implements ActionListener {
 
         /*最初にテキストボックスに表示するメッセージ*/
         textLabel.setText("<html>製造する装備の設計図を選択してください<br>"
-        + "中央の「製造」ボタンから製造することができます");
+                + "中央の「製造」ボタンから製造することができます");
         textLabel.setVerticalAlignment(JLabel.TOP);
         textLabel.setFont(new Font("ＭＳ ゴシック", BOLD, 22));
         textLabel.setBounds(234, 344, 558, 144);
@@ -259,18 +263,18 @@ public class Workshop extends JFrame implements ActionListener {
 
     }
 
-    public void setBlueprint(Blueprint bp){
+    public void setBlueprint(Blueprint bp) {
 
         setPane.removeAll();
         ImageIcon setBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
-        JLabel setBpLabel = new JLabel(isc.scale(setBpIcon,6.0));
+        JLabel setBpLabel = new JLabel(isc.scale(setBpIcon, 6.0));
         setBpLabel.setBounds(0, 0, 192, 192);
         setPane.add(setBpLabel);
         setPane.setBounds(242, 72, 192, 192);
 
         upgradePane.removeAll();
         ImageIcon upgradeBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
-        JLabel upgradeBpLabel = new JLabel(isc.scale(upgradeBpIcon,6.0));
+        JLabel upgradeBpLabel = new JLabel(isc.scale(upgradeBpIcon, 6.0));
         upgradeBpLabel.setBounds(0, 0, 192, 192);
         upgradePane.add(upgradeBpLabel);
         upgradePane.setBounds(592, 72, 192, 192);
@@ -294,6 +298,10 @@ public class Workshop extends JFrame implements ActionListener {
                 printReq(bpButton[i].blueprint, false);
                 setBlueprint(bpButton[i].blueprint);
             }
+        }
+
+        if (e.getSource() == bButton.button()) {
+            Workshop_MainMenu workshopMainMenu = new Workshop_MainMenu(base, user);
         }
 
     }

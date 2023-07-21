@@ -18,6 +18,7 @@ public class GachaWindow extends JFrame implements MouseListener {
 
     private User user;
     WindowBase base;
+    private BackButton bButton = new BackButton();
     String[] puText = new String[5];           //新規装備の名前を５つ格納する配列
     JLayeredPane p = new JLayeredPane();             //操作で変化しない部分を表示する
     JLayeredPane p2 = new JLayeredPane();            //操作ごとに変化する部分を格納する
@@ -69,7 +70,7 @@ public class GachaWindow extends JFrame implements MouseListener {
         p.setLayout(null);                //ボタン配置の設定
         p2.setLayout(null);
 
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
 
@@ -97,6 +98,9 @@ public class GachaWindow extends JFrame implements MouseListener {
         b2.setBounds(482, 300, 250, 150);
         b2.addMouseListener(this);
         p.add(b2);
+
+        bButton.setButtonRight(p);
+        bButton.button().addMouseListener(this);
 
         addMouseListener(this);
     }
@@ -259,6 +263,9 @@ public class GachaWindow extends JFrame implements MouseListener {
             gachaTenTimes();
         }
 
+        if (e.getSource() == bButton.button()) {
+            Workshop_MainMenu workshopMainMenu = new Workshop_MainMenu(base, user);
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import model.util.User;
 public class MainMenu extends JFrame implements MouseListener {
 
     User user;
+    BackButton bButton = new BackButton();
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/home_backImg.png");    //画像のディレクトリは調整してもろて
@@ -33,6 +34,9 @@ public class MainMenu extends JFrame implements MouseListener {
         label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
+
+        bButton.setButtonRight(p);
+        bButton.button().addMouseListener(this);
 
         paint(p);
 
@@ -77,9 +81,14 @@ public class MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
-            Status status = new Status(20, 1, 4, 2);
+            Status status = new Status(20, 3, 5, 2);
             Player player = new Player("testUser", status);
             Game testGame = new Game(base, player);
+            base.setVisible(true);
+        }
+
+        if (e.getSource() == bButton.button()) {
+            Login login = new Login(base, user);
         }
 
     }

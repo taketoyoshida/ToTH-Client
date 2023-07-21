@@ -9,6 +9,7 @@ import model.util.User;
 public class Workshop_MainMenu extends JFrame implements MouseListener {
 
     private User user;
+    private BackButton bButton = new BackButton();
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
@@ -30,9 +31,12 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
         this.base = base;
         this.user = user;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
+
+        bButton.setButtonRight(p);
+        bButton.button().addMouseListener(this);
 
         paint();
 
@@ -94,6 +98,10 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
         if (e.getSource() == b4) {
             System.out.println("宝物庫の鍵を開けてやろう");
             Warehouse warehouseTest = new Warehouse(base, user);
+        }
+
+        if (e.getSource() == bButton.button()) {
+            MainMenu mainMenu = new MainMenu(base, user);
         }
 
     }
