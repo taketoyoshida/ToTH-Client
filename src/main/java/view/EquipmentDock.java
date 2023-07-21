@@ -123,7 +123,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
         menuPane.setLayer(infoPane, 10);
     }
 
-    public void getList() {
+    public void getList() {               //持ってる装備のリストを表示するメソッド
         int limit = 15, pf = 462;
         for (int i = 0; i < limit; i++) {
             JLabel itemSlot = new JLabel(iconSlot3);
