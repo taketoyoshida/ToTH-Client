@@ -22,7 +22,7 @@ public class Workshop extends JFrame implements ActionListener {
     private JLayeredPane listPane = new JLayeredPane();
     private JLayeredPane setPane = new JLayeredPane();
     private JLayeredPane upgradePane = new JLayeredPane();
-    private ImageIcon iconBackground = new ImageIcon("./assets/imgs/ログイン画面.png");    //画像のディレクトリは調整してもろて
+    private ImageIcon iconBackground = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
     private ImageIcon iconList = new ImageIcon("./assets/imgs/TestEquipBaseList.png");
     private ImageIcon iconEquipPickArea = new ImageIcon("./assets/imgs/TestWorkshopText.png");
     private ImageIcon iconUpgradeSelection = new ImageIcon("./assets/imgs/TestEquipSlot.png");
