@@ -3,41 +3,41 @@ package controller.game;
 import controller.networking.GameGateway;
 import model.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
-import static model.Game.BOARD_COL;
-import static model.Game.BOARD_ROW;
+import static model.GameModel.BOARD_COL;
+import static model.GameModel.BOARD_ROW;
+
 
 import model.util.User;
 
-public class Game {
+public class GameController {
     private Random random;
-    private static final int GAME_TURN = 2;
+    private static final int GAME_TURN = 1;
     private int turnNum;
-    private final model.Game game;
+    private GameModel gameModel;
     private List<Integer> enemies;
+    private HashMap<Position, Piece> board = new HashMap<>();
     private final GameGateway.IGameGateway gateway;
-//    private final Player me = new Player("Player1", new Status(1, 1, 1, 1));
-//    private final Player opponent = new Player("Player2", new Status(1, 1, 1, 1));
+
 
     public static User testUser1 = new User(100, "test1", 100000, 1);
     public static User testUser2 = new User(200, "test2", 100000, 1);
     public static Player Player1;
     public static Player Player2;
 
-    public Game(User user1, User user2) {
+    public GameController(User user1, User user2) {
+        this.gameModel = new GameModel();
         Status player1Status = user1.getStatus();
-        Player1 = new Player(user1.getUsername(), player1Status, user1.getRank());
+        Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(),new Position(0,0));
+        gameModel.setPiece(new Position(0,0), new Piece(Piece.PieceType.PLAYER));
         Status player2Status = user2.getStatus();
-        Player2 = new Player(user2.getUsername(), player2Status, user2.getRank());
+        Player2 = new Player(user2.getUsername(), player2Status, user2.getRank(),new Position(BOARD_ROW - 1, BOARD_COL - 1));
+        gameModel.setPiece(new Position(BOARD_ROW - 1, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER));
 
-        game = new model.Game();
         setObstacle();
         //setEnemy();
-        game.setPiece(new Position(0, 0), new Piece(Piece.PieceType.ENEMY));
+        gameModel.setPiece(new Position(1, 1), new Piece(Piece.PieceType.ENEMY));
 
         turnNum = 1;
         this.random = new Random();
@@ -149,6 +149,11 @@ public class Game {
         System.out.println("Player1の報酬: " + Player1.getReward());
         System.out.println("Player2の報酬: " + Player2.getReward());
 
+        System.out.println("テスト処理");
+        Position pos = new Position(0,0);
+        gameModel.setPiece(pos,new Piece(Piece.PieceType.ENEMY));
+        System.out.println(gameModel.getPiece(new Position(0,0)).getType());
+
     }
 
     //盤面を更新
@@ -173,11 +178,7 @@ public class Game {
 
     //攻撃が妥当か判定
     public boolean isValidAtk() {
-        if (true) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
     }
 
     //プレイヤーを移動
@@ -187,11 +188,7 @@ public class Game {
 
     //妥当な移動か（移動できるか）を判定
     public boolean isValidMove() {
-        if (true) {
-            return true;
-        } else {
-            return false;
-        }
+        return true;
 
     }
 
@@ -208,7 +205,27 @@ public class Game {
         for (int i = 0; i < BOARD_ROW; i++) {
             System.out.print(" ");
             for (int j = 0; j < BOARD_COL; j++) {
-                game.printPiece(new Position(i, j));
+                Piece piece = gameModel.getPiece(new Position(i, j));
+                String symbol;
+                if (piece == null) {
+                    symbol = "-";
+                } else {
+                    switch (piece.getType()) {
+                        case PLAYER:
+                            symbol = "P";
+                            break;
+                        case ENEMY:
+                            symbol = "E";
+                            break;
+                        case OBSTACLE:
+                            symbol = "O";
+                            break;
+                        default:
+                            symbol = "^";
+                            break;
+                    }
+                }
+                System.out.print(symbol);
             }
             System.out.println();
         }
@@ -266,11 +283,11 @@ public class Game {
             // 周囲1マスに他のプレイヤーやモンスターが無ければランダムで敵をセット
             int ROW = getRandomNum(0, BOARD_ROW - 1);// ランダムで座標を生成
             int COL = getRandomNum(0, BOARD_COL - 1);
-            if (game.getPiece(ROW, COL) != null
-                    || game.getPiecesAround(new Position(ROW, COL)).size() == 0) continue;// 当該マスに障害物含む何かがあったら再生成
+            if (gameModel.getPiece(ROW, COL) != null
+                    || gameModel.getPiecesAround(new Position(ROW, COL)).size() == 0) continue;// 当該マスに障害物含む何かがあったら再生成
             // TODO: Implement Piece
             // enemyInfoに対応する敵をセット
-            game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.ENEMY));
+            gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.ENEMY));
             break;
         } while (true);// 敵がセットされるまで続く
     }
@@ -282,7 +299,7 @@ public class Game {
         for (int i = 0; i < 10; i++) {
             ROW = random.nextInt(BOARD_ROW);// ランダムで座標を生成
             COL = random.nextInt(BOARD_COL);
-            game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
+            gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
             // TODO: Implement Piece
 //            if (game.getPiecesAround(new Position(ROW, COL)).size() == 0)
 //                game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));// 周囲1マスに他の障害物が無ければセット
@@ -299,8 +316,8 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(testUser1, testUser2);
-        game.printBoard();
-        game.playGame();
+        GameController gameController = new GameController(testUser1, testUser2);
+        gameController.printBoard();
+        gameController.playGame();
     }
 }

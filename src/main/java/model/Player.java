@@ -18,6 +18,7 @@ public class Player {
     private Map<EquipmentPosition, Equipment> equippedItems; // 装備
     /* 持ってる装備を格納する変数が必要 */
     private int deadCount = 0;
+    private Position pos;
     /*
     private final int baseHP = 10;
     private final int baseATK = 5;
@@ -25,7 +26,7 @@ public class Player {
     private final int baseRNG = 1;
     */
 
-    public Player(String name, Status status, int rank) {
+    public Player(String name, Status status, int rank,Position pos) {
         this.name = name;
         this.status = status;
         this.materials = new HashMap<>();
@@ -36,6 +37,7 @@ public class Player {
         this.reward = 0;
         this.aliveTurn = 0;
         this.equippedItems = new HashMap<>();
+        this.pos = pos;
     }
 
     public String getName() {

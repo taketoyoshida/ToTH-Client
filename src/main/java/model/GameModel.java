@@ -5,23 +5,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Game {
+public class GameModel {
     public static final int BOARD_ROW = 8;
     public static final int BOARD_COL = 12;
     public int turn;   //手番
-    private final HashMap<Position, Piece> board;
+    private static HashMap<Position, Piece> board; // static を削除
     int[] remainAction = new int[2];
     public final boolean[] isDead;
 
-    public Game() {
+    public GameModel() {
         turn = 0;
         remainAction[0] = 2;
         remainAction[1] = 2;
         isDead = new boolean[]{false, false};
-        board = new HashMap<>();
+        board = new HashMap<>(); // インスタンス変数として初期化する
+        initBoard(); // 盤面の初期化を行う
     }
 
-    public void setPiece(Position pos, Piece piece) {
+    public static void setPiece(Position pos, Piece piece) { // static を削除
         board.put(pos, piece);
     }
 
@@ -52,5 +53,14 @@ public class Game {
             }
         }
         return results;
+    }
+
+    //盤面を初期化
+    public void initBoard() {
+        for (int x = 0; x < BOARD_ROW; x++) {
+            for (int y = 0; y < BOARD_COL; y++) {
+                board.put(new Position(x, y), new Piece(Piece.PieceType.EMPTY));
+            }
+        }
     }
 }
