@@ -27,4 +27,20 @@ public class Piece implements Serializable {
         this.type = type;
     }
 
+    @Override
+    public String toString() {
+        switch (type) {
+            case EMPTY:
+                return "-";
+            case PLAYER:
+                return "P";
+            case ENEMY:
+                return "E";
+            case OBSTACLE:
+                return "O";
+            default:
+                return "^";
+        }
+    }
+
 }

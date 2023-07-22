@@ -17,9 +17,7 @@ public class GameController {
     private int turnNum;
     private GameModel gameModel;
     private List<Integer> enemies;
-    private HashMap<Position, Piece> board = new HashMap<>();
     private final GameGateway.IGameGateway gateway;
-
 
     public static User testUser1 = new User(100, "test1", 100000, 1);
     public static User testUser2 = new User(200, "test2", 100000, 1);
@@ -27,24 +25,26 @@ public class GameController {
     public static Player Player2;
 
     public GameController(User user1, User user2) {
-        this.gameModel = new GameModel();
+        this.random = new Random();
+        // TODO: Gateway should be properly initialized
+        this.gateway = new GameGateway.IGameGateway() {};
+
+        // gameModelインスタンスを1回だけ作成し、それを使用する
+        gameModel = new GameModel();
         Status player1Status = user1.getStatus();
-        Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(),new Position(0,0));
-        gameModel.setPiece(new Position(0,0), new Piece(Piece.PieceType.PLAYER));
+        Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(), new Position(0, 0));
+        gameModel.setPiece(new Position(0, 0), new Piece(Piece.PieceType.PLAYER));
+
         Status player2Status = user2.getStatus();
-        Player2 = new Player(user2.getUsername(), player2Status, user2.getRank(),new Position(BOARD_ROW - 1, BOARD_COL - 1));
+        Player2 = new Player(user2.getUsername(), player2Status, user2.getRank(), new Position(BOARD_ROW - 1, BOARD_COL - 1));
         gameModel.setPiece(new Position(BOARD_ROW - 1, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER));
 
         setObstacle();
-        //setEnemy();
         gameModel.setPiece(new Position(1, 1), new Piece(Piece.PieceType.ENEMY));
 
         turnNum = 1;
-        this.random = new Random();
-        // TODO: Gateway should be properly initialized
-        this.gateway = new GameGateway.IGameGateway() {
-        };
     }
+
 
     //ゲームのメインループ
     public void playGame() {
@@ -77,24 +77,6 @@ public class GameController {
 
             /* 敵の行動 */
             // TODO: 敵の行動を処理するプログラムの追加
-//            while (enemies.size() < 3) {
-//                setEnemy();
-//            }
-//            for (int enemyId : enemies) {
-//                EnemyInfo enemyInfo = null;
-//                for (EnemyInfo info : EnemyInfo.values()) {
-//                    if (info.getID() == enemyId) {
-//                        enemyInfo = info;
-//                        break;
-//                    }
-//                }
-//                if (enemyInfo == null) {
-//                    //System.out.println("敵の情報が見つかりません: " + enemyId);
-//                    continue;
-//                }
-//                moveEnemy();
-//                atkEnemy();
-//            }
 
             refBoard();
             refStatus();
@@ -144,15 +126,11 @@ public class GameController {
             Player2.setReward(Player2.getScore() / 10);
         }
 
-        System.out.println("Player1の得点: " + Player1.getScore());
-        System.out.println("Player2の得点: " + Player2.getScore());
-        System.out.println("Player1の報酬: " + Player1.getReward());
-        System.out.println("Player2の報酬: " + Player2.getReward());
+//        System.out.println("Player1の得点: " + Player1.getScore());
+//        System.out.println("Player2の得点: " + Player2.getScore());
+//        System.out.println("Player1の報酬: " + Player1.getReward());
+//        System.out.println("Player2の報酬: " + Player2.getReward());
 
-        System.out.println("テスト処理");
-        Position pos = new Position(0,0);
-        gameModel.setPiece(pos,new Piece(Piece.PieceType.ENEMY));
-        System.out.println(gameModel.getPiece(new Position(0,0)).getType());
 
     }
 
@@ -205,26 +183,8 @@ public class GameController {
         for (int i = 0; i < BOARD_ROW; i++) {
             System.out.print(" ");
             for (int j = 0; j < BOARD_COL; j++) {
-                Piece piece = gameModel.getPiece(new Position(i, j));
-                String symbol;
-                if (piece == null) {
-                    symbol = "-";
-                } else {
-                    switch (piece.getType()) {
-                        case PLAYER:
-                            symbol = "P";
-                            break;
-                        case ENEMY:
-                            symbol = "E";
-                            break;
-                        case OBSTACLE:
-                            symbol = "O";
-                            break;
-                        default:
-                            symbol = "^";
-                            break;
-                    }
-                }
+                Piece piece = gameModel.getPiece(i, j); // gameModelからPieceを取得するように修正
+                String symbol = (piece != null) ? piece.toString() : "-";
                 System.out.print(symbol);
             }
             System.out.println();
@@ -316,7 +276,8 @@ public class GameController {
     }
 
     public static void main(String[] args) {
-        GameController gameController = new GameController(testUser1, testUser2);
+        GameModel gameModel = new GameModel(); // GameModelのインスタンスをここで作成
+        GameController gameController = new GameController(testUser1, testUser2); // GameModelのインスタンスをコンストラクタに渡す
         gameController.printBoard();
         gameController.playGame();
     }

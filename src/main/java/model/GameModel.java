@@ -8,8 +8,8 @@ import java.util.Set;
 public class GameModel {
     public static final int BOARD_ROW = 8;
     public static final int BOARD_COL = 12;
-    public int turn;   //手番
-    private static HashMap<Position, Piece> board; // static を削除
+    public int turn;
+    private GameBoard board;
     int[] remainAction = new int[2];
     public final boolean[] isDead;
 
@@ -18,49 +18,30 @@ public class GameModel {
         remainAction[0] = 2;
         remainAction[1] = 2;
         isDead = new boolean[]{false, false};
-        board = new HashMap<>(); // インスタンス変数として初期化する
-        initBoard(); // 盤面の初期化を行う
+        board = new GameBoard();
+        initBoard();
     }
 
-    public static void setPiece(Position pos, Piece piece) { // static を削除
-        board.put(pos, piece);
+    // 新しいGameBoardクラスのメソッドを使用するように修正
+    public void setPiece(Position pos, Piece piece) {
+        board.setPiece(pos, piece);
     }
 
     public Piece getPiece(Position pos) {
-        return board.get(pos);
+        return board.getPiece(pos);
     }
 
     public Piece getPiece(int x, int y) {
-        return board.get(new Position(x, y));
-    }
-
-    public void printPiece(Position pos) {
-        if (getPiece(pos) == null) {
-            System.out.print("空");
-        }
+        return board.getPiece(x, y);
     }
 
     // 対象のマスの周囲のコマを返す
     public Set<Map.Entry<Position, Piece>> getPiecesAround(Position pos) {
-        Set<Map.Entry<Position, Piece>> results = new HashSet<>();
-        for (Map.Entry<Position, Piece> entry : board.entrySet()) {
-            if (entry.getKey().getY() == pos.getY() &&
-                    (entry.getKey().getX() == pos.getX() - 1 || entry.getKey().getX() == pos.getX() + 1)) {
-                results.add(entry);
-            } else if (entry.getKey().getX() == pos.getX() &&
-                    (entry.getKey().getY() == pos.getY() - 1 || entry.getKey().getY() == pos.getY() + 1)) {
-                results.add(entry);
-            }
-        }
-        return results;
+        return board.getPiecesAround(pos);
     }
 
-    //盤面を初期化
-    public void initBoard() {
-        for (int x = 0; x < BOARD_ROW; x++) {
-            for (int y = 0; y < BOARD_COL; y++) {
-                board.put(new Position(x, y), new Piece(Piece.PieceType.EMPTY));
-            }
-        }
+    private void initBoard() {
+        board.initBoard(BOARD_ROW, BOARD_COL);
     }
 }
+
