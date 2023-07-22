@@ -32,7 +32,7 @@ public class Player {
         this.materials = new HashMap<>();
         this.remainAction = 0;
         this.isDead = false;
-        this.rank = 0;
+        this.rank = rank;
         this.score = 0;
         this.reward = 0;
         this.aliveTurn = 0;
