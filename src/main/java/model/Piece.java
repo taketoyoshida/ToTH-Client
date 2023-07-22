@@ -29,18 +29,16 @@ public class Piece implements Serializable {
 
     @Override
     public String toString() {
-        switch (type) {
-            case EMPTY:
-                return "-";
-            case PLAYER:
-                return "P";
-            case ENEMY:
-                return "E";
-            case OBSTACLE:
-                return "O";
-            default:
-                return "^";
+        if (this.type == PieceType.PLAYER) {
+            return "P";
+        } else if (this.type == PieceType.ENEMY) {
+            return "E";
+        } else if (this.type == PieceType.OBSTACLE) {
+            return "O";
+        } else {
+            return "-";
         }
     }
+
 
 }

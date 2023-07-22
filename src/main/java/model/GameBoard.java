@@ -15,6 +15,9 @@ public class GameBoard {
     public void setPiece(Position pos, Piece piece) {
         board.put(pos, piece);
     }
+    public void setPiece(int x, int y, Piece piece) {
+        board.put(new Position(x, y), piece);
+    }
 
     public Piece getPiece(Position pos) {
         return board.get(pos);

@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameModel {
-    public static final int BOARD_ROW = 8;
-    public static final int BOARD_COL = 12;
+    public static final int BOARD_ROW = 4;
+    public static final int BOARD_COL = 4;
     public int turn;
     private GameBoard board;
     int[] remainAction = new int[2];
@@ -26,6 +26,9 @@ public class GameModel {
     public void setPiece(Position pos, Piece piece) {
         board.setPiece(pos, piece);
     }
+    public void setPiece(int x, int y, Piece piece) {
+        board.setPiece(x, y, piece);
+    }
 
     public Piece getPiece(Position pos) {
         return board.getPiece(pos);
@@ -42,6 +45,12 @@ public class GameModel {
 
     private void initBoard() {
         board.initBoard(BOARD_ROW, BOARD_COL);
+    }
+    public void printPiece(int x, int y) {
+        Piece piece = getPiece(x,y);
+        System.out.println("Position (" + x + ", " + y + "), Piece: " + piece);
+        String symbol = (piece != null) ? piece.toString() : "-";
+        System.out.print(symbol);
     }
 }
 

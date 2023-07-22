@@ -29,7 +29,6 @@ public class GameController {
         // TODO: Gateway should be properly initialized
         this.gateway = new GameGateway.IGameGateway() {};
 
-        // gameModelインスタンスを1回だけ作成し、それを使用する
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();
         Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(), new Position(0, 0));
@@ -40,7 +39,8 @@ public class GameController {
         gameModel.setPiece(new Position(BOARD_ROW - 1, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER));
 
         setObstacle();
-        gameModel.setPiece(new Position(1, 1), new Piece(Piece.PieceType.ENEMY));
+        gameModel.setPiece(1,1, new Piece(Piece.PieceType.ENEMY));
+        gameModel.printPiece(1,1);
 
         turnNum = 1;
     }
@@ -48,6 +48,7 @@ public class GameController {
 
     //ゲームのメインループ
     public void playGame() {
+        printBoard();
         System.out.println("ゲームを開始します");
         System.out.println("Player1: " + Player1.getName());
         Player1.printStatus();
@@ -65,7 +66,7 @@ public class GameController {
             // Player1の行動
             // Player2の行動
             // 2人の行動が終わったら
-            refBoard(); //敵プレイやの動きを加味してボードの書き換え
+            //refBoard(); //敵プレイやの動きを加味してボードの書き換え
 
             System.out.println("攻撃するコマを選択してください");
             if (isValidAtk()) {
@@ -183,7 +184,8 @@ public class GameController {
         for (int i = 0; i < BOARD_ROW; i++) {
             System.out.print(" ");
             for (int j = 0; j < BOARD_COL; j++) {
-                Piece piece = gameModel.getPiece(i, j); // gameModelからPieceを取得するように修正
+                Piece piece = gameModel.getPiece(i, j);
+                System.out.println("Position (" + i + ", " + j + "), Piece: " + piece); // デバッグプリントを追加
                 String symbol = (piece != null) ? piece.toString() : "-";
                 System.out.print(symbol);
             }
@@ -276,9 +278,7 @@ public class GameController {
     }
 
     public static void main(String[] args) {
-        GameModel gameModel = new GameModel(); // GameModelのインスタンスをここで作成
         GameController gameController = new GameController(testUser1, testUser2); // GameModelのインスタンスをコンストラクタに渡す
-        gameController.printBoard();
         gameController.playGame();
     }
 }
