@@ -49,10 +49,8 @@ public class Player {
     }
 
     public void printStatus() {
-        System.out.println("HP: " + status.getHP());
-        System.out.println("ATK: " + status.getATK());
-        System.out.println("MOV: " + status.getMOV());
-        System.out.println("RNG: " + status.getRNG());
+        System.out.println(" HP | ATK | MOV | RNG");
+        System.out.printf("%3d | %3d | %3d | %3d\n", status.getHP(), status.getATK(), status.getMOV(), status.getRNG());
     }
 
     public Map<Material, Integer> getMaterials() {

@@ -7,13 +7,14 @@ import java.util.*;
 
 import static model.GameModel.BOARD_COL;
 import static model.GameModel.BOARD_ROW;
+import static model.Piece.PieceType.EMPTY;
 
 
 import model.util.User;
 
 public class GameController {
     private Random random;
-    private static final int GAME_TURN = 1;
+    private static final int GAME_TURN = 3;
     private int turnNum;
     private GameModel gameModel;
     private List<Integer> enemies;
@@ -27,28 +28,27 @@ public class GameController {
     public GameController(User user1, User user2) {
         this.random = new Random();
         // TODO: Gateway should be properly initialized
-        this.gateway = new GameGateway.IGameGateway() {};
+        this.gateway = new GameGateway.IGameGateway() {
+        };
 
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();
         Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(), new Position(0, 0));
-        gameModel.setPiece(new Position(0, 0), new Piece(Piece.PieceType.PLAYER));
+        gameModel.setPiece(new Position(0, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER));
 
         Status player2Status = user2.getStatus();
         Player2 = new Player(user2.getUsername(), player2Status, user2.getRank(), new Position(BOARD_ROW - 1, BOARD_COL - 1));
-        gameModel.setPiece(new Position(BOARD_ROW - 1, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER));
+        gameModel.setPiece(new Position(BOARD_ROW - 1, 0), new Piece(Piece.PieceType.PLAYER));
 
         setObstacle();
-        gameModel.setPiece(1,1, new Piece(Piece.PieceType.ENEMY));
-        gameModel.printPiece(1,1);
-
+        setEnemy();
+        printBoard();
         turnNum = 1;
     }
 
 
     //ゲームのメインループ
     public void playGame() {
-        printBoard();
         System.out.println("ゲームを開始します");
         System.out.println("Player1: " + Player1.getName());
         Player1.printStatus();
@@ -60,15 +60,16 @@ public class GameController {
             System.out.println("Turn: " + turnNum);
             System.out.println("Player1_Score: " + Player1.getScore());
             System.out.println("Player2_Score: " + Player2.getScore());
-            System.out.println("プレイヤー1のターンです");
-            System.out.println("移動先を選択してください");
+            printBoard();
+            //System.out.println("プレイヤー1のターンです");
+            //System.out.println("移動先を選択してください");
             // TODO: Player should be properly initialized
             // Player1の行動
             // Player2の行動
             // 2人の行動が終わったら
             //refBoard(); //敵プレイやの動きを加味してボードの書き換え
 
-            System.out.println("攻撃するコマを選択してください");
+            //System.out.println("攻撃するコマを選択してください");
             if (isValidAtk()) {
                 atkPlayer();
             }
@@ -99,12 +100,11 @@ public class GameController {
             }
 
             //生存ボーナス
-            System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
+            //System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
             Player1.increaseScore(10 * Player1.getAliveTurn());
-            System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
+            //System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
             Player2.increaseScore(10 * Player2.getAliveTurn());
 
-            printBoard();
             turnNum++;
         }
 
@@ -180,13 +180,12 @@ public class GameController {
     }
 
     public void printBoard() {
-        System.out.println("盤面表示");
         for (int i = 0; i < BOARD_ROW; i++) {
             System.out.print(" ");
             for (int j = 0; j < BOARD_COL; j++) {
                 Piece piece = gameModel.getPiece(i, j);
-                System.out.println("Position (" + i + ", " + j + "), Piece: " + piece); // デバッグプリントを追加
-                String symbol = (piece != null) ? piece.toString() : "-";
+                //System.out.println("Position (" + i + ", " + j + "), Piece: " + piece); // デバッグプリントを追加
+                String symbol = (piece != null) ? piece.toString() : "nul";
                 System.out.print(symbol);
             }
             System.out.println();
@@ -194,40 +193,15 @@ public class GameController {
     }
 
     //敵をセット
+    // setEnemyメソッド：敵を初期配置する
     public void setEnemy() {
-        enemies = new ArrayList<>();
-        int rank = Math.min(Player1.getRank(), Player2.getRank());
+        // 最初に敵を初期配置する
         for (int i = 0; i < 3; i++) {
-            int enemyId = 0;
-            if (rank == 1) {
-                enemyId = getRandomNum(1, rank * 2);
-            } else if (1 < rank && rank <= 6) {
-                enemyId = getRandomNum(rank * 2 - 3, rank * 2);
-            } else {
-                System.out.println("rankが不正です");
-            }
-            enemies.add(enemyId);
-            putEnemy(enemyId);
+            putEnemy(1);
         }
     }
 
-    //        int rank;
-//        if (Player1.getRank() < Player2.getRank()) {
-//            rank = Player1.getRank();
-//        } else {
-//            rank = Player2.getRank();
-//        }
-//        enemy = new int[4];
-//        int i;
-//        for (i = 1; i <= 4; i++) {
-//            enemy[i] = rank * 2 - i;    // とりあえずIDを入れる
-//            if (rank * 2 - i <= 0) break;// rank1のみ敵は２種類
-//        }
-    // TODO: Implement this using Piece class
-//        game.board[0][0] = enemy[i - 2];   // rank1以外は１つ前のrankで初登場した敵が対角に初期配置
-//        game.board[7][11] = enemy[i - 1];  // rank1ではrank1の敵２種が配置
-//    }
-    // 敵を特定のマスに置く
+    // putEnemyメソッド：敵を盤面にセットし、ゲーム中のENEMYの情報を格納するリストに追加する
     public void putEnemy(int enemyId) {
         EnemyInfo enemyInfo = null;
         // 指定された敵IDに対応するEnemyInfoを取得
@@ -241,17 +215,19 @@ public class GameController {
             System.out.println("指定された敵IDに対応する敵が存在しません。");
             return;
         }
+
         do {
-            // 周囲1マスに他のプレイヤーやモンスターが無ければランダムで敵をセット
-            int ROW = getRandomNum(0, BOARD_ROW - 1);// ランダムで座標を生成
-            int COL = getRandomNum(0, BOARD_COL - 1);
-            if (gameModel.getPiece(ROW, COL) != null
-                    || gameModel.getPiecesAround(new Position(ROW, COL)).size() == 0) continue;// 当該マスに障害物含む何かがあったら再生成
-            // TODO: Implement Piece
-            // enemyInfoに対応する敵をセット
-            gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.ENEMY));
-            break;
-        } while (true);// 敵がセットされるまで続く
+            // 周囲1マスに他のプレイヤーやモンスターがいなければ、ランダムで敵をセット
+            int row = getRandomNum(0, BOARD_ROW - 1); // ランダムで座標を生成
+            int col = getRandomNum(0, BOARD_COL - 1);
+
+            Piece piece = gameModel.getPiece(row, col);
+            // 指定したマスがEMPTYかつその周囲に他の駒が存在しない場合に敵をセット
+            if (piece.getType() == EMPTY && areAdjacentCellsEmpty(new Position(row, col), gameModel.getBoard())) {
+                gameModel.setPiece(new Position(row, col), new Piece(Piece.PieceType.ENEMY));
+                break;
+            }
+        } while (true);
     }
 
     //障害物を最大10個セット
@@ -262,10 +238,32 @@ public class GameController {
             ROW = random.nextInt(BOARD_ROW);// ランダムで座標を生成
             COL = random.nextInt(BOARD_COL);
             gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
-            // TODO: Implement Piece
-//            if (game.getPiecesAround(new Position(ROW, COL)).size() == 0)
-//                game.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));// 周囲1マスに他の障害物が無ければセット
+            // TODO: プレイヤーとか敵が締め出される可能性があるので、その場合は再度セットし直す
         }
+    }
+    public boolean areAdjacentCellsEmpty(Position pos, GameBoard gameBoard) {
+        int x = pos.getX();
+        int y = pos.getY();
+
+        // 上下左右の座標を表す配列
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+        // 隣接するマスをチェック
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+
+            // 新しい座標が盤面内かをチェック
+            if (newX >= 0 && newX < BOARD_ROW && newY >= 0 && newY < BOARD_COL) {
+                // 新しい座標のマスがEMPTYでない場合、falseを返す
+                if (gameBoard.getPiece(newX, newY).getType() != Piece.PieceType.EMPTY) {
+                    return false;
+                }
+            }
+        }
+
+        // 全ての方向の隣接するマスがEMPTYだった場合、trueを返す
+        return true;
     }
 
     public boolean isGameOver() {
@@ -279,6 +277,6 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController gameController = new GameController(testUser1, testUser2); // GameModelのインスタンスをコンストラクタに渡す
-        gameController.playGame();
+        //gameController.playGame();
     }
 }

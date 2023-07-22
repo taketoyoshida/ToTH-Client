@@ -35,10 +35,13 @@ public class Piece implements Serializable {
             return "E";
         } else if (this.type == PieceType.OBSTACLE) {
             return "O";
-        } else {
+        } else if (this.type == PieceType.EMPTY) {
             return "-";
+        } else {
+            return "^";
         }
     }
+
 
 
 }

@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameModel {
-    public static final int BOARD_ROW = 4;
-    public static final int BOARD_COL = 4;
+    public static final int BOARD_ROW = 8;
+    public static final int BOARD_COL = 12;
     public int turn;
     private GameBoard board;
     int[] remainAction = new int[2];
@@ -36,6 +36,9 @@ public class GameModel {
 
     public Piece getPiece(int x, int y) {
         return board.getPiece(x, y);
+    }
+    public GameBoard getBoard() {
+        return board;
     }
 
     // 対象のマスの周囲のコマを返す
