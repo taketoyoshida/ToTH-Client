@@ -43,9 +43,29 @@ public class Player {
     public String getName() {
         return name;
     }
-
     public Status getStatus() {
         return status;
+    }
+    public int getHP() {
+        return status.getHP();
+    }
+    public int getATK() {
+        return status.getATK();
+    }
+    public int getMOV() {
+        return status.getMOV();
+    }
+    public int getRNG() {
+        return status.getRNG();
+    }
+    public Position getPos() {
+        return pos;
+    }
+    public int getRow() {
+        return pos.getRow();
+    }
+    public int getCol() {
+        return pos.getCol();
     }
 
     public void printStatus() {
@@ -135,36 +155,6 @@ public class Player {
         return materials.getOrDefault(material, 0);
     }
 
-/*
-    public void equipItem(Equipment item) {
-        if (equippedItems.containsKey(item.getPosition())) {
-            unequipItem(item.getPosition());
-        }
-        equippedItems.put(item.getPosition(), item);
-        resetStatus();
-    }
-    public void unequipItem(EquipmentPosition position) {
-        equippedItems.remove(position);
-        resetStatus();
-    }
-    private void resetStatus() {
-        int totalHP = baseHP;
-        int totalATK = baseATK;
-        int totalMOV = baseMOV;
-        int totalRNG = baseRNG;
-        for (Equipment equipment : equippedItems.values()) {
-            Status equipmentStatus = equipment.getStatus();
-            totalHP += equipmentStatus.getHP();
-            totalATK += equipmentStatus.getATK();
-            totalMOV += equipmentStatus.getMOV();
-            totalRNG += equipmentStatus.getRNG();
-        }
-        status.setHP(totalHP);
-        status.setATK(totalATK);
-        status.setMOV(totalMOV);
-        status.setRNG(totalRNG);
-    }
-*/
 
     private void decreaseHP(int damage) {
         status.setHP(status.getHP() - damage);

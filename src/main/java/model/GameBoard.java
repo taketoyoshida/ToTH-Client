@@ -5,9 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static model.GameModel.BOARD_COL;
-import static model.GameModel.BOARD_ROW;
-
 public class GameBoard {
     private final Map<Position, Piece> board;
 
@@ -36,12 +33,12 @@ public class GameBoard {
     public Set<Map.Entry<Position, Piece>> getPiecesAround(Position pos) {
         Set<Map.Entry<Position, Piece>> results = new HashSet<>();
         for (Map.Entry<Position, Piece> entry : board.entrySet()) {
-            int x = entry.getKey().getX();
-            int y = entry.getKey().getY();
+            int x = entry.getKey().getRow();
+            int y = entry.getKey().getCol();
 
-            if ((x == pos.getX() - 1 || x == pos.getX() + 1) && y == pos.getY()) {
+            if ((x == pos.getRow() - 1 || x == pos.getRow() + 1) && y == pos.getCol()) {
                 results.add(entry);
-            } else if ((y == pos.getY() - 1 || y == pos.getY() + 1) && x == pos.getX()) {
+            } else if ((y == pos.getCol() - 1 || y == pos.getCol() + 1) && x == pos.getRow()) {
                 results.add(entry);
             }
         }

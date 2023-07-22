@@ -7,7 +7,6 @@ import java.util.*;
 
 import static model.GameModel.BOARD_COL;
 import static model.GameModel.BOARD_ROW;
-import static model.Piece.PieceType.EMPTY;
 
 
 import model.util.User;
@@ -17,7 +16,7 @@ public class GameController {
     private static final int GAME_TURN = 3;
     private int turnNum;
     private GameModel gameModel;
-    private List<Integer> enemies;
+    private List<Enemy> enemyList;
     private final GameGateway.IGameGateway gateway;
     private int gameRank;
 
@@ -28,6 +27,7 @@ public class GameController {
 
     public GameController(User user1, User user2) {
         this.random = new Random();
+        enemyList = new ArrayList<>();
         // TODO: Gateway should be properly initialized
         this.gateway = new GameGateway.IGameGateway() {
         };
@@ -64,25 +64,21 @@ public class GameController {
             System.out.println("Player1_Score: " + Player1.getScore());
             System.out.println("Player2_Score: " + Player2.getScore());
             printBoard();
-            //System.out.println("プレイヤー1のターンです");
-            //System.out.println("移動先を選択してください");
-            // TODO: Player should be properly initialized
             // Player1の行動
-            actionPlayer(Player1);
+            System.out.println("プレイヤー1のターンです");
+            actionPlayer(Player1, gameModel);
             // Player2の行動
-            // 2人の行動が終わったら
-            //refBoard(); //敵プレイやの動きを加味してボードの書き換え
-
-            //System.out.println("攻撃するコマを選択してください");
-            if (isValidAtk()) {
-                atkPlayer();
-            }
+            System.out.println("プレイヤー2のターンです");
+            actionPlayer(Player2, gameModel);
 
             refScore();
             refBoard();
 
             /* 敵の行動 */
             // TODO: 敵の行動を処理するプログラムの追加
+            for (Enemy enemy : enemyList) {
+                actionEnemy();
+            }
 
             refBoard();
             refStatus();
@@ -132,12 +128,13 @@ public class GameController {
         }
 
 
-
-
     }
 
-    private void actionPlayer(Player player) {
+    private void actionPlayer(Player player, GameModel gameModel) {
+        GameActions gameActions = new GameActions();
+        gameActions.actionPlayer(player, gameModel);
     }
+
 
     //盤面を更新
     public void refBoard() {
@@ -202,10 +199,10 @@ public class GameController {
         // 最初に敵を初期配置する
         for (int i = 0; i < 3; i++) {
             int enemyId = 0;
-            if (gameRank == 1){
-                enemyId = getRandomNum(1,2);
-            }else if(2 <= gameRank && gameRank <= 6){
-                enemyId = getRandomNum(gameRank*2-3,gameRank*2);
+            if (gameRank == 1) {
+                enemyId = getRandomNum(1, 2);
+            } else if (2 <= gameRank && gameRank <= 6) {
+                enemyId = getRandomNum(gameRank * 2 - 3, gameRank * 2);
             }
             putEnemy(enemyId);
 
@@ -214,28 +211,19 @@ public class GameController {
 
     // putEnemyメソッド：敵を盤面にセットし、ゲーム中のENEMYの情報を格納するリストに追加する
     public void putEnemy(int enemyId) {
-        EnemyInfo enemyInfo = null;
-        // 指定された敵IDに対応するEnemyInfoを取得
-        for (EnemyInfo info : EnemyInfo.values()) {
-            if (info.getID() == enemyId) {
-                enemyInfo = info;
-                break;
-            }
-        }
+        EnemyInfo enemyInfo = getEnemyInfoById(enemyId);
         if (enemyInfo == null) {
             System.out.println("指定された敵IDに対応する敵が存在しません。");
             return;
         }
 
         do {
-            // 周囲1マスに他のプレイヤーやモンスターがいなければ、ランダムで敵をセット
-            int row = getRandomNum(0, BOARD_ROW - 1); // ランダムで座標を生成
-            int col = getRandomNum(0, BOARD_COL - 1);
+            int row = getRandomNum(0, GameModel.BOARD_ROW - 1); // ランダムで座標を生成
+            int col = getRandomNum(0, GameModel.BOARD_COL - 1);
 
             Piece piece = gameModel.getPiece(row, col);
-            // 指定したマスがEMPTYかつその周囲に他の駒が存在しない場合に敵をセット
-            if (isEmpty(new Position(row,col),gameModel.getBoard()) && areAdjacentCellsEmpty(new Position(row, col), gameModel.getBoard())) {
-                switch(enemyId){
+            if (isEmpty(new Position(row, col), gameModel.getBoard()) && areAdjacentCellsEmpty(new Position(row, col), gameModel.getBoard())) {
+                switch (enemyId) {
                     case 1:
                         gameModel.setPiece(new Position(row, col), new Piece(Piece.PieceType.ENEMY01));
                         break;
@@ -275,9 +263,111 @@ public class GameController {
                     default:
                         break;
                 }
+                Enemy enemy = new Enemy(enemyId, enemyInfo.name, enemyInfo.HP, enemyInfo.ATK, enemyInfo.MOV, enemyInfo.RNG, new Position(row, col));
+                enemyList.add(enemy); // enemyListに敵を追加
+
                 break;
             }
         } while (true);
+    }
+
+    // actionEnemyメソッド：敵の行動を実行する
+    public void actionEnemy() {
+        Random random = new Random();
+
+        for (Enemy enemy : enemyList) {
+            int movementRange = enemy.getMov();
+            Position currentPosition = enemy.getPosition();
+
+            // 敵の移動処理を実装
+            for (int i = 0; i < movementRange; i++) {
+                int randomDirection = getRandomNum(0, 3); // ランダムに上下左右の方向を選択
+
+                // 敵の新しい位置を計算
+                Position newPosition = new Position(currentPosition.getRow(), currentPosition.getCol());
+                switch (randomDirection) {
+                    case 0: // 上に移動
+                        if (newPosition.getRow() > 0) {
+                            newPosition.setRow(newPosition.getRow() - 1);
+                        }
+                        break;
+                    case 1: // 下に移動
+                        if (newPosition.getRow() < GameModel.BOARD_ROW - 1) {
+                            newPosition.setRow(newPosition.getRow() + 1);
+                        }
+                        break;
+                    case 2: // 左に移動
+                        if (newPosition.getCol() > 0) {
+                            newPosition.setCol(newPosition.getCol() - 1);
+                        }
+                        break;
+                    case 3: // 右に移動
+                        if (newPosition.getCol() < GameModel.BOARD_COL - 1) {
+                            newPosition.setCol(newPosition.getCol() + 1);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                // 移動先が空の場合のみ移動を実行
+                if (isEmpty(newPosition, gameModel.getBoard())) {
+                    gameModel.setPiece(currentPosition, new Piece(Piece.PieceType.EMPTY));
+                    switch (enemy.getId()) {
+                        case 1:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY01));
+                            break;
+                        case 2:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY02));
+                            break;
+                        case 3:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY03));
+                            break;
+                        case 4:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY04));
+                            break;
+                        case 5:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY05));
+                            break;
+                        case 6:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY06));
+                            break;
+                        case 7:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY07));
+                            break;
+                        case 8:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY08));
+                            break;
+                        case 9:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY09));
+                            break;
+                        case 10:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY10));
+                            break;
+                        case 11:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY11));
+                            break;
+                        case 12:
+                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY12));
+                            break;
+                        default:
+                            break;
+                    }
+                    enemy.setPosition(newPosition); // 移動後の座標を設定
+                    currentPosition = newPosition; // 現在の位置を更新
+                }
+            }
+        }
+    }
+
+    // 敵の情報をIDに基づいて取得するメソッド
+    private EnemyInfo getEnemyInfoById(int enemyId) {
+        for (EnemyInfo enemyInfo : EnemyInfo.values()) {
+            if (enemyInfo.getID() == enemyId) {
+                return enemyInfo;
+            }
+        }
+        return null;
     }
 
     //障害物を最大10個セット
@@ -287,15 +377,16 @@ public class GameController {
         for (int i = 0; i < 10; i++) {
             ROW = random.nextInt(BOARD_ROW);// ランダムで座標を生成
             COL = random.nextInt(BOARD_COL);
-            if(isEmpty(new Position(ROW, COL), gameModel.getBoard())) {
+            if (isEmpty(new Position(ROW, COL), gameModel.getBoard())) {
                 gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
             }
             // TODO: プレイヤーとか敵が締め出される可能性があるので、その場合は再度セットし直す
         }
     }
+
     public boolean areAdjacentCellsEmpty(Position pos, GameBoard gameBoard) {
-        int x = pos.getX();
-        int y = pos.getY();
+        int x = pos.getRow();
+        int y = pos.getCol();
 
         // 上下左右の座標を表す配列
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -317,6 +408,7 @@ public class GameController {
         // 全ての方向の隣接するマスがEMPTYだった場合、trueを返す
         return true;
     }
+
     public boolean isEmpty(Position pos, GameBoard gameBoard) {
         Piece piece = gameBoard.getPiece(pos);
         return piece != null && piece.getType() == Piece.PieceType.EMPTY;
@@ -333,6 +425,6 @@ public class GameController {
 
     public static void main(String[] args) {
         GameController gameController = new GameController(testUser1, testUser2); // GameModelのインスタンスをコンストラクタに渡す
-        //gameController.playGame();
+        gameController.playGame();
     }
 }
