@@ -17,13 +17,13 @@ public class User {
     private int balance;
     private int rank;
     private Player player;
-    private final int baseHP = 50;
-    private final int baseATK = 30;
-    private final int baseMOV = 10;
-    private final int baseRNG = 10;
+    private final int baseHP = 100;
+    private final int baseATK = 150;
+    private final int baseMOV = 3;
+    private final int baseRNG = 2;
     private Status status; //装備選択後のステータス
 
-    public User(int id, String username, int balance,int rank) {
+    public User(int id, String username, int balance, int rank) {
         this.ID = id;
         this.username = username;
         this.balance = balance;
@@ -176,7 +176,8 @@ public class User {
 
         setRank();
     }
-    public Status getStatus(){
+
+    public Status getStatus() {
         resetStatus();
         return status;
     }

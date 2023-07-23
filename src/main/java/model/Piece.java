@@ -60,15 +60,13 @@ public class Piece implements Serializable {
             case ENEMY12:
                 return " E12 ";
             case OBSTACLE:
-                return " OBS ";
+                return " *** ";
             case EMPTY:
                 return " --- ";
             default:
                 return " ^^^ ";
         }
     }
-
-
 
 
 }

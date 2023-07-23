@@ -21,7 +21,7 @@ public class Player {
     private Position pos;
     private Teban teban;
 
-    public Player(Teban teban,  String name, Status status, int rank,Position pos) {
+    public Player(Teban teban, String name, Status status, int rank, Position pos) {
         this.teban = teban;
         this.name = name;
         this.status = status;
@@ -39,42 +39,55 @@ public class Player {
     public void setTeban(Teban teban) {
         this.teban = teban;
     }
+
     public Teban getTeban() {
         return teban;
     }
+
     public String getName() {
         return name;
     }
+
     public Status getStatus() {
         return status;
     }
+
     public int getHP() {
         return status.getHP();
     }
+
     public int getATK() {
         return status.getATK();
     }
+
     public int getMOV() {
         return status.getMOV();
     }
+
     public int getRNG() {
         return status.getRNG();
     }
-    public Position getPos() {
+
+    public Position getPosition() {
         return pos;
     }
+
     public int getRow() {
         return pos.getRow();
     }
+
     public int getCol() {
         return pos.getCol();
     }
+
     public void setPos(Position pos) {
         this.pos = pos;
     }
+
     public void setRow(int row) {
         this.pos.setRow(row);
     }
+
     public void setCol(int col) {
         this.pos.setCol(col);
     }
@@ -167,7 +180,7 @@ public class Player {
     }
 
 
-    private void decreaseHP(int damage) {
+    public void decreaseHP(int damage) {
         status.setHP(status.getHP() - damage);
         if (status.getHP() <= 0) {
             isDead = true;
@@ -179,7 +192,8 @@ public class Player {
         isDead = false;
         deadCount++;
     }
-    public enum Teban{
+
+    public enum Teban {
         SENTE, GOTE
     }
 

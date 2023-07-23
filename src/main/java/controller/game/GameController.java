@@ -13,7 +13,7 @@ import model.util.User;
 
 public class GameController {
     private Random random;
-    private static final int GAME_TURN = 3;
+    private static final int GAME_TURN = 10;
     private int turnNum;
     private GameModel gameModel;
     private List<Enemy> enemyList;
@@ -58,7 +58,7 @@ public class GameController {
         while (!isGameOver()) {
             System.out.println();
             System.out.println("┌------------------┐");
-            System.out.printf ("|     Turn: %2d     |", turnNum);
+            System.out.printf("|     Turn: %2d     |\n", turnNum);
             System.out.println("└------------------┘");
 
             System.out.println("先手: " + Player1.getName());
@@ -85,10 +85,11 @@ public class GameController {
             System.out.println("-----プレイヤー2のターンです-----");
             actionPlayer(Player2, gameModel);
 
-            /* 敵の行動 */
-            // TODO: 敵の行動を処理するプログラムの追加
             System.out.println();
             System.out.println("-----敵のターンです-----");
+            while (enemyList.size() < 3) {
+                putEnemy(gameRank);
+            }
             for (Enemy enemy : enemyList) {
                 actionEnemy(enemy);
             }
@@ -99,14 +100,21 @@ public class GameController {
             if (Player1.isDead()) {
                 System.out.println(Player1.getName() + "は死にました");
                 Player1.setScore(Player1.getScore() - 500);
+                System.out.println("死んだので500点引かれます。現在のスコアは" + Player1.getScore() + "です");
                 Player1.increaseDeadCount();
                 Player1.setAliveTurn(0);
+                gameModel.setPiece(Player1.getPosition(), new Piece(Piece.PieceType.EMPTY));
+                gameModel.setPiece(new Position(BOARD_ROW - 1, 0), new Piece(Piece.PieceType.PLAYER1));
+
             }
             if (Player2.isDead()) {
                 System.out.println(Player2.getName() + "は死にました");
                 Player2.setScore(Player2.getScore() - 500);
+                System.out.println("死んだので500点引かれます。現在のスコアは" + Player2.getScore() + "です");
                 Player2.increaseDeadCount();
                 Player2.setAliveTurn(0);
+                gameModel.setPiece(Player2.getPosition(), new Piece(Piece.PieceType.EMPTY));
+                gameModel.setPiece(new Position(0, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER2));
             }
 
             //生存ボーナス
@@ -139,6 +147,8 @@ public class GameController {
             Player1.setReward(Player1.getScore() / 40);
             Player2.setReward(Player2.getScore() / 10);
         }
+        System.out.println("Player1の報酬: " + Player1.getReward());
+        System.out.println("Player2の報酬: " + Player2.getReward());
 
 
     }
@@ -168,25 +178,24 @@ public class GameController {
         }
     }
 
-
     //敵をセット
     // setEnemyメソッド：敵を初期配置する
     public void setEnemy(int gameRank) {
         // 最初に敵を初期配置する
         for (int i = 0; i < 3; i++) {
-            int enemyId = 0;
-            if (gameRank == 1) {
-                enemyId = getRandomNum(1, 2);
-            } else if (2 <= gameRank && gameRank <= 6) {
-                enemyId = getRandomNum(gameRank * 2 - 3, gameRank * 2);
-            }
-            putEnemy(enemyId);
+            putEnemy(gameRank);
 
         }
     }
 
     // putEnemyメソッド：敵を盤面にセットし、ゲーム中のENEMYの情報を格納するリストに追加する
-    public void putEnemy(int enemyId) {
+    public void putEnemy(int gameRank) {
+        int enemyId = 0;
+        if (gameRank == 1) {
+            enemyId = getRandomNum(1, 2);
+        } else if (2 <= gameRank && gameRank <= 6) {
+            enemyId = getRandomNum(gameRank * 2 - 3, gameRank * 2);
+        }
         EnemyInfo enemyInfo = getEnemyInfoById(enemyId);
         if (enemyInfo == null) {
             System.out.println("指定された敵IDに対応する敵が存在しません。");
@@ -335,7 +344,47 @@ public class GameController {
         }
         System.out.println(enemy.getName() + " moved from " + initialPosition + " to " + newPosition);
 
+        // プレイヤーの位置を取得
+        Position playerPosition1 = Player1.getPosition();
+        Position playerPosition2 = Player2.getPosition();
+
+        // マンハッタン距離を計算
+        int distanceToPlayer1 = Math.abs(currentPosition.getRow() - playerPosition1.getRow())
+                + Math.abs(currentPosition.getCol() - playerPosition1.getCol());
+
+        int distanceToPlayer2 = Math.abs(currentPosition.getRow() - playerPosition2.getRow())
+                + Math.abs(currentPosition.getCol() - playerPosition2.getCol());
+
+        // 攻撃対象のプレイヤーを格納するリスト
+        List<Player> targetPlayers = new ArrayList<>();
+
+        // マンハッタン距離が敵の攻撃範囲内のプレイヤーをリストに追加
+        if (distanceToPlayer1 <= enemy.getRng()) {
+            targetPlayers.add(Player1);
+        }
+        if (distanceToPlayer2 <= enemy.getRng()) {
+            targetPlayers.add(Player2);
+        }
+
+        // 攻撃対象がいる場合に攻撃を行う
+        if (!targetPlayers.isEmpty()) {
+            // ランダムに攻撃対象を選択
+            int randomIndex = getRandomNum(0, targetPlayers.size() - 1);
+            Player targetPlayer = targetPlayers.get(randomIndex);
+
+            // 攻撃対象のプレイヤーを攻撃する処理（既存のコードと同じ）
+            System.out.println("----------ATTACK LOG----------");
+            System.out.println(currentPosition + " にいる " + enemy.getName() + " が " + targetPlayer.getName() + " を攻撃");
+            targetPlayer.decreaseHP(enemy.getAtk());
+            System.out.println(enemy.getName() + "　が　" + targetPlayer.getName() + "　に　" + enemy.getAtk() + "　のダメージを与えました");
+            System.out.println(targetPlayer.getName() + "　の残りHPは　" + targetPlayer.getHP() + "　です");
+            System.out.println("------------------------------");
+
+            gameModel.printBoard();
+
+        }
     }
+
 
     // 敵の情報をIDに基づいて取得するメソッド
     private EnemyInfo getEnemyInfoById(int enemyId) {

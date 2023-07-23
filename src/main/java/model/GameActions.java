@@ -61,6 +61,12 @@ public class GameActions {
                     continue;
                 }
 
+                Piece targetPiece = gameModel.getPiece(targetRow, targetCol);
+                if (targetPiece.getType() != Piece.PieceType.EMPTY) {
+                    System.out.println("指定された座標にはすでに何かが配置されています。再度入力してください。");
+                    continue;
+                }
+
                 // 移動先の座標にプレイヤーを移動
                 gameModel.setPiece(currentRow, currentCol, new Piece(Piece.PieceType.EMPTY));
                 switch (player.getTeban()) {
@@ -96,6 +102,8 @@ public class GameActions {
         System.out.println("攻撃したい座標を入力してください。攻撃フェイズを終了する場合は\"100\"を入力");
         while (true) {
             String attackInput = scanner.nextLine();
+            // 攻撃フェイズを終了する
+            if (attackInput.equals("100")) break;
             String[] attackCoordinates = attackInput.split(" ");
 
             if (attackCoordinates.length != 2) {
@@ -140,7 +148,7 @@ public class GameActions {
                                 if (enemy.getHp() <= 0) {
                                     System.out.println("敵を倒しました。");
                                     System.out.println("撃破ボーナスとして1000点が加算されます");
-                                    System.out.println("現在のスコア :"+player.getScore());
+                                    System.out.println("現在のスコア :" + player.getScore());
                                     enemyList.remove(enemy);
                                     gameModel.setPiece(attackRow, attackCol, new Piece(Piece.PieceType.EMPTY));
                                     player.increaseScore(DEFEAT_BONUS);
