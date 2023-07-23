@@ -12,6 +12,7 @@ public class GameModel {
     private GameBoard board;
     int[] remainAction = new int[2];
     public final boolean[] isDead;
+    public static final int DEFEAT_BONUS = 1000;
 
     public GameModel() {
         turn = 0;

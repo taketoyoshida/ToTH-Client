@@ -20,8 +20,8 @@ public class GameController {
     private final GameGateway.IGameGateway gateway;
     private int gameRank;
 
-    public static User testUser1 = new User(100, "test1", 100000, 3);
-    public static User testUser2 = new User(200, "test2", 100000, 3);
+    public static User testUser1 = new User(100, "test1", 100000, 5);
+    public static User testUser2 = new User(200, "test2", 100000, 5);
     public static Player Player1;
     public static Player Player2;
 
@@ -34,54 +34,64 @@ public class GameController {
 
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();
-        Player1 = new Player(SENTE,user1.getUsername(), player1Status, user1.getRank(), new Position(BOARD_ROW-1, 0));
+        Player1 = new Player(SENTE, user1.getUsername(), player1Status, user1.getRank(), new Position(BOARD_ROW - 1, 0));
         gameModel.setPiece(new Position(BOARD_ROW - 1, 0), new Piece(Piece.PieceType.PLAYER1));
 
         Status player2Status = user2.getStatus();
-        Player2 = new Player(GOTE,user2.getUsername(), player2Status, user2.getRank(), new Position(0, BOARD_COL - 1));
+        Player2 = new Player(GOTE, user2.getUsername(), player2Status, user2.getRank(), new Position(0, BOARD_COL - 1));
         gameModel.setPiece(new Position(0, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER2));
 
         gameRank = Math.min(Player1.getRank(), Player2.getRank());
 
         setObstacle();
         setEnemy(gameRank);
-        printBoard();
         turnNum = 1;
     }
 
 
     //ゲームのメインループ
     public void playGame() {
-        System.out.println("ゲームを開始します");
-        System.out.println("Player1: " + Player1.getName());
-        Player1.printStatus();
-        System.out.println("Player2: " + Player2.getName());
-        Player2.printStatus();
+        System.out.println("----------ゲームを開始します----------");
+
         Scanner scanner = new Scanner(System.in);
 
         while (!isGameOver()) {
-            System.out.println("Turn: " + turnNum);
-            System.out.println("Player1_Score: " + Player1.getScore());
-            System.out.println("Player2_Score: " + Player2.getScore());
-            printBoard();
-            // Player1の行動
-            System.out.println("プレイヤー1のターンです");
-            actionPlayer(Player1, gameModel);
-            // Player2の行動
-            System.out.println("プレイヤー2のターンです");
-            actionPlayer(Player2, gameModel);
+            System.out.println();
+            System.out.println("┌------------------┐");
+            System.out.printf ("|     Turn: %2d     |", turnNum);
+            System.out.println("└------------------┘");
 
-            refScore();
-            refBoard();
+            System.out.println("先手: " + Player1.getName());
+            Player1.printStatus();
+            System.out.println("SCORE : " + Player1.getScore());
+
+            System.out.println("後手: " + Player2.getName());
+            Player2.printStatus();
+            System.out.println("SCORE : " + Player2.getScore());
+
+            System.out.println();
+            // 敵の情報の表示
+            for (Enemy enemy : enemyList) {
+                System.out.println("ENEMY: " + enemy.getName() + " " + enemy.getPosition());
+                enemy.printEnemyStatus();
+            }
+
+            printBoard();
+            // 先手
+            System.out.println();
+            System.out.println("-----プレイヤー1のターンです-----");
+            actionPlayer(Player1, gameModel);
+            // 後手
+            System.out.println("-----プレイヤー2のターンです-----");
+            actionPlayer(Player2, gameModel);
 
             /* 敵の行動 */
             // TODO: 敵の行動を処理するプログラムの追加
+            System.out.println();
+            System.out.println("-----敵のターンです-----");
             for (Enemy enemy : enemyList) {
-                actionEnemy();
+                actionEnemy(enemy);
             }
-
-            refBoard();
-            refStatus();
 
             Player1.increaseAliveTurn();
             Player2.increaseAliveTurn();
@@ -100,16 +110,19 @@ public class GameController {
             }
 
             //生存ボーナス
-            //System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
+            System.out.println();
+            System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
             Player1.increaseScore(10 * Player1.getAliveTurn());
-            //System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
+            System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
             Player2.increaseScore(10 * Player2.getAliveTurn());
 
             turnNum++;
         }
-
-        System.out.println("ゲーム終了です");
+        System.out.println();
+        System.out.println("----------ゲーム終了です----------");
         /* 得点計算処理 */
+        System.out.println("Player1の得点: " + Player1.getScore());
+        System.out.println("Player2の得点: " + Player2.getScore());
         if (Player1.getScore() == Player2.getScore()) {
             /* 引き分け */
             System.out.println("引き分けです");
@@ -132,52 +145,7 @@ public class GameController {
 
     private void actionPlayer(Player player, GameModel gameModel) {
         GameActions gameActions = new GameActions();
-        gameActions.actionPlayer(player, gameModel);
-    }
-
-
-    //盤面を更新
-    public void refBoard() {
-
-    }
-
-    //スコアを更新
-    public void refScore() {
-
-    }
-
-    //ステータスを更新
-    public void refStatus() {
-
-    }
-
-    //プレイヤーが攻撃
-    public void atkPlayer() {
-
-    }
-
-    //攻撃が妥当か判定
-    public boolean isValidAtk() {
-        return true;
-    }
-
-    //プレイヤーを移動
-    public void movePlayer(Player player) {
-
-    }
-
-    //妥当な移動か（移動できるか）を判定
-    public boolean isValidMove() {
-        return true;
-
-    }
-
-    public void moveEnemy() {
-
-    }
-
-    public void atkEnemy() {
-
+        gameActions.actionPlayer(player, gameModel, enemyList);
     }
 
     public void printBoard() {
@@ -199,7 +167,6 @@ public class GameController {
             System.out.println();
         }
     }
-
 
 
     //敵をセット
@@ -281,92 +248,93 @@ public class GameController {
     }
 
     // actionEnemyメソッド：敵の行動を実行する
-    public void actionEnemy() {
+    public void actionEnemy(Enemy enemy) {
         Random random = new Random();
+        int movementRange = enemy.getMov();
+        Position initialPosition = enemy.getPosition();
+        Position currentPosition = enemy.getPosition();
+        Position newPosition = null;
 
-        for (Enemy enemy : enemyList) {
-            int movementRange = enemy.getMov();
-            Position currentPosition = enemy.getPosition();
+        // 敵の移動処理を実装
+        for (int i = 0; i < movementRange; i++) {
+            int randomDirection = getRandomNum(0, 3); // ランダムに上下左右の方向を選択
 
-            // 敵の移動処理を実装
-            for (int i = 0; i < movementRange; i++) {
-                int randomDirection = getRandomNum(0, 3); // ランダムに上下左右の方向を選択
+            // 敵の新しい位置を計算
+            newPosition = new Position(currentPosition.getRow(), currentPosition.getCol());
+            switch (randomDirection) {
+                case 0: // 上に移動
+                    if (newPosition.getRow() > 0) {
+                        newPosition.setRow(newPosition.getRow() - 1);
+                    }
+                    break;
+                case 1: // 下に移動
+                    if (newPosition.getRow() < GameModel.BOARD_ROW - 1) {
+                        newPosition.setRow(newPosition.getRow() + 1);
+                    }
+                    break;
+                case 2: // 左に移動
+                    if (newPosition.getCol() > 0) {
+                        newPosition.setCol(newPosition.getCol() - 1);
+                    }
+                    break;
+                case 3: // 右に移動
+                    if (newPosition.getCol() < GameModel.BOARD_COL - 1) {
+                        newPosition.setCol(newPosition.getCol() + 1);
+                    }
+                    break;
+                default:
+                    break;
+            }
 
-                // 敵の新しい位置を計算
-                Position newPosition = new Position(currentPosition.getRow(), currentPosition.getCol());
-                switch (randomDirection) {
-                    case 0: // 上に移動
-                        if (newPosition.getRow() > 0) {
-                            newPosition.setRow(newPosition.getRow() - 1);
-                        }
+            // 移動先が空の場合のみ移動を実行
+            if (isEmpty(newPosition, gameModel.getBoard())) {
+                gameModel.setPiece(currentPosition, new Piece(Piece.PieceType.EMPTY));
+                switch (enemy.getId()) {
+                    case 1:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY01));
                         break;
-                    case 1: // 下に移動
-                        if (newPosition.getRow() < GameModel.BOARD_ROW - 1) {
-                            newPosition.setRow(newPosition.getRow() + 1);
-                        }
+                    case 2:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY02));
                         break;
-                    case 2: // 左に移動
-                        if (newPosition.getCol() > 0) {
-                            newPosition.setCol(newPosition.getCol() - 1);
-                        }
+                    case 3:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY03));
                         break;
-                    case 3: // 右に移動
-                        if (newPosition.getCol() < GameModel.BOARD_COL - 1) {
-                            newPosition.setCol(newPosition.getCol() + 1);
-                        }
+                    case 4:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY04));
+                        break;
+                    case 5:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY05));
+                        break;
+                    case 6:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY06));
+                        break;
+                    case 7:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY07));
+                        break;
+                    case 8:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY08));
+                        break;
+                    case 9:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY09));
+                        break;
+                    case 10:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY10));
+                        break;
+                    case 11:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY11));
+                        break;
+                    case 12:
+                        gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY12));
                         break;
                     default:
                         break;
                 }
-
-                // 移動先が空の場合のみ移動を実行
-                if (isEmpty(newPosition, gameModel.getBoard())) {
-                    gameModel.setPiece(currentPosition, new Piece(Piece.PieceType.EMPTY));
-                    switch (enemy.getId()) {
-                        case 1:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY01));
-                            break;
-                        case 2:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY02));
-                            break;
-                        case 3:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY03));
-                            break;
-                        case 4:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY04));
-                            break;
-                        case 5:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY05));
-                            break;
-                        case 6:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY06));
-                            break;
-                        case 7:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY07));
-                            break;
-                        case 8:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY08));
-                            break;
-                        case 9:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY09));
-                            break;
-                        case 10:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY10));
-                            break;
-                        case 11:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY11));
-                            break;
-                        case 12:
-                            gameModel.setPiece(newPosition, new Piece(Piece.PieceType.ENEMY12));
-                            break;
-                        default:
-                            break;
-                    }
-                    enemy.setPosition(newPosition); // 移動後の座標を設定
-                    currentPosition = newPosition; // 現在の位置を更新
-                }
+                enemy.setPosition(newPosition); // 移動後の座標を設定
+                currentPosition = newPosition; // 現在の位置を更新
             }
         }
+        System.out.println(enemy.getName() + " moved from " + initialPosition + " to " + newPosition);
+
     }
 
     // 敵の情報をIDに基づいて取得するメソッド

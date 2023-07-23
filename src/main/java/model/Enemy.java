@@ -19,8 +19,6 @@ public class Enemy {
         this.position = position;
     }
 
-    // 以下、getterとsetterを追加する（必要に応じて）
-
     public int getId() {
         return id;
     }
@@ -56,4 +54,7 @@ public class Enemy {
     public void setPosition(Position position) {
         this.position = position;
     }
+    public void printEnemyStatus(){
+        System.out.println(" HP | ATK | MOV | RNG");
+        System.out.printf("%3d | %3d | %3d | %3d\n", hp, atk, mov, rng);  }
 }

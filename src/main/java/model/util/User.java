@@ -17,10 +17,10 @@ public class User {
     private int balance;
     private int rank;
     private Player player;
-    private final int baseHP = 10;
-    private final int baseATK = 5;
-    private final int baseMOV = 1;
-    private final int baseRNG = 1;
+    private final int baseHP = 50;
+    private final int baseATK = 30;
+    private final int baseMOV = 10;
+    private final int baseRNG = 10;
     private Status status; //装備選択後のステータス
 
     public User(int id, String username, int balance,int rank) {
@@ -71,7 +71,7 @@ public class User {
         } else if (120 <= rate && rate < 160) {
             rank = 5;
         } else if (160 <= rate) {
-            rank = 6;
+            rank = 5;
         }
     }
 
