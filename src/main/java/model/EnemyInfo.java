@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum EnemyInfo {
     //TODO: 画像を変更する
-    ENEMY_1(1, "RageBoar", 10, 7, 1, 1, "test.png",
+    ENEMY_1(1, "RageBoar", 10, 7, 1, 1, "Enemy_ID1.png",
             createDropRatesMap(0.5, 0.05, 0.0, 0.05, 0.05)),
     ENEMY_2(2, "RabidRabbit", 10, 5, 2, 1, "Enemy_ID2.png",
             createDropRatesMap(0.2, 0.05, 0.0, 0.35, 0.05)),
