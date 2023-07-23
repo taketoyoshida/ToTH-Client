@@ -24,10 +24,10 @@ public class Workshop extends JFrame implements ActionListener {
     private JLayeredPane setPane = new JLayeredPane();
     private JLayeredPane upgradePane = new JLayeredPane();
     private ImageIcon iconBackground = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
-    private ImageIcon iconList = new ImageIcon("./assets/imgs/TestEquipBaseList.png");
-    private ImageIcon iconEquipPickArea = new ImageIcon("./assets/imgs/TestWorkshopText.png");
-    private ImageIcon iconUpgradeSelection = new ImageIcon("./assets/imgs/TestEquipSlot.png");
-    private ImageIcon iconSlot = new ImageIcon("./assets/imgs/TestEquipSlot4.png");
+    private ImageIcon iconList = new ImageIcon("./assets/imgs/EquipBaseList.png");
+    private ImageIcon iconEquipPickArea = new ImageIcon("./assets/imgs/WorkshopText.png");
+    private ImageIcon iconUpgradeSelection = new ImageIcon("./assets/imgs/EquipSlot.png");
+    private ImageIcon iconSlot = new ImageIcon("./assets/imgs/EquipSlot4.png");
     private ImageIcon iconUpgrade = new ImageIcon("./assets/imgs/TestButton3.png");
     private ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
 

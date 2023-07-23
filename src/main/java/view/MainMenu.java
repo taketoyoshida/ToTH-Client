@@ -15,8 +15,8 @@ public class MainMenu extends JFrame implements MouseListener {
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/home_backImg.png");    //画像のディレクトリは調整してもろて
-    private ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
-    private ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
+    private ImageIcon bIcon1 = new ImageIcon("./assets/imgs/Button1.png");
+    private ImageIcon bIcon2 = new ImageIcon("./assets/imgs/Button2.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
 
     private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む

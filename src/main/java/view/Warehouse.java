@@ -19,10 +19,10 @@ public class Warehouse extends JFrame implements ActionListener {
     private final JLayeredPane itemInfoPane = new JLayeredPane();
     private final JLayeredPane listPane = new JLayeredPane();
     private final ImageIcon iconBackground = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
-    private final ImageIcon iconList = new ImageIcon("./assets/imgs/TestItemList.png");
-    private final ImageIcon iconItemInfo = new ImageIcon("./assets/imgs/TestItemInfo.png");
-    private final ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/TestEquipSlot2.png");
-    private final ImageIcon iconSlot = new ImageIcon("./assets/imgs/TestEquipSlot4.png");
+    private final ImageIcon iconList = new ImageIcon("./assets/imgs/ItemList.png");
+    private final ImageIcon iconItemInfo = new ImageIcon("./assets/imgs/ItemInfo.png");
+    private final ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/EquipSlot2.png");
+    private final ImageIcon iconSlot = new ImageIcon("./assets/imgs/EquipSlot4.png");
     private final ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
 
     ImageScaling isc = new ImageScaling();
