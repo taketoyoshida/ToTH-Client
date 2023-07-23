@@ -19,14 +19,10 @@ public class Player {
     /* 持ってる装備を格納する変数が必要 */
     private int deadCount = 0;
     private Position pos;
-    /*
-    private final int baseHP = 10;
-    private final int baseATK = 5;
-    private final int baseMOV = 1;
-    private final int baseRNG = 1;
-    */
+    private Teban teban;
 
-    public Player(String name, Status status, int rank,Position pos) {
+    public Player(Teban teban,  String name, Status status, int rank,Position pos) {
+        this.teban = teban;
         this.name = name;
         this.status = status;
         this.materials = new HashMap<>();
@@ -40,6 +36,12 @@ public class Player {
         this.pos = pos;
     }
 
+    public void setTeban(Teban teban) {
+        this.teban = teban;
+    }
+    public Teban getTeban() {
+        return teban;
+    }
     public String getName() {
         return name;
     }
@@ -66,6 +68,15 @@ public class Player {
     }
     public int getCol() {
         return pos.getCol();
+    }
+    public void setPos(Position pos) {
+        this.pos = pos;
+    }
+    public void setRow(int row) {
+        this.pos.setRow(row);
+    }
+    public void setCol(int col) {
+        this.pos.setCol(col);
     }
 
     public void printStatus() {
@@ -167,6 +178,9 @@ public class Player {
         //resetStatus();
         isDead = false;
         deadCount++;
+    }
+    public enum Teban{
+        SENTE, GOTE
     }
 
 }

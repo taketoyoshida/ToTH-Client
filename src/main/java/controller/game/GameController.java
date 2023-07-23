@@ -5,8 +5,8 @@ import model.*;
 
 import java.util.*;
 
-import static model.GameModel.BOARD_COL;
-import static model.GameModel.BOARD_ROW;
+import static model.GameModel.*;
+import static model.Player.Teban.*;
 
 
 import model.util.User;
@@ -34,12 +34,12 @@ public class GameController {
 
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();
-        Player1 = new Player(user1.getUsername(), player1Status, user1.getRank(), new Position(0, 0));
-        gameModel.setPiece(new Position(0, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER1));
+        Player1 = new Player(SENTE,user1.getUsername(), player1Status, user1.getRank(), new Position(BOARD_ROW-1, 0));
+        gameModel.setPiece(new Position(BOARD_ROW - 1, 0), new Piece(Piece.PieceType.PLAYER1));
 
         Status player2Status = user2.getStatus();
-        Player2 = new Player(user2.getUsername(), player2Status, user2.getRank(), new Position(BOARD_ROW - 1, BOARD_COL - 1));
-        gameModel.setPiece(new Position(BOARD_ROW - 1, 0), new Piece(Piece.PieceType.PLAYER2));
+        Player2 = new Player(GOTE,user2.getUsername(), player2Status, user2.getRank(), new Position(0, BOARD_COL - 1));
+        gameModel.setPiece(new Position(0, BOARD_COL - 1), new Piece(Piece.PieceType.PLAYER2));
 
         gameRank = Math.min(Player1.getRank(), Player2.getRank());
 
@@ -181,17 +181,26 @@ public class GameController {
     }
 
     public void printBoard() {
+        // 列番号を表示
+        System.out.print("   ");
+        for (int j = 0; j < BOARD_COL; j++) {
+            System.out.printf(" %3d ", j);
+        }
+        System.out.println();
+
         for (int i = 0; i < BOARD_ROW; i++) {
-            System.out.print(" ");
+            // 行番号を表示
+            System.out.printf("%2d ", i);
             for (int j = 0; j < BOARD_COL; j++) {
                 Piece piece = gameModel.getPiece(i, j);
-                //System.out.println("Position (" + i + ", " + j + "), Piece: " + piece); // デバッグプリントを追加
                 String symbol = (piece != null) ? piece.toString() : "nul";
-                System.out.print(symbol);
+                System.out.printf("%4s", symbol);
             }
             System.out.println();
         }
     }
+
+
 
     //敵をセット
     // setEnemyメソッド：敵を初期配置する

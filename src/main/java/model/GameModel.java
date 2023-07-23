@@ -26,6 +26,7 @@ public class GameModel {
     public void setPiece(Position pos, Piece piece) {
         board.setPiece(pos, piece);
     }
+
     public void setPiece(int x, int y, Piece piece) {
         board.setPiece(x, y, piece);
     }
@@ -37,6 +38,7 @@ public class GameModel {
     public Piece getPiece(int x, int y) {
         return board.getPiece(x, y);
     }
+
     public GameBoard getBoard() {
         return board;
     }
@@ -49,11 +51,32 @@ public class GameModel {
     private void initBoard() {
         board.initBoard(BOARD_ROW, BOARD_COL);
     }
+
     public void printPiece(int x, int y) {
-        Piece piece = getPiece(x,y);
+        Piece piece = getPiece(x, y);
         System.out.println("Position (" + x + ", " + y + "), Piece: " + piece);
         String symbol = (piece != null) ? piece.toString() : "-";
         System.out.print(symbol);
+    }
+
+    public void printBoard() {
+        // 列番号を表示
+        System.out.print("   ");
+        for (int j = 0; j < BOARD_COL; j++) {
+            System.out.printf(" %3d ", j);
+        }
+        System.out.println();
+
+        for (int i = 0; i < BOARD_ROW; i++) {
+            // 行番号を表示
+            System.out.printf("%2d ", i);
+            for (int j = 0; j < BOARD_COL; j++) {
+                Piece piece = getPiece(i, j);
+                String symbol = (piece != null) ? piece.toString() : "nul";
+                System.out.printf("%4s", symbol);
+            }
+            System.out.println();
+        }
     }
 }
 
