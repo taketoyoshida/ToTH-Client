@@ -4,29 +4,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EnemyInfo {
-    ENEMY_1(1, "敵1", 10, 7, 1, 1, "test.png",
+    //TODO: 画像を変更する
+    ENEMY_1(1, "RageBoar", 10, 7, 1, 1, "test.png",
             createDropRatesMap(0.5, 0.05, 0.0, 0.05, 0.05)),
-    ENEMY_2(2, "敵2", 10, 5, 2, 1, "test.png",
+    ENEMY_2(2, "RabidRabbit", 10, 5, 2, 1, "Enemy_ID2.png",
             createDropRatesMap(0.2, 0.05, 0.0, 0.35, 0.05)),
-    ENEMY_3(3, "敵3", 30, 10, 1, 2, "test.png",
+    ENEMY_3(3, "NaturalTrent", 30, 10, 1, 2, "Enemy_ID3.png",
             createDropRatesMap(0.55, 0.05, 0.0, 0.1, 0.05)),
-    ENEMY_4(4, "敵4", 25, 15, 3, 1, "test.png",
+    ENEMY_4(4, "ShadowBear", 25, 15, 3, 1, "Enemy_ID4.png",
             createDropRatesMap(0.05, 0.15, 0.02, 0.18, 0.15)),
-    ENEMY_5(5, "敵5", 40, 20, 2, 2, "test.png",
+    ENEMY_5(5, "EtheralMonk", 40, 20, 2, 2, "Enemy_ID5.png",
             createDropRatesMap(0.3, 0.1, 0.02, 0.2, 0.1)),
-    ENEMY_6(6, "敵6", 50, 15, 1, 2, "test.png",
+    ENEMY_6(6, "SlowSheel", 50, 15, 1, 2, "Enemy_ID6.png",
             createDropRatesMap(0.2, 0.2, 0.04, 0.04, 0.2)),
-    ENEMY_7(7, "敵7", 70, 25, 3, 2, "test.png",
+    ENEMY_7(7, "GrantTiger", 70, 25, 3, 2, "Enemy_ID7.png",
             createDropRatesMap(0.35, 0.15, 0.0, 0.2, 0.2)),
-    ENEMY_8(8, "敵8", 70, 20, 2, 1, "test.png",
+    ENEMY_8(8, "ArmoredKnight", 70, 20, 2, 1, "Enemy_ID8.png",
             createDropRatesMap(0.05, 0.15, 0.1, 0.0, 0.2)),
-    ENEMY_9(9, "敵9", 80, 30, 3, 2, "test.png",
+    ENEMY_9(9, "SkysPegasus", 80, 30, 3, 2, "Enemy_ID9.png",
             createDropRatesMap(0.1, 0.3, 0.05, 0.0, 0.3)),
-    ENEMY_10(10, "敵10", 100, 40, 1, 1, "test.png",
+    ENEMY_10(10, "UnicornGuardian", 100, 40, 1, 1, "Enemy_ID10.png",
             createDropRatesMap(0.3, 0.1, 0.15, 0.1, 0.1)),
-    ENEMY_11(11, "敵11", 100, 50, 2, 2, "test.png",
+    ENEMY_11(11, "FlameWyrm", 100, 50, 2, 2, "Enemy_ID11.png",
             createDropRatesMap(0.2, 0.4, 0.1, 0.0, 0.3)),
-    ENEMY_12(12, "敵12", 150, 20, 2, 1, "test.png",
+    ENEMY_12(12, "TitanGolem", 150, 20, 2, 1, "Enemy_ID12.png",
             createDropRatesMap(0.1, 0.0, 0.3, 0.2, 0.0));
 
 
@@ -50,6 +51,26 @@ public enum EnemyInfo {
         this.POS = null;
         this.imgPath = imgPath;
         this.dropRates = dropRates;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public int getATK() {
+        return ATK;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getMOV() {
+        return MOV;
+    }
+
+    public int getRNG() {
+        return RNG;
     }
 
     public String getAssetPath() {

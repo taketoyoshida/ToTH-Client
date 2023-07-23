@@ -166,7 +166,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514, "testUser", 45590, 3);
+        User user = new User(114514, "testUser", 45590,0);
         WindowBase base = new WindowBase("test");
         EquipmentDock test = new EquipmentDock(base, user);
         base.setVisible(true);

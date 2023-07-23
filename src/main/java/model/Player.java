@@ -8,28 +8,40 @@ import java.util.Map;
 public class Player {
     private String name;                        // 名前
     private Status status;                      // ステータス
-    private Map<Material, Integer> materials;   // 素材
+    private Map<Material, Integer> materials;   // 試合中に獲得した素材
     private int remainAction;                   // 残り行動数
     private boolean isDead;                     // 死亡判定
     private int rank;                           // ランク
     private int score;                          // スコア
+    private int reward;                         // ゲーム終了後の報酬（ゴールド）
+    private int aliveTurn;                      // 生存ターン数
     private Map<EquipmentPosition, Equipment> equippedItems; // 装備
     /* 持ってる装備を格納する変数が必要 */
     private int deadCount = 0;
-    private final int baseHP = 10;
-    private final int baseATK = 5;
-    private final int baseMOV = 1;
-    private final int baseRNG = 1;
+    private Position pos;
+    private Teban teban;
 
-    public Player(String name, Status status) {
+    public Player(Teban teban, String name, Status status, int rank, Position pos) {
+        this.teban = teban;
         this.name = name;
         this.status = status;
         this.materials = new HashMap<>();
         this.remainAction = 0;
         this.isDead = false;
-        this.rank = 0;
+        this.rank = rank;
         this.score = 0;
+        this.reward = 0;
+        this.aliveTurn = 0;
         this.equippedItems = new HashMap<>();
+        this.pos = pos;
+    }
+
+    public void setTeban(Teban teban) {
+        this.teban = teban;
+    }
+
+    public Teban getTeban() {
+        return teban;
     }
 
     public String getName() {
@@ -38,6 +50,51 @@ public class Player {
 
     public Status getStatus() {
         return status;
+    }
+
+    public int getHP() {
+        return status.getHP();
+    }
+
+    public int getATK() {
+        return status.getATK();
+    }
+
+    public int getMOV() {
+        return status.getMOV();
+    }
+
+    public int getRNG() {
+        return status.getRNG();
+    }
+
+    public Position getPosition() {
+        return pos;
+    }
+
+    public int getRow() {
+        return pos.getRow();
+    }
+
+    public int getCol() {
+        return pos.getCol();
+    }
+
+    public void setPos(Position pos) {
+        this.pos = pos;
+    }
+
+    public void setRow(int row) {
+        this.pos.setRow(row);
+    }
+
+    public void setCol(int col) {
+        this.pos.setCol(col);
+    }
+
+    public void printStatus() {
+        System.out.println(" HP | ATK | MOV | RNG");
+        System.out.printf("%3d | %3d | %3d | %3d\n", status.getHP(), status.getATK(), status.getMOV(), status.getRNG());
     }
 
     public Map<Material, Integer> getMaterials() {
@@ -60,6 +117,10 @@ public class Player {
         isDead = dead;
     }
 
+    public void increaseDeadCount() {
+        deadCount++;
+    }
+
     public int getRank() {
         return rank;
     }
@@ -80,6 +141,26 @@ public class Player {
         this.score += points;
     }
 
+    public int getReward() {
+        return reward;
+    }
+
+    public void setReward(int reward) {
+        this.reward = reward;
+    }
+
+    public int getAliveTurn() {
+        return aliveTurn;
+    }
+
+    public void setAliveTurn(int aliveTurn) {
+        this.aliveTurn = aliveTurn;
+    }
+
+    public void increaseAliveTurn() {
+        this.aliveTurn++;
+    }
+
     public void addMaterial(Material material, int quantity) {
         materials.put(material, materials.getOrDefault(material, 0) + quantity);
     }
@@ -98,40 +179,8 @@ public class Player {
         return materials.getOrDefault(material, 0);
     }
 
-    public void equipItem(Equipment item) {
-        if (equippedItems.containsKey(item.getPosition())) {
-            unequipItem(item.getPosition());
-        }
-        equippedItems.put(item.getPosition(), item);
-        resetStatus();
-    }
 
-    public void unequipItem(EquipmentPosition position) {
-        equippedItems.remove(position);
-        resetStatus();
-    }
-
-    private void resetStatus() {
-        int totalHP = baseHP;
-        int totalATK = baseATK;
-        int totalMOV = baseMOV;
-        int totalRNG = baseRNG;
-
-        for (Equipment equipment : equippedItems.values()) {
-            Status equipmentStatus = equipment.getStatus();
-            totalHP += equipmentStatus.getHP();
-            totalATK += equipmentStatus.getATK();
-            totalMOV += equipmentStatus.getMOV();
-            totalRNG += equipmentStatus.getRNG();
-        }
-
-        status.setHP(totalHP);
-        status.setATK(totalATK);
-        status.setMOV(totalMOV);
-        status.setRNG(totalRNG);
-    }
-
-    private void decreaseHP(int damage) {
+    public void decreaseHP(int damage) {
         status.setHP(status.getHP() - damage);
         if (status.getHP() <= 0) {
             isDead = true;
@@ -139,9 +188,14 @@ public class Player {
     }
 
     private void respawn() {
-        resetStatus();
+        //resetStatus();
         isDead = false;
         deadCount++;
     }
+
+    public enum Teban {
+        SENTE, GOTE
+    }
+
 }
 
