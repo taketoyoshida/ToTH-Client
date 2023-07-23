@@ -22,8 +22,10 @@ public class Game extends JFrame implements KeyListener {
     private JLayeredPane bgPanel = new JLayeredPane();
     private JLayeredPane gamePanel = new JLayeredPane();
     private JLayeredPane cursorGuidePanel = new JLayeredPane();
+
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/game.png");    //画像のディレクトリは調整してもろて
     private ImageIcon charIcon = new ImageIcon("./assets/imgs/エルフGreen.png");
+
     private ImageIcon bgIcon = new ImageIcon("./assets/imgs/TestGameBG.png");
     private ImageIcon attackIcon = new ImageIcon("./assets/imgs/TestAttack.gif");
     private ImageIcon moveCursorIcon = new ImageIcon("./assets/imgs/TestCursor1.png");
@@ -53,10 +55,10 @@ public class Game extends JFrame implements KeyListener {
 
         start();
 
+        gamePanel.addKeyListener(this);
         base.addKeyListener(this);
 
         base.change(bgPanel);
-
 
     }
 

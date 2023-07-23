@@ -13,6 +13,7 @@ import model.Blueprint;
 public class Warehouse extends JFrame implements ActionListener {
 
     private User user;
+    private BackButton bButton = new BackButton();
     private final WindowBase base;
     private final JLayeredPane menuPanel = new JLayeredPane();
     private final JLayeredPane itemInfoPane = new JLayeredPane();
@@ -76,7 +77,7 @@ public class Warehouse extends JFrame implements ActionListener {
     public Warehouse(WindowBase base, User user) {
         this.base = base;
         this.user = user;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         menuPanel.add(label1);
         menuPanel.setLayer(label1, -10);
 
@@ -92,6 +93,9 @@ public class Warehouse extends JFrame implements ActionListener {
     public void menu() {          //変化しないパーツのみなさま
 
         menuPanel.setLayout(null);      //ボタン配置の設定
+
+        bButton.setButtonRight(menuPanel);
+        bButton.button().addActionListener(this);
 
         /*表示する対象を選択するボタンの召喚*/
         menuButtons[0] = new MenuButton("装備", MenuState.EQUIPMENT);
@@ -376,7 +380,9 @@ public class Warehouse extends JFrame implements ActionListener {
             return;
         }
 
-        // TODO: Upgradeボタンが押されたときの処理
+        if(e.getSource() == bButton.button()){
+            Workshop_MainMenu workshopMainMenu = new Workshop_MainMenu(base, user);
+        }
     }
 
     public static void main(String args[]) {

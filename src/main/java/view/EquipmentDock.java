@@ -13,6 +13,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
 
     private final WindowBase base;
     private User user;
+    private BackButton bButton = new BackButton();
     private JLayeredPane menuPane = new JLayeredPane();
     private JLayeredPane infoPane = new JLayeredPane();
     private JLayeredPane listPane = new JLayeredPane();
@@ -48,7 +49,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
 
         this.base = base;
         this.user = user;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         menuPane.add(label1);
         menuPane.setLayer(label1, -10);
 
@@ -68,6 +69,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
     public void menu() {//ボタンのみなさんの召喚
 
         menuPane.setLayout(null);      //ボタン配置の設定
+
+        bButton.setButtonRight(menuPane);
+        bButton.button().addActionListener(this);
 
         /*部位ごとの現在の装備の表示*/
         labelSlotHead.setBounds(16, 64, 128, 128);
@@ -162,7 +166,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
         if (e.getSource() == b1) {
             System.out.println("力が…欲しいか…？");
         }
-
+        if(e.getSource() == bButton.button()){
+            Workshop_MainMenu workshopMainMenu = new Workshop_MainMenu(base, user);
+        }
     }
 
     public static void main(String args[]) {
