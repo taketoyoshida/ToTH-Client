@@ -406,7 +406,7 @@ public class GameController {
             if (isEmpty(new Position(ROW, COL), gameModel.getBoard())) {
                 gameModel.setPiece(new Position(ROW, COL), new Piece(Piece.PieceType.OBSTACLE));
             }
-            // TODO: プレイヤーとか敵が締め出される可能性があるので、その場合は再度セットし直す
+            // TODO: プレイヤーとか敵が締め出される可能性があるので、その場合は再度セットし直す(時間なければしなくてよい)
         }
     }
 

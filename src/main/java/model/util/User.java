@@ -71,7 +71,7 @@ public class User {
         } else if (120 <= rate && rate < 160) {
             rank = 5;
         } else if (160 <= rate) {
-            rank = 5;
+            rank = 6;
         }
     }
 
@@ -128,8 +128,8 @@ public class User {
         if (this.getMaterialQuantity(Material.WOOD) >= equipmentItem.req_wood
                 && this.getMaterialQuantity(Material.IRON) >= equipmentItem.req_iron
                 && this.getMaterialQuantity(Material.DIAMOND) >= equipmentItem.req_diamond
-                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_bronze &&
-                this.getMaterialQuantity(Material.LEATHER) >= equipmentItem.req_leather) {
+                && this.getMaterialQuantity(Material.BRONZE) >= equipmentItem.req_bronze
+                && this.getMaterialQuantity(Material.LEATHER) >= equipmentItem.req_leather) {
             this.consumeMaterial(Material.WOOD, equipmentItem.req_wood);
             this.consumeMaterial(Material.IRON, equipmentItem.req_iron);
             this.consumeMaterial(Material.DIAMOND, equipmentItem.req_diamond);
