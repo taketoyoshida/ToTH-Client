@@ -9,6 +9,8 @@ import model.*;
 import model.game.Equipment;
 import model.util.User;
 
+import static java.awt.Font.BOLD;
+
 public class Warehouse extends JFrame implements ActionListener {
 
     private User user;
@@ -22,8 +24,8 @@ public class Warehouse extends JFrame implements ActionListener {
     private final ImageIcon iconItemInfo = new ImageIcon("./assets/imgs/ItemInfo.png");
     private final ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/EquipSlot2.png");
     private final ImageIcon iconSlot = new ImageIcon("./assets/imgs/EquipSlot4.png");
-    private final ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
     private final ImageIcon iconBlueprint = new ImageIcon("./assets/imgs/Blueprint.png");
+    ImageIcon cIcon = new ImageIcon("./assets/imgs/Coin.png");
 
     ImageScaling isc = new ImageScaling();
 
@@ -128,6 +130,27 @@ public class Warehouse extends JFrame implements ActionListener {
 
         /*アイテム表示蘭の場所とり*/
         itemInfoPane.setBounds(546, 32, 256, 464);
+
+        /*コイン数の表示*/
+        JLabel cLabel = new JLabel(cIcon);
+        cLabel.setBounds(370, 16, 32, 32);
+        menuPanel.add(cLabel);
+        menuPanel.setLayer(cLabel, 0);
+        JLabel coinTxt = new JLabel();
+        coinTxt.setHorizontalAlignment(JLabel.LEFT);
+        int coin = user.getBalance();
+        if (coin > 9999) {
+            coinTxt.setText("×9999+");
+            coinTxt.setForeground(Color.RED);
+        } else {
+            coinTxt.setText("×" + String.format("%4d", coin));
+            coinTxt.setForeground(Color.BLACK);
+        }
+        coinTxt.setFont(new Font("ＭＳ ゴシック", BOLD, 32));
+        coinTxt.setBounds(402, 16, 500, 32);
+        menuPanel.add(coinTxt);
+        menuPanel.setLayer(coinTxt, 0);
+
     }
 
     //ボタンの状態の切り替え

@@ -221,7 +221,7 @@ public class Workshop extends JFrame implements ActionListener {
             listPane.setLayer(listLabel, -10);
         }
 
-        listPane.setBounds(16, 16, 176, pf);
+        listPane.setBounds(0, 0, 176, pf);
         listPane.setPreferredSize(new Dimension(176, pf));
         viewport.setView(listPane);
         scrollPane.setBounds(16, 16, 176 + 18, 462 + 18);
