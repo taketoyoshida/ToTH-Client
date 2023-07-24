@@ -1,6 +1,7 @@
 package controller.game;
 
 //import controller.networking.GameGateway;
+
 import model.*;
 
 import java.util.*;
@@ -11,6 +12,7 @@ import static model.Player.Teban.*;
 
 
 import model.util.User;
+import view.Game;
 
 
 public class GameController {
@@ -28,12 +30,15 @@ public class GameController {
     public static Player Player1;
     public static Player Player2;
 
-    public GameController(User user1, User user2) {
+    public Game view;
+
+    public GameController(Game game, User user1, User user2) {
         this.random = new Random();
         enemyList = new ArrayList<>();
         // TODO: Gateway should be properly initialized
 //        this.gateway = new GameGateway.IGameGateway() {
 //        };
+        this.view = game;
 
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();

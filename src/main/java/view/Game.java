@@ -30,7 +30,7 @@ public class Game extends JFrame implements KeyListener, MouseListener {
     public static User testUser1 = new User(100, "test1", 100000, 5);
     public static User testUser2 = new User(200, "test2", 100000, 5);
     private GameModel GM;
-    private GameController GC = new GameController(testUser1,testUser2);
+    private GameController GC = new GameController(this, testUser1,testUser2);
     JLabel[] textLabel2 = new JLabel[24];
     JLabel[] textLabel1 = new JLabel[8];
 
