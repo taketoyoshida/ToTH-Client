@@ -1,9 +1,10 @@
 package controller.game;
 
-import controller.networking.GameGateway;
+import gateway.game.GameGateway;
 import model.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 import static model.GameModel.*;
 import static model.Player.Teban.*;
@@ -11,7 +12,7 @@ import static model.Player.Teban.*;
 
 import model.util.User;
 
-public class GameController {
+public class GameController implements IGameController {
     private Random random;
     private static final int GAME_TURN = 10;
     private int turnNum;
@@ -25,12 +26,18 @@ public class GameController {
     public static Player Player1;
     public static Player Player2;
 
+    private static final Logger logger = Logger.getLogger(GameController.class.getName());
+
     public GameController(User user1, User user2) {
         this.random = new Random();
         enemyList = new ArrayList<>();
         // TODO: Gateway should be properly initialized
-        this.gateway = new GameGateway.IGameGateway() {
-        };
+        try {
+            this.gateway = new GameGateway.GameGatewayImpl(this);
+        } catch (Exception e) {
+            logger.severe("Failed to initialize gateway");
+            throw new RuntimeException(e);
+        }
 
         gameModel = new GameModel();
         Status player1Status = user1.getStatus();
@@ -465,4 +472,9 @@ public class GameController {
     }
 
 
+
+    @Override
+    public void notifyGameUpdate() {
+        logger.info("Game update notification received");
+    }
 }
