@@ -18,12 +18,16 @@ public class BackButton {
 
     public void setButtonRight(JLayeredPane bgPanel){
         bButton.setBounds(16, 16, 64, 32);
+        bButton.setBorderPainted(false);
+        bButton.setContentAreaFilled(false);
         bgPanel.add(bButton);
         bgPanel.setLayer(bButton, 10);
     }
 
     public void setButtonLeft(JLayeredPane bgPanel){
         bButton.setBounds(752, 16, 64, 32);
+        bButton.setBorderPainted(false);
+        bButton.setContentAreaFilled(false);
         bgPanel.add(bButton);
         bgPanel.setLayer(bButton, 10);
     }

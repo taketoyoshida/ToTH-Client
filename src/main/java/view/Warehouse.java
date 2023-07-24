@@ -318,7 +318,6 @@ public class Warehouse extends JFrame implements ActionListener {
             /*アイテムの数の表示*/
             String itemQuantity = String.valueOf(user.getMaterialQuantity(materials[i]));
             JLabel numLabel = new JLabel(itemQuantity);
-
             numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
             numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
             numLabel.setForeground(Color.YELLOW);

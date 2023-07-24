@@ -49,19 +49,19 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
         p.setLayout(null);      //ボタン配置の設定
 
-        b1.setBounds(100, 100, 200, 100);
+        b1.setBounds(64, 64, 256, 128);
         b1.addMouseListener(this);
         p.add(b1);
 
-        b2.setBounds(500, 100, 200, 100);
+        b2.setBounds(512, 64, 256, 128);
         b2.addMouseListener(this);
         p.add(b2);
 
-        b3.setBounds(100, 300, 200, 100);
+        b3.setBounds(64, 320, 256, 128);
         b3.addMouseListener(this);
         p.add(b3);
 
-        b4.setBounds(500, 300, 200, 100);
+        b4.setBounds(512, 320, 256, 128);
         b4.addMouseListener(this);
         p.add(b4);
 
