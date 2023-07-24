@@ -1,5 +1,9 @@
 package model;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class Enemy {
     private int id;
     private String name;
@@ -8,6 +12,7 @@ public class Enemy {
     private int mov;
     private int rng;
     private Position position;
+    private PrintWriter logWriter;
 
     public Enemy(int id, String name, int hp, int atk, int mov, int rng, Position position) {
         this.id = id;
@@ -17,8 +22,16 @@ public class Enemy {
         this.mov = mov;
         this.rng = rng;
         this.position = position;
-    }
 
+        try {
+            logWriter = new PrintWriter(new FileWriter("src/main/java/controller/game/GameLog.txt", true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeToLog(String log) {
+        logWriter.println(log);
+    }
     public int getId() {
         return id;
     }
@@ -56,5 +69,10 @@ public class Enemy {
     }
     public void printEnemyStatus(){
         System.out.println(" HP | ATK | MOV | RNG");
-        System.out.printf("%3d | %3d | %3d | %3d\n", hp, atk, mov, rng);  }
+        System.out.printf("%3d | %3d | %3d | %3d\n", hp, atk, mov, rng);
+    }
+    public void printEnemyStatusToLog(){
+        writeToLog(" HP | ATK | MOV | RNG");
+        writeToLog(String.format("%3d | %3d | %3d | %3d\n", hp, atk, mov, rng));
+    }
 }
