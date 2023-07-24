@@ -13,15 +13,15 @@ public enum EnemyInfo {
             createDropRatesMap(0.55, 0.05, 0.0, 0.1, 0.05)),
     ENEMY_4(4, "ShadowBear", 25, 15, 3, 1, "Enemy_ID4.png",
             createDropRatesMap(0.05, 0.15, 0.02, 0.18, 0.15)),
-    ENEMY_5(5, "EtheralMonk", 40, 20, 2, 2, "Enemy_ID5.png",
+    ENEMY_5(5, "EtherealMonk", 40, 20, 2, 2, "Enemy_ID5.png",
             createDropRatesMap(0.3, 0.1, 0.02, 0.2, 0.1)),
-    ENEMY_6(6, "SlowSheel", 50, 15, 1, 2, "Enemy_ID6.png",
+    ENEMY_6(6, "SlowShell", 50, 15, 1, 2, "Enemy_ID6.png",
             createDropRatesMap(0.2, 0.2, 0.04, 0.04, 0.2)),
     ENEMY_7(7, "GrantTiger", 70, 25, 3, 2, "Enemy_ID7.png",
             createDropRatesMap(0.35, 0.15, 0.0, 0.2, 0.2)),
     ENEMY_8(8, "ArmoredKnight", 70, 20, 2, 1, "Enemy_ID8.png",
             createDropRatesMap(0.05, 0.15, 0.1, 0.0, 0.2)),
-    ENEMY_9(9, "SkysPegasus", 80, 30, 3, 2, "Enemy_ID9.png",
+    ENEMY_9(9, "SkyPegasus", 80, 30, 3, 2, "Enemy_ID9.png",
             createDropRatesMap(0.1, 0.3, 0.05, 0.0, 0.3)),
     ENEMY_10(10, "UnicornGuardian", 100, 40, 1, 1, "Enemy_ID10.png",
             createDropRatesMap(0.3, 0.1, 0.15, 0.1, 0.1)),
@@ -38,7 +38,7 @@ public enum EnemyInfo {
     public final int MOV;
     public final int RNG;
     public final Position POS;
-    public String imgPath;
+    public final String imgPath;
     public final Map<Material, Double> dropRates;
 
     EnemyInfo(int id, String name, int hp, int atk, int mov, int rng, String imgPath, Map<Material, Double> dropRates) {

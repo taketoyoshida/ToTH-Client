@@ -28,8 +28,11 @@ public class GameActions {
 
         boolean isMoving = true;
         while (isMoving && movementRange > 0) {
+
             System.out.println("現在位置: (" + currentRow + ", " + currentCol + ")");
             System.out.println("残り移動範囲: " + movementRange);
+
+            /* コンソール上で動かすときはここを使う */
             System.out.println("移動したい座標を入力してください。移動フェイズを終了する場合は\"100\"を入力");
             String input = scanner.nextLine();
 
@@ -45,9 +48,28 @@ public class GameActions {
                 continue;
             }
 
+            /* ボタンから入力するときはこっち */
+//            int x = ｘをゲットする処理
+//            int y = ｙをゲットする処理
+
+//            if(移動終了が押される){
+//                isMoving = false;
+//                break;
+//            }
+//            if(関係ないボタンが押される){
+//                System.out.println("無効な入力です。再度入力してください。");
+//                continue;
+//            }
+
+
             try {
+                /* コンソール上で動かすときはこれ */
                 int targetRow = Integer.parseInt(coordinates[0]);
                 int targetCol = Integer.parseInt(coordinates[1]);
+
+                /* ボタンから入力するときはこれ */
+                //int targetRow = x;
+                //int targetCol = y;
 
                 if (targetRow < 0 || targetRow >= GameModel.BOARD_ROW || targetCol < 0 || targetCol >= GameModel.BOARD_COL) {
                     System.out.println("無効な座標です。再度入力してください。");
@@ -99,11 +121,21 @@ public class GameActions {
         //攻撃フェイズ
         System.out.println();
         System.out.println("----------攻撃フェイズ----------");
+
+        /* コンソール上で動かす場合 */
         System.out.println("攻撃したい座標を入力してください。攻撃フェイズを終了する場合は\"100\"を入力");
+
+        /* ボタンで動かすとき */
+        //int x = ｘをゲットする処理
+        //int y = ｙをゲットする処理
+
         while (true) {
             String attackInput = scanner.nextLine();
-            // 攻撃フェイズを終了する
-            if (attackInput.equals("100")) break;
+            /* コンソール上で動かすとき */
+            if (attackInput.equals("100")){
+                System.out.println("攻撃フェイズを終了します。");
+                break;
+            }
             String[] attackCoordinates = attackInput.split(" ");
 
             if (attackCoordinates.length != 2) {
@@ -111,9 +143,25 @@ public class GameActions {
                 continue;
             }
 
+            /* ボタンから入力するとき */
+//            if(攻撃終了が押される){
+//                System.out.println("攻撃フェイズを終了します。");
+//                break;
+//            }
+//            if(関係ないボタンが押される){
+//                System.out.println("無効な入力です。再度入力してください。");
+//                continue;
+//            }
+
+
             try {
+                /* コンソール上 */
                 int attackRow = Integer.parseInt(attackCoordinates[0]);
                 int attackCol = Integer.parseInt(attackCoordinates[1]);
+
+                /* ボタン入力 */
+                //int attackRow = x;
+                //int attackCol = y;
 
                 if (attackRow < 0 || attackRow >= GameModel.BOARD_ROW || attackCol < 0 || attackCol >= GameModel.BOARD_COL) {
                     System.out.println("無効な座標です。再度入力してください。");
@@ -176,5 +224,6 @@ public class GameActions {
         }
 
     }
+
 
 }
