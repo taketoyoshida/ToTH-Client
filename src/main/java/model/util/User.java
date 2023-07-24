@@ -57,6 +57,9 @@ public class User {
         }
         balance += amount;
     }
+    public void increaseBalance(int amount) {
+        balance += amount;
+    }
 
     public void setRank() {
         int rate = status.getHP() + status.getATK();
