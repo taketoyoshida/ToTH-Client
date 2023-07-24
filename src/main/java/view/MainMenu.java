@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import model.EquipmentItem;
 import model.Player;
 import model.Status;
 import model.util.User;
@@ -14,10 +15,14 @@ public class MainMenu extends JFrame implements MouseListener {
     BackButton bButton = new BackButton();
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
+    private JLayeredPane infoPane = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/home_backImg.png");    //画像のディレクトリは調整してもろて
     private ImageIcon bIcon1 = new ImageIcon("./assets/imgs/Button1.png");
     private ImageIcon bIcon2 = new ImageIcon("./assets/imgs/Button2.png");
-    //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
+    private ImageIcon infoIcon = new ImageIcon("./assets/imgs/MainMenuInfo.png");
+    private ImageIcon cIcon = new ImageIcon("./assets/imgs/Coin.png");
+
+    private ImageScaling isc = new ImageScaling();
 
     private JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
     //JLabel label2 = new JLabel(icon2);
@@ -31,7 +36,7 @@ public class MainMenu extends JFrame implements MouseListener {
 
         this.base = base;
         this.user = user;
-        label1.setBounds(0, 0, 816, 512);//背景の描画とレイヤーの設定
+        label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         p.add(label1);
         p.setLayer(label1, -10);
 
@@ -58,6 +63,58 @@ public class MainMenu extends JFrame implements MouseListener {
         b2.addMouseListener(this);
         p.add(b2);
 
+        /*プレイヤ情報の表示*/
+        infoPane.setBounds(384, 220, 384, 256);
+        p.add(infoPane);
+        p.setLayer(infoPane, 0);
+        JLabel infoBox = new JLabel(infoIcon);
+        infoBox.setBounds(0, 0, 384, 256);
+        infoPane.add(infoBox);
+        infoPane.setLayer(infoBox, 10);
+        /*ユーザ名の表示*/
+        String name = "<html>" + user.getUsername() + "さん";
+        JLabel nameLabel = new JLabel(name);
+        nameLabel.setBounds(16, 16, 384, 35);
+        nameLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 40));
+        infoPane.add(nameLabel);
+        infoPane.setLayer(nameLabel, 20);
+        /*所持金の表示*/
+        JLabel coinIconLabel = new JLabel(isc.scale(cIcon, 1.0));
+        coinIconLabel.setBounds(16, 67, 32, 32);
+        infoPane.add(coinIconLabel);
+        infoPane.setLayer(coinIconLabel, 20);
+        String balance = "×" + user.getBalance();
+        JLabel balanceLabel = new JLabel(balance);
+        balanceLabel.setBounds(48, 67, 384, 32);
+        balanceLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 32));
+        infoPane.add(balanceLabel);
+        infoPane.setLayer(balanceLabel, 20);
+        /*所持装備の数の表示*/
+        EquipmentItem[] eItems = EquipmentItem.values();
+        int count = 0;
+        for (int i = 0; i < eItems.length; i++) {
+            if (user.getEquipmentQuantity(eItems[i]) > 0) {
+                count++;
+            }
+        }
+        JLabel equipmentLabel = new JLabel("<html>作った装備：" + count + "種類");
+        equipmentLabel.setBounds(16, 115, 384, 32);
+        equipmentLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 32));
+        infoPane.add(equipmentLabel);
+        infoPane.setLayer(equipmentLabel, 20);
+        /*ランクの表示*/
+        JLabel rankLabel = new JLabel("<html>現在のランク：" + user.getRank());
+        rankLabel.setBounds(16, 163, 384, 32);
+        rankLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 32));
+        infoPane.add(rankLabel);
+        infoPane.setLayer(rankLabel, 20);
+        /*次のランクまでのポイントの表示*/
+        JLabel nextRankLabel = new JLabel("<html>次のランクまで：" + user.getRankPoint() + "ポイント");
+        nextRankLabel.setBounds(16, 208, 384, 32);
+        nextRankLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 20));
+        infoPane.add(nextRankLabel);
+        infoPane.setLayer(nextRankLabel, 20);
+
 
         addMouseListener(this);
     }
@@ -81,10 +138,10 @@ public class MainMenu extends JFrame implements MouseListener {
         }
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
-            Status status = new Status(20, 3, 5, 2);
-            Player player = new Player("testUser", status);
-            Game testGame = new Game(base, player);
-            base.setVisible(true);
+            //Status status = new Status(20, 3, 5, 2);
+            //Player player = new Player("testUser", status);
+            //Game testGame = new Game(base, player);
+            //base.setVisible(true);
         }
 
         if (e.getSource() == bButton.button()) {
