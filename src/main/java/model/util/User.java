@@ -142,11 +142,16 @@ public class User {
         throw new Exception("素材が足りません");
     }
 
-    public void equipItem(Equipment item) {
+    public void equipItem(EquipmentItem item) {
         if (equippedItems.containsKey(item.getPosition())) {
             unequipItem(item.getPosition());
         }
-        equippedItems.put(item.getPosition(), item);
+        int lvl = getEquipmentLevel(item);
+        Equipment equipment = new Equipment(item, lvl);
+        if(lvl !=0){
+            System.out.println("装備しました");
+            equippedItems.put(item.getPosition(), equipment);
+        }
         resetStatus();
     }
 
@@ -180,6 +185,14 @@ public class User {
     public Status getStatus() {
         resetStatus();
         return status;
+    }
+
+    public Equipment getEquipment(EquipmentPosition position) {
+        return equippedItems.get(position);
+    }
+
+    public int getEquipmentQuantity(EquipmentItem equipmentItem) {
+        return equipments.getOrDefault(equipmentItem, 0);
     }
 
 }
