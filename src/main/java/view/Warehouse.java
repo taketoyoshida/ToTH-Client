@@ -115,6 +115,9 @@ public class Warehouse extends JFrame implements ActionListener {
         infoSlotLabel.setBounds(610, 64, 128, 128);
         menuPanel.add(infoSlotLabel);
         menuPanel.setLayer(infoSlotLabel, 0);
+
+        /*アイテム表示蘭の場所とり*/
+        itemInfoPane.setBounds(546, 32, 256, 464);
     }
 
     //ボタンの状態の切り替え
@@ -208,6 +211,7 @@ public class Warehouse extends JFrame implements ActionListener {
             JLabel numLabel = new JLabel(bqQuantity);
             numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
             numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+            numLabel.setForeground(Color.YELLOW);
             listPane.add(numLabel);
             listPane.setLayer(numLabel, 20);
         }
@@ -258,6 +262,7 @@ public class Warehouse extends JFrame implements ActionListener {
 
             numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
             numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+            numLabel.setForeground(Color.YELLOW);
             listPane.add(numLabel);
             listPane.setLayer(numLabel, 20);
         }
@@ -310,13 +315,12 @@ public class Warehouse extends JFrame implements ActionListener {
                 + "素材を集めることで、装備を製造することができる<br>"
                 + "装備を製造すると、設計図は消費される";
         JLabel bpTxt = new JLabel(txt);
-        bpTxt.setBounds(0, 192, 256, 256);
+        bpTxt.setBounds(32, 192, 208, 256);
         bpTxt.setVerticalAlignment(JLabel.TOP);
         bpTxt.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 16));
         itemInfoPane.add(bpTxt);
         itemInfoPane.setLayer(bpTxt, 0);
 
-        itemInfoPane.setBounds(546, 32, 256, 464);
         menuPanel.add(itemInfoPane);
         menuPanel.setLayer(itemInfoPane, 10);
     }
@@ -348,13 +352,12 @@ public class Warehouse extends JFrame implements ActionListener {
 
         /*フレーバーテキストの表示*/
         JLabel itemTxt = new JLabel(material.getTxt());
-        itemTxt.setBounds(0, 192, 256, 256);
+        itemTxt.setBounds(32, 192, 208, 256);
         itemTxt.setVerticalAlignment(JLabel.TOP);
         itemTxt.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 16));
         itemInfoPane.add(itemTxt);
         itemInfoPane.setLayer(itemTxt, 0);
 
-        itemInfoPane.setBounds(546, 32, 256, 464);
         menuPanel.add(itemInfoPane);
         menuPanel.setLayer(itemInfoPane, 10);
     }

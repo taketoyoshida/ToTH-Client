@@ -176,6 +176,7 @@ public class Workshop extends JFrame implements ActionListener {
                 JLabel num = new JLabel(String.valueOf(bpNum));
                 num.setBounds(64 + 80 * (i % 2), 64 + 80 * (i / 2), 32, 32);
                 num.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
+                num.setForeground(Color.yellow);
                 listPane.add(num);
                 listPane.setLayer(num, 20);
 
@@ -186,6 +187,7 @@ public class Workshop extends JFrame implements ActionListener {
             JLabel txtLabel = new JLabel(txt);
             txtLabel.setHorizontalAlignment(JLabel.CENTER);
             txtLabel.setVerticalAlignment(JLabel.CENTER);
+            txtLabel.setForeground(Color.yellow);
             txtLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 20));
             txtLabel.setBounds(0, 0, 176, 462);
             listPane.add(txtLabel);
