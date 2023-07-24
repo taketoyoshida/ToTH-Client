@@ -176,5 +176,10 @@ public class GameActions {
         }
 
     }
+    public String movePos(int x,int y){
+        String X= String.valueOf(x);
+        String Y= String.valueOf(y);
+        return X+" "+Y;
+    }
 
 }

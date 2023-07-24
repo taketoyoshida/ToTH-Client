@@ -444,6 +444,13 @@ public class GameController {
         if (turnNum > GAME_TURN) return true;
         else return false;
     }
+    public GameModel ReturnGameModel(){
+        return gameModel;
+    }
+    public  List<Enemy> enemylist(){
+        return enemyList;
+    }
+
 
     public int getRandomNum(int min, int max) {
         return random.nextInt(max - min + 1) + min;
@@ -453,4 +460,9 @@ public class GameController {
         GameController gameController = new GameController(testUser1, testUser2); // GameModelのインスタンスをコンストラクタに渡す
         gameController.playGame();
     }
+    public int turnReturn(){
+        return  turnNum;
+    }
+
+
 }
