@@ -68,5 +68,42 @@ public class Piece implements Serializable {
         }
     }
 
+    public int toIntger() {
+        switch (type) {
+            case PLAYER1, PLAYER2:
+                return 1;
+            case ENEMY01:
+                return 2;
+            case ENEMY02:
+                return 3;
+            case ENEMY03:
+                return 4;
+            case ENEMY04:
+                return 5;
+            case ENEMY05:
+                return 6;
+            case ENEMY06:
+                return 7;
+            case ENEMY07:
+                return 8;
+            case ENEMY08:
+                return 9;
+            case ENEMY09:
+                return 10;
+            case ENEMY10:
+                return 11;
+            case ENEMY11:
+                return 12;
+            case ENEMY12:
+                return 13;
+            case OBSTACLE:
+                return 14;
+            case EMPTY:
+                return 15;
+            default:
+                return 16;
+        }
+    }
+
 
 }

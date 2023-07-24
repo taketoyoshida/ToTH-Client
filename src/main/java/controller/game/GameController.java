@@ -444,6 +444,9 @@ public class GameController {
         if (turnNum > GAME_TURN) return true;
         else return false;
     }
+    public GameModel ReturnGameModel(){
+        return gameModel;
+    }
 
     public int getRandomNum(int min, int max) {
         return random.nextInt(max - min + 1) + min;
