@@ -30,7 +30,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
     private ImageIcon iconTextField = new ImageIcon("./assets/imgs/DockText.png");
     private ImageIcon iconSlot2 = new ImageIcon("./assets/imgs/EquipSlot3.png");
     private ImageIcon iconSlot3 = new ImageIcon("./assets/imgs/EquipSlot4.png");
-    private ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
+    private ImageIcon iconEquip = new ImageIcon("./assets/imgs/EquipButton.png");
     private ImageIcon iconButton = new ImageIcon("./assets/imgs/TestButton3.png");
     ImageScaling isc = new ImageScaling();
 
@@ -46,8 +46,7 @@ public class EquipmentDock extends JFrame implements ActionListener {
 
     JScrollPane scrollPane = new JScrollPane();
     JViewport viewport = scrollPane.getViewport();
-    JButton b1 = new JButton(iconButton);
-    JButton equipButton = new JButton("装備する");
+    JButton equipButton = new JButton(iconEquip);
     private EquipCompoundButton[] equipButtons = new EquipCompoundButton[EquipmentItem.LENGTH];
     private static EquipCompoundButton[] slotButtons = new EquipCompoundButton[4];
 
@@ -144,7 +143,10 @@ public class EquipmentDock extends JFrame implements ActionListener {
         labelTextNext.setFont(new Font("MS ゴシック", BOLD, 22));
         menuPane.add(labelTextNext);
         menuPane.setLayer(labelTextNext, 10);
+        /*装備するボタン*/
         equipButton.setBounds(384, 384, 64, 64);
+        equipButton.setBorderPainted(false);
+        equipButton.setContentAreaFilled(false);
         equipButton.addActionListener(this);
         menuPane.add(equipButton);
         menuPane.setLayer(equipButton, 10);
