@@ -48,6 +48,7 @@ public class GachaMock {
         Map.Entry<Double, EquipmentItem> entry = probabilitySheet.higherEntry(randomValue);
         if (entry == null) throw new Exception("Unexpected gacha result");
         EquipmentItem item = entry.getValue();
+        user.addBlueprint(new Blueprint(item),1);
         return new GachaResult(new Blueprint(item));
     }
 
