@@ -16,7 +16,8 @@ public class Workshop extends JFrame implements ActionListener {
 
     private User user;
     private BackButton bButton = new BackButton();
-    int itemVar = 5, bpVar = 23;                 //装備原型と素材の種類の数
+    private final int itemVar = 5, bpVar = 23;                 //装備原型と素材の種類の数
+    private EquipmentItem targetItem;
     private final WindowBase base;
     private JLayeredPane menuPanel = new JLayeredPane();
     private JLayeredPane equipInfoPane = new JLayeredPane();
@@ -30,6 +31,7 @@ public class Workshop extends JFrame implements ActionListener {
     private ImageIcon iconSlot = new ImageIcon("./assets/imgs/EquipSlot4.png");
     private ImageIcon iconUpgrade = new ImageIcon("./assets/imgs/TestButton3.png");
     private ImageIcon iconItem = new ImageIcon("./assets/imgs/TestItemShield.png");
+    private final ImageIcon iconBlueprint = new ImageIcon("./assets/imgs/Blueprint.png");
 
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
     ImageScaling isc = new ImageScaling();
@@ -57,6 +59,7 @@ public class Workshop extends JFrame implements ActionListener {
 
         this.base = base;
         this.user = user;
+        this.targetItem = null;
         label1.setBounds(0, 0, 832, 512);//背景の描画とレイヤーの設定
         menuPanel.add(label1);
         menuPanel.setLayer(label1, -10);
@@ -82,9 +85,16 @@ public class Workshop extends JFrame implements ActionListener {
         menuPanel.add(label2);
         menuPanel.setLayer(label2, 0);
 
+        /*製造前のアイコン置き場*/
         labelUpgradeBefore.setBounds(242, 72, 192, 192);
         menuPanel.add(labelUpgradeBefore);
         menuPanel.setLayer(labelUpgradeBefore, 0);
+        JLabel bpSlot = new JLabel(isc.scale(iconBlueprint, 6.0));
+        bpSlot.setBounds(242, 72, 192, 192);
+        menuPanel.add(bpSlot);
+        menuPanel.setLayer(bpSlot, 5);
+
+        /*製造後のアイコン置き場*/
         labelUpgradeAfter.setBounds(592, 72, 192, 192);
         menuPanel.add(labelUpgradeAfter);
         menuPanel.setLayer(labelUpgradeAfter, 0);
@@ -118,16 +128,17 @@ public class Workshop extends JFrame implements ActionListener {
     }
 
     public void getList() {
+        listPane.removeAll();
 
         /*全種類の設計図の所持数を確認*/
         int exist = 0;
         Blueprint[] bp = new Blueprint[bpVar];
         bp[0] = new Blueprint(EquipmentItem.LEATHER_HELMET);
-        bp[1] = new Blueprint(EquipmentItem.COPPER_HELMET);
+        bp[1] = new Blueprint(EquipmentItem.BRONZE_HELMET);
         bp[2] = new Blueprint(EquipmentItem.IRON_HELMET);
         bp[3] = new Blueprint(EquipmentItem.DIAMOND_HELMET);
         bp[4] = new Blueprint(EquipmentItem.LEATHER_ARMOR);
-        bp[5] = new Blueprint(EquipmentItem.COPPER_ARMOR);
+        bp[5] = new Blueprint(EquipmentItem.BRONZE_ARMOR);
         bp[6] = new Blueprint(EquipmentItem.IRON_ARMOR);
         bp[7] = new Blueprint(EquipmentItem.DIAMOND_ARMOR);
         bp[8] = new Blueprint(EquipmentItem.WOOD_SWORD);
@@ -161,6 +172,11 @@ public class Workshop extends JFrame implements ActionListener {
                 itemSlot.setBounds(16 + 80 * (i % 2), 16 + 80 * (i / 2), 64, 64);
                 listPane.add(itemSlot);
                 listPane.setLayer(itemSlot, 0);
+                JLabel bpSlot = new JLabel(isc.scale(iconBlueprint, 2.0));
+                bpSlot.setBounds(16 + 80 * (i % 2), 16 + 80 * (i / 2), 64, 64);
+                listPane.add(bpSlot);
+                listPane.setLayer(bpSlot, 5);
+
                 /*設計図のアイコンの表示*/
                 ImageIcon bpIcon = new ImageIcon(bpButton[i].blueprint.baseItem().getAssetPath());
                 bpButton[i].button = new JButton(isc.scale(bpIcon, 2.0));
@@ -265,8 +281,32 @@ public class Workshop extends JFrame implements ActionListener {
 
     }
 
+    public void printSuccess(EquipmentItem ei) {
+        equipInfoPane.removeAll();
+        JLabel success = new JLabel("製造成功！");
+        success.setFont(new Font("ＭＳ ゴシック", BOLD, 22));
+        success.setBounds(234, 344, 558, 22);
+        equipInfoPane.add(success);
+        equipInfoPane.setLayer(success, 10);
+        base.change(menuPanel);
+        /*強化後のレベル比較*/
+        int lvl = user.getEquipmentQuantity(ei);
+        String txt;
+        if (lvl < 2) {
+            txt = "<html>未所持&nbsp;→&nbsp;レベル" + lvl;
+        } else {
+            txt = "<html>レベル" + (lvl - 1) + "&nbsp;→&nbsp;レベル" + lvl;
+        }
+        JLabel lvlLabel = new JLabel(txt);
+        lvlLabel.setFont(new Font("ＭＳ ゴシック", BOLD, 22));
+        lvlLabel.setBounds(234, 366, 558, 22);
+        equipInfoPane.add(lvlLabel);
+
+    }
+
     public void setBlueprint(Blueprint bp) {
 
+        /*設計図を置く*/
         setPane.removeAll();
         ImageIcon setBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
         JLabel setBpLabel = new JLabel(isc.scale(setBpIcon, 6.0));
@@ -274,6 +314,8 @@ public class Workshop extends JFrame implements ActionListener {
         setPane.add(setBpLabel);
         setPane.setBounds(242, 72, 192, 192);
 
+
+        /*完成品を置く*/
         upgradePane.removeAll();
         ImageIcon upgradeBpIcon = new ImageIcon(bp.baseItem().getAssetPath());
         JLabel upgradeBpLabel = new JLabel(isc.scale(upgradeBpIcon, 6.0));
@@ -287,15 +329,24 @@ public class Workshop extends JFrame implements ActionListener {
         menuPanel.setLayer(setPane, 10);
         menuPanel.add(upgradePane);
         menuPanel.setLayer(upgradePane, 10);
+
+        base.change(menuPanel);
     }
 
     public void actionPerformed(ActionEvent e) {
         // Upgradeボタンが押されたときの処理
         if (e.getSource() == buttonUpgrade) {
-            System.out.println("力が…欲しいか…？");
+            try {
+                user.createEquipment(targetItem);
+                printSuccess(targetItem);
+            } catch (Exception ex) {
+                printReq(new Blueprint(targetItem), true);
+            }
+            getList();
         }
         for (int i = 0; i < bpVar; i++) {
             if (e.getSource() == bpButton[i].button) {
+                targetItem = bpButton[i].blueprint.baseItem();
                 equipInfoPane.removeAll();
                 printReq(bpButton[i].blueprint, false);
                 setBlueprint(bpButton[i].blueprint);
@@ -314,9 +365,14 @@ public class Workshop extends JFrame implements ActionListener {
         user.addBlueprint(new Blueprint(EquipmentItem.WOOD_SWORD), 3);
         user.addBlueprint(new Blueprint(EquipmentItem.IRON_SWORD), 1);
         user.addBlueprint(new Blueprint(EquipmentItem.DIAMOND_SWORD), 2);
+        user.addBlueprint(new Blueprint(EquipmentItem.LEATHER_HELMET), 2);
+        user.addBlueprint(new Blueprint(EquipmentItem.BRONZE_HELMET), 1);
 
-        user.addMaterial(Material.WOOD, 5);
-        user.addMaterial(Material.IRON, 2);
+        user.addMaterial(Material.WOOD, 45);
+        user.addMaterial(Material.IRON, 20);
+        user.addMaterial(Material.DIAMOND, 6);
+        user.addMaterial(Material.LEATHER, 20);
+        user.addMaterial(Material.BRONZE, 0);
 
         WindowBase base = new WindowBase("test");
         Workshop test = new Workshop(base, user);

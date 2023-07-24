@@ -401,6 +401,9 @@ public class EquipmentDock extends JFrame implements ActionListener {
             for (int i = 0; i < slottedEquipment.length; i++) {
                 slottedEquipment[i] = dummy[i];
             }
+            infoSlot[0] = dummy[0];
+            infoSlot[1] = dummy[1];
+            target = -1;
             getEquipment();
             base.change(menuPane);
             printStatus();

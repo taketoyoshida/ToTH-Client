@@ -2,11 +2,11 @@ package model;
 
 public enum EquipmentItem {
     LEATHER_HELMET(1, "皮のヘルメット", EquipmentPosition.HEAD, 2, 0, 0, 2, 0, "leather_helmet.png", new Status(5, 0, 1, 0)),
-    COPPER_HELMET(2, "銅のヘルメット", EquipmentPosition.HEAD, 4, 0, 0, 4, 2, "copper_helmet.png", new Status(10, 0, 1, 0)),
+    BRONZE_HELMET(2, "銅のヘルメット", EquipmentPosition.HEAD, 4, 0, 0, 4, 2, "bronze_helmet.png", new Status(10, 0, 1, 0)),
     IRON_HELMET(3, "鉄のヘルメット", EquipmentPosition.HEAD, 4, 3, 0, 4, 1, "iron_helmet.png", new Status(20, 0, 0, 0)),
     DIAMOND_HELMET(4, "ダイヤのヘルメット", EquipmentPosition.HEAD, 4, 4, 2, 6, 1, "diamond_helmet.png", new Status(25, 0, 1, 0)),
     LEATHER_ARMOR(5, "皮のアーマー", EquipmentPosition.BODY, 4, 0, 0, 4, 0, "leather_armor.png", new Status(10, 0, 2, 0)),
-    COPPER_ARMOR(6, "銅のアーマー", EquipmentPosition.BODY, 6, 0, 0, 6, 4, "copper_armor.png", new Status(15, 0, 1, 0)),
+    BRONZE_ARMOR(6, "銅のアーマー", EquipmentPosition.BODY, 6, 0, 0, 6, 4, "bronze_armor.png", new Status(15, 0, 1, 0)),
     IRON_ARMOR(7, "鉄のアーマー", EquipmentPosition.BODY, 6, 5, 0, 6, 2, "iron_armor.png", new Status(30, 0, 0, 0)),
     DIAMOND_ARMOR(8, "ダイヤのアーマー", EquipmentPosition.BODY, 6, 5, 3, 8, 2, "diamond_armor.png", new Status(40, 0, 1, 0)),
     WOOD_SWORD(9, "木の剣", EquipmentPosition.RIGHT_HAND, 4, 0, 0, 0, 0, "wood_sword.png", new Status(0, 3, 1, 0)),
@@ -84,7 +84,7 @@ public enum EquipmentItem {
             case DIAMOND_HELMET, DIAMOND_SHIELD, DIAMOND_ARMOR -> {
                 status.setHP(status.getHP() + level * 5);
             }
-            case COPPER_ARMOR, COPPER_HELMET -> {
+            case BRONZE_ARMOR, BRONZE_HELMET -> {
                 status.setHP(status.getHP() + level * 2);
             }
         }
