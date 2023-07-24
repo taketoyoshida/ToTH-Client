@@ -82,8 +82,8 @@ public class MainMenu extends JFrame implements MouseListener {
         if (e.getSource() == b2) {
             System.out.println("大丈夫だ、問題ない");
             Status status = new Status(20, 3, 5, 2);
-            Player player = new Player("testUser", status);
-            Game testGame = new Game(base, player);
+            //Player player = new Player("testUser", status);
+            //Game testGame = new Game(base, player);
             base.setVisible(true);
         }
 

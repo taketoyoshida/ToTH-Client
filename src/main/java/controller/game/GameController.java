@@ -4,12 +4,14 @@ import controller.networking.GameGateway;
 import model.*;
 
 import java.util.*;
+import java.io.*;
 
 import static model.GameModel.*;
 import static model.Player.Teban.*;
 
 
 import model.util.User;
+
 
 public class GameController {
     private Random random;
@@ -19,6 +21,7 @@ public class GameController {
     private List<Enemy> enemyList;
     private final GameGateway.IGameGateway gateway;
     private int gameRank;
+    private PrintWriter logWriter;
 
     public static User testUser1 = new User(100, "test1", 100000, 5);
     public static User testUser2 = new User(200, "test2", 100000, 5);
@@ -45,13 +48,20 @@ public class GameController {
 
         setObstacle();
         setEnemy(gameRank);
+
+        try {
+            logWriter = new PrintWriter(new FileWriter("src/main/java/controller/game/GameLog.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         turnNum = 1;
     }
 
 
     //ゲームのメインループ
     public void playGame() {
-        System.out.println("----------ゲームを開始します----------");
+//        System.out.println("----------ゲームを開始します----------");
+        writeToLog("----------ゲームを開始します----------");
 
         Scanner scanner = new Scanner(System.in);
 
@@ -61,13 +71,21 @@ public class GameController {
             System.out.printf("|     Turn: %2d     |\n", turnNum);
             System.out.println("└------------------┘");
 
+            writeToLog("\n┌------------------┐");
+            writeToLog(String.format("|     Turn: %2d     |", turnNum));
+            writeToLog("└------------------┘");
+
             System.out.println("先手: " + Player1.getName());
             Player1.printStatus();
             System.out.println("SCORE : " + Player1.getScore());
-
             System.out.println("後手: " + Player2.getName());
             Player2.printStatus();
             System.out.println("SCORE : " + Player2.getScore());
+
+            writeToLog("先手: " + Player1.getName());
+            writeToLog("SCORE : " + Player1.getScore());
+            writeToLog("後手: " + Player2.getName());
+            writeToLog("SCORE : " + Player2.getScore());
 
             System.out.println();
             // 敵の情報の表示
@@ -80,13 +98,17 @@ public class GameController {
             // 先手
             System.out.println();
             System.out.println("-----プレイヤー1のターンです-----");
-            actionPlayer(Player1, gameModel);
+            writeToLog("\n-----プレイヤー1のターンです-----");
+
+            actionPlayer(Player1, gameModel, logWriter);
             // 後手
             System.out.println("-----プレイヤー2のターンです-----");
-            actionPlayer(Player2, gameModel);
+            writeToLog("\n-----プレイヤー2のターンです-----");
+            actionPlayer(Player2, gameModel, logWriter);
 
             System.out.println();
             System.out.println("-----敵のターンです-----");
+            writeToLog("\n-----敵のターンです-----");
             while (enemyList.size() < 3) {
                 putEnemy(gameRank);
             }
@@ -99,8 +121,10 @@ public class GameController {
 
             if (Player1.isDead()) {
                 System.out.println(Player1.getName() + "は死にました");
+                writeToLog(Player1.getName() + "は死にました");
                 Player1.setScore(Player1.getScore() - 500);
                 System.out.println("死んだので500点引かれます。現在のスコアは" + Player1.getScore() + "です");
+                writeToLog("死んだので500点引かれます。現在のスコアは" + Player1.getScore() + "です");
                 Player1.increaseDeadCount();
                 Player1.setAliveTurn(0);
                 gameModel.setPiece(Player1.getPosition(), new Piece(Piece.PieceType.EMPTY));
@@ -109,8 +133,10 @@ public class GameController {
             }
             if (Player2.isDead()) {
                 System.out.println(Player2.getName() + "は死にました");
+                writeToLog(Player2.getName() + "は死にました");
                 Player2.setScore(Player2.getScore() - 500);
                 System.out.println("死んだので500点引かれます。現在のスコアは" + Player2.getScore() + "です");
+                writeToLog("死んだので500点引かれます。現在のスコアは" + Player2.getScore() + "です");
                 Player2.increaseDeadCount();
                 Player2.setAliveTurn(0);
                 gameModel.setPiece(Player2.getPosition(), new Piece(Piece.PieceType.EMPTY));
@@ -120,42 +146,61 @@ public class GameController {
             //生存ボーナス
             System.out.println();
             System.out.println("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
+            writeToLog("生存ボーナスとして" + Player1.getName() + "は" + 10 * Player1.getAliveTurn() + "点を獲得しました");
             Player1.increaseScore(10 * Player1.getAliveTurn());
             System.out.println("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
+            writeToLog("生存ボーナスとして" + Player2.getName() + "は" + 10 * Player2.getAliveTurn() + "点を獲得しました");
             Player2.increaseScore(10 * Player2.getAliveTurn());
 
             turnNum++;
         }
         System.out.println();
         System.out.println("----------ゲーム終了です----------");
+        writeToLog("\n----------ゲーム終了です----------");
         /* 得点計算処理 */
         System.out.println("Player1の得点: " + Player1.getScore());
+        writeToLog("Player1の得点: " + Player1.getScore());
         System.out.println("Player2の得点: " + Player2.getScore());
+        writeToLog("Player2の得点: " + Player2.getScore());
         if (Player1.getScore() == Player2.getScore()) {
             /* 引き分け */
             System.out.println("引き分けです");
+            writeToLog("引き分けです");
             Player1.setReward(Player1.getScore() / 20);
             Player2.setReward(Player2.getScore() / 20);
         } else if (Player1.getScore() > Player2.getScore()) {
             /* プレイヤ－1の勝ち */
             System.out.println(Player1.getName() + "の勝ちです");
+            writeToLog(Player1.getName() + "の勝ちです");
             Player1.setReward(Player1.getScore() / 10);
             Player2.setReward(Player2.getScore() / 40);
         } else if (Player1.getScore() < Player2.getScore()) {
             /* プレイヤー2の勝ち */
             System.out.println(Player2.getName() + "の勝ちです");
+            writeToLog(Player2.getName() + "の勝ちです");
             Player1.setReward(Player1.getScore() / 40);
             Player2.setReward(Player2.getScore() / 10);
         }
         System.out.println("Player1の報酬: " + Player1.getReward());
         System.out.println("Player2の報酬: " + Player2.getReward());
+        writeToLog("Player1の報酬: " + Player1.getReward());
+        writeToLog("Player2の報酬: " + Player2.getReward());
+
+        /* プレイヤーの報酬を保存 */
+        testUser1.increaseBalance(Player1.getReward());
+        testUser2.increaseBalance(Player2.getReward());
 
 
     }
 
-    private void actionPlayer(Player player, GameModel gameModel) {
+    private void actionPlayer(Player player, GameModel gameModel, PrintWriter logWriter) {
         GameActions gameActions = new GameActions();
-        gameActions.actionPlayer(player, gameModel, enemyList);
+        gameActions.actionPlayer(player, gameModel, enemyList,logWriter);
+    }
+
+    private void writeToLog(String log) {
+        logWriter.println(log);
+        logWriter.flush();
     }
 
     public void printBoard() {
@@ -343,6 +388,7 @@ public class GameController {
             }
         }
         System.out.println(enemy.getName() + " moved from " + initialPosition + " to " + newPosition);
+        writeToLog(enemy.getName() + " moved from " + initialPosition + " to " + newPosition);
 
         // プレイヤーの位置を取得
         Position playerPosition1 = Player1.getPosition();
@@ -374,11 +420,16 @@ public class GameController {
 
             // 攻撃対象のプレイヤーを攻撃する処理（既存のコードと同じ）
             System.out.println("----------ATTACK LOG----------");
+            writeToLog("----------ATTACK LOG----------");
             System.out.println(currentPosition + " にいる " + enemy.getName() + " が " + targetPlayer.getName() + " を攻撃");
+            writeToLog(currentPosition + " にいる " + enemy.getName() + " が " + targetPlayer.getName() + " を攻撃");
             targetPlayer.decreaseHP(enemy.getAtk());
             System.out.println(enemy.getName() + "　が　" + targetPlayer.getName() + "　に　" + enemy.getAtk() + "　のダメージを与えました");
+            writeToLog(enemy.getName() + "　が　" + targetPlayer.getName() + "　に　" + enemy.getAtk() + "　のダメージを与えました");
             System.out.println(targetPlayer.getName() + "　の残りHPは　" + targetPlayer.getHP() + "　です");
+            writeToLog(targetPlayer.getName() + "　の残りHPは　" + targetPlayer.getHP() + "　です");
             System.out.println("------------------------------");
+            writeToLog("------------------------------");
 
             gameModel.printBoard();
 
@@ -443,6 +494,10 @@ public class GameController {
     public boolean isGameOver() {
         if (turnNum > GAME_TURN) return true;
         else return false;
+    }
+
+    public GameModel ReturnGameModel() {
+        return gameModel;
     }
 
     public int getRandomNum(int min, int max) {

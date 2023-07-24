@@ -4,6 +4,7 @@ import model.game.Equipment;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.io.*;
 
 public class Player {
     private String name;                        // 名前
@@ -20,6 +21,7 @@ public class Player {
     private int deadCount = 0;
     private Position pos;
     private Teban teban;
+    private PrintWriter logWriter;
 
     public Player(Teban teban, String name, Status status, int rank, Position pos) {
         this.teban = teban;
@@ -34,6 +36,16 @@ public class Player {
         this.aliveTurn = 0;
         this.equippedItems = new HashMap<>();
         this.pos = pos;
+
+        try {
+            logWriter = new PrintWriter(new FileWriter("src/main/java/controller/game/GameLog.txt", true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeToLog(String log) {
+        logWriter.println(log);
     }
 
     public void setTeban(Teban teban) {
@@ -95,6 +107,10 @@ public class Player {
     public void printStatus() {
         System.out.println(" HP | ATK | MOV | RNG");
         System.out.printf("%3d | %3d | %3d | %3d\n", status.getHP(), status.getATK(), status.getMOV(), status.getRNG());
+    }
+    public void printStatusToLog() {
+        writeToLog(" HP | ATK | MOV | RNG");
+        writeToLog(String.format("%3d | %3d | %3d | %3d\n", status.getHP(), status.getATK(), status.getMOV(), status.getRNG()));
     }
 
     public Map<Material, Integer> getMaterials() {
