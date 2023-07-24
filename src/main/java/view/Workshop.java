@@ -123,11 +123,11 @@ public class Workshop extends JFrame implements ActionListener {
         int exist = 0;
         Blueprint[] bp = new Blueprint[bpVar];
         bp[0] = new Blueprint(EquipmentItem.LEATHER_HELMET);
-        bp[1] = new Blueprint(EquipmentItem.COPPER_HELMET);
+        bp[1] = new Blueprint(EquipmentItem.BRONZE_HELMET);
         bp[2] = new Blueprint(EquipmentItem.IRON_HELMET);
         bp[3] = new Blueprint(EquipmentItem.DIAMOND_HELMET);
         bp[4] = new Blueprint(EquipmentItem.LEATHER_ARMOR);
-        bp[5] = new Blueprint(EquipmentItem.COPPER_ARMOR);
+        bp[5] = new Blueprint(EquipmentItem.BRONZE_ARMOR);
         bp[6] = new Blueprint(EquipmentItem.IRON_ARMOR);
         bp[7] = new Blueprint(EquipmentItem.DIAMOND_ARMOR);
         bp[8] = new Blueprint(EquipmentItem.WOOD_SWORD);

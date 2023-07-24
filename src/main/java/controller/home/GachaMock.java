@@ -16,11 +16,11 @@ public class GachaMock {
         probabilitySheet = new TreeMap<>();
         // orders does not matter as it uses TreeMap
         probabilitySheet.put(0.1, EquipmentItem.LEATHER_HELMET);
-        probabilitySheet.put(0.15, EquipmentItem.COPPER_HELMET);
+        probabilitySheet.put(0.15, EquipmentItem.BRONZE_HELMET);
         probabilitySheet.put(0.18, EquipmentItem.IRON_HELMET);
         probabilitySheet.put(0.19, EquipmentItem.DIAMOND_HELMET);
         probabilitySheet.put(0.26, EquipmentItem.LEATHER_ARMOR);
-        probabilitySheet.put(0.31, EquipmentItem.COPPER_ARMOR);
+        probabilitySheet.put(0.31, EquipmentItem.BRONZE_ARMOR);
         probabilitySheet.put(0.34, EquipmentItem.IRON_ARMOR);
         probabilitySheet.put(0.35, EquipmentItem.DIAMOND_ARMOR);
         probabilitySheet.put(0.43, EquipmentItem.WOOD_SWORD);
