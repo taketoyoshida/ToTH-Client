@@ -58,7 +58,10 @@ public enum EquipmentItem {
 
     public Status getStatus(int level) {
         level -= 1;
-        Status status = this.baseStatus;
+        Status status = new Status(baseStatus.getHP(),baseStatus.getATK(),
+                baseStatus.getMOV(),baseStatus.getRNG());
+
+
         switch (this) {//装備名で上げ幅を決定
             case WOOD_SWORD, WOOD_SPEAR, WOOD_ARROW, WOOD_DAGGER -> {
                 status.setHP(status.getHP() + level);
@@ -86,5 +89,9 @@ public enum EquipmentItem {
             }
         }
         return status;
+    }
+
+    public EquipmentPosition getPosition() {
+        return this.position;
     }
 }

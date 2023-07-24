@@ -33,4 +33,8 @@ public class Equipment {
     public void levelUp() {
         this.level++;
     }
+
+    public EquipmentItem getItem(){
+        return this.item;
+    }
 }
