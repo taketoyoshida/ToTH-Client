@@ -203,6 +203,7 @@ public class GachaWindow extends JFrame implements ActionListener {
         p2.setLayer(waitLabel, 0);
         b1.setEnabled(false);      //待機演出中はガチャボタンは無効化する
         b2.setEnabled(false);
+        bButton.button().setEnabled(false);
 
         p2.setBounds(316, 60, 200, 200);
         p.add(p2);
@@ -244,6 +245,7 @@ public class GachaWindow extends JFrame implements ActionListener {
                 p.setLayer(p2, 10);
                 b1.setEnabled(true);    //忘れずにボタンを有効化する
                 b2.setEnabled(true);
+                bButton.button().setEnabled(true);
                 getUserCoin();  //コイン数を更新する
                 base.change(p);
 
@@ -291,6 +293,7 @@ public class GachaWindow extends JFrame implements ActionListener {
                 p.setLayer(p2, 10);
                 b1.setEnabled(true);    //忘れずにボタンを有効化する
                 b2.setEnabled(true);
+                bButton.button().setEnabled(true);
                 getUserCoin();  //コイン数を更新する
                 base.change(p);
 

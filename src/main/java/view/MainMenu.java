@@ -109,7 +109,11 @@ public class MainMenu extends JFrame implements MouseListener {
         infoPane.add(rankLabel);
         infoPane.setLayer(rankLabel, 20);
         /*次のランクまでのポイントの表示*/
-        JLabel nextRankLabel = new JLabel("<html>次のランクまで：" + user.getRankPoint() + "ポイント");
+        int nextRankPoint = user.getRankPoint();
+        String rankTxt;
+        if (nextRankPoint < 0) rankTxt = "<html>次のランクまで：---ポイント";
+        else rankTxt = "<html>次のランクまで：" + nextRankPoint + "ポイント";
+        JLabel nextRankLabel = new JLabel(rankTxt);
         nextRankLabel.setBounds(16, 208, 384, 32);
         nextRankLabel.setFont(new java.awt.Font("ＭＳ ゴシック", java.awt.Font.BOLD, 20));
         infoPane.add(nextRankLabel);
