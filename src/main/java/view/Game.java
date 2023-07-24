@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,7 +18,7 @@ import static model.GameModel.BOARD_COL;
 import static model.GameModel.BOARD_ROW;
 
 
-public class Game extends JFrame implements KeyListener {
+public class Game extends JFrame implements KeyListener, MouseListener {
 
     private final Player player;
     private final WindowBase base;
@@ -29,7 +31,8 @@ public class Game extends JFrame implements KeyListener {
     public static User testUser2 = new User(200, "test2", 100000, 5);
     private GameModel GM;
     private GameController GC = new GameController(testUser1,testUser2);
-    JLabel textLabel2 = new JLabel();
+    JLabel[] textLabel2 = new JLabel[24];
+    JLabel[] textLabel1 = new JLabel[8];
 
     private Timer timer = new Timer(false);
     private JLayeredPane bgPanel = new JLayeredPane();
@@ -52,6 +55,7 @@ public class Game extends JFrame implements KeyListener {
     private JLabel cursorLabel = new JLabel();
 
 
+
     public Game(WindowBase base, Player player) {
 
         GM=GC.ReturnGameModel();
@@ -71,15 +75,32 @@ public class Game extends JFrame implements KeyListener {
         gamePanel.setLayer(cursorGuidePanel, 10);
 
 
-        textLabel2.setFont(new Font("ＭＳ ゴシック", BOLD, 12));
-        textLabel2.setBounds(590,64 ,256 , 352);
-        bgPanel.add(textLabel2);
-        bgPanel.setLayer(textLabel2, 10);
+        for(int i=0;i<24;i++) {
+            textLabel2[i]=new JLabel();
+            textLabel2[i].setFont(new Font("ＭＳ ゴシック", BOLD, 15));
+            textLabel2[i].setForeground(Color.WHITE);
+            textLabel2[i].setBounds(560, 16*i, 256, 250);
+            bgPanel.add(textLabel2[i]);
+            bgPanel.setLayer(textLabel2[i], 10);
+        }
+
+        for(int i=0;i<8;i++) {
+            textLabel1[i]=new JLabel();
+            textLabel1[i].setFont(new Font("ＭＳ ゴシック", BOLD, 15));
+            textLabel1[i].setForeground(Color.WHITE);
+            textLabel1[i].setBounds(64, 16*i,326 , 600);
+            bgPanel.add(textLabel2[i]);
+            bgPanel.setLayer(textLabel2[i], 10);
+        }
 
         start();
 
         gamePanel.addKeyListener(this);
         base.addKeyListener(this);
+
+        gamePanel.addMouseListener(this);
+        base.addMouseListener(this);
+
 
         base.change(bgPanel);
 
@@ -88,7 +109,7 @@ public class Game extends JFrame implements KeyListener {
     public void start() {
         setGameBG();
         printBoard();
-        setText();
+        setText2();
     }
 
     public void setGameBG() {
@@ -102,8 +123,34 @@ public class Game extends JFrame implements KeyListener {
             }
 
     }
-    public void setText(){
+    public  void setText1(){
 
+    }
+    public void setText2(){//各キャラクタと敵のHPが出る
+        textLabel2[0].setText("┌------------------┐");
+        textLabel2[1].setText("|     Turn: "+GC.turnReturn()+"        |\n");
+        textLabel2[2].setText("└------------------┘");
+
+        textLabel2[3].setText("先手: " + GC.Player1.getName());
+        textLabel2[4].setText(" HP | ATK | MOV | RNG");
+        textLabel2[5].setText(" "+GC.Player1.getHP()+"| "+GC.Player1.getATK()+"| "+GC.Player1.getMOV()+"| "+GC.Player1.getRNG());
+        textLabel2[6].setText("SCORE : " + GC.Player1.getScore());
+
+        textLabel2[7].setText("後手: " + GC.Player2.getName());
+        textLabel2[8].setText(" HP | ATK | MOV | RNG");
+        textLabel2[9].setText(" "+GC.Player2.getHP()+"| "+GC.Player2.getATK()+"| "+GC.Player2.getMOV()+"| "+GC.Player2.getRNG());
+        textLabel2[10].setText("SCORE : " + GC.Player2.getScore());
+
+        System.out.println();
+        // 敵の情報の表示
+        int count=11;
+        for (Enemy enemy : GC.enemylist()) {
+
+            textLabel2[count].setText("ENEMY: " + enemy.getName() + " " + enemy.getPosition());
+            textLabel2[count+1].setText(" HP | ATK | MOV | RNG");
+            textLabel2[count+2].setText(" "+enemy.getHp()+"| "+enemy.getAtk()+"| "+enemy.getMov()+"| "+enemy.getRng());
+            count=count+3;
+        }
 
     }
 
@@ -121,6 +168,25 @@ public class Game extends JFrame implements KeyListener {
     }
 
     @Override
+    public void mouseClicked(MouseEvent e) {
+
+        // マウスクリック時の座標を取得してGameControllerに渡す
+        int x = e.getX() / 32; // マスのサイズ32に合わせて割る
+        int y = e.getY() / 32;
+
+        GC.processClick(x, y); // GameControllerにクリックした座標を渡す
+        printBoard();
+    }
+    @Override
+    public  void mousePressed(MouseEvent e){};
+    @Override
+    public  void mouseReleased(MouseEvent e){};
+    @Override
+    public  void mouseEntered(MouseEvent e){};
+    @Override
+    public  void mouseExited(MouseEvent e){};
+
+    @Override
     public void keyTyped(KeyEvent e) {
 
 
@@ -129,6 +195,11 @@ public class Game extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) { //Keyを押したときの動作
             switch (e.getKeyCode()) {
+                case KeyEvent.VK_M:
+                    if (!keyFlag) {
+                        moveCharacter(100,100);
+                        keyFlag = true;
+                    }
                 case KeyEvent.VK_W:
                     if (!keyFlag) {
                         moveCharacter(0,-1);
@@ -166,9 +237,12 @@ public class Game extends JFrame implements KeyListener {
 
     }
 
+
     @Override
     public void keyReleased(KeyEvent e) {//Keyboardを離したときの動作
         switch (e.getKeyCode()) {
+            case  KeyEvent.VK_M:
+                keyFlag=false;
             case KeyEvent.VK_W:
                 keyFlag = false;
 
@@ -189,24 +263,32 @@ public class Game extends JFrame implements KeyListener {
     }
 
     public void moveCharacter(int X, int Y) {//キャラクターを動かす。
-        if (Y == -1 && X == 0 && charPosY > 0) {
+        if(Y == 100 && X == 100){
+            GC.setPosition(100,100);//移動終了
+        }else if (Y == -1 && X == 0 && charPosY > 0) {
             charPosY=charPosY-1;
-
+            GC.setPosition(charPosX,charPosY);
+            setText2();
             printBoard();
-            System.out.println(charPosX+" "+charPosY);
         } else if (Y == 1 && X == 0 && charPosY < limY - 1) {
             charPosY=charPosY+1;
+            GC.setPosition(charPosX,charPosY);
+            setText2();
             printBoard();
-            System.out.println(charPosX+" "+charPosY);
+
 
         } else if (X == -1 && Y == 0 && charPosX > 0) {
             charPosX=charPosX-1;
+            GC.setPosition(charPosX,charPosY);
+            setText2();
             printBoard();
-            System.out.println(charPosX+" "+charPosY);
+
         } else if (X == 1 && Y == 0 && charPosX < limX - 1) {
             charPosX=charPosX+1;
+            GC.setPosition(charPosX,charPosY);
+            setText2();
             printBoard();
-            System.out.println(charPosX+" "+charPosY);
+
         }
     }
 
