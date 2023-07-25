@@ -151,7 +151,7 @@ public class User {
         }
         int lvl = getEquipmentLevel(item);
         Equipment equipment = new Equipment(item, lvl);
-        if(lvl !=0){
+        if (lvl != 0) {
             System.out.println("装備しました");
             equippedItems.put(item.getPosition(), equipment);
         }
@@ -188,6 +188,27 @@ public class User {
     public Status getStatus() {
         resetStatus();
         return status;
+    }
+
+    public int getRankPoint() {   //次のランクまでのポイントを返す
+        int rate = status.getHP() + status.getATK();
+        switch (this.rank) {
+            case 1:
+                return 30 - rate;
+            case 2:
+                return 50 - rate;
+            case 3:
+                return 80 - rate;
+            case 4:
+                return 120 - rate;
+            case 5:
+                if (rate >= 160)
+                    return -1;
+                else if (rate < 160)
+                    return 160 - rate;
+            default:
+                return -1;
+        }
     }
 
     public Equipment getEquipment(EquipmentPosition position) {

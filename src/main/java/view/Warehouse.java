@@ -25,6 +25,7 @@ public class Warehouse extends JFrame implements ActionListener {
     private final ImageIcon iconInfoSlot = new ImageIcon("./assets/imgs/EquipSlot2.png");
     private final ImageIcon iconSlot = new ImageIcon("./assets/imgs/EquipSlot4.png");
     private final ImageIcon iconBlueprint = new ImageIcon("./assets/imgs/Blueprint.png");
+    private final ImageIcon iconButton = new ImageIcon("./assets/imgs/WarehouseButton.png");
     ImageIcon cIcon = new ImageIcon("./assets/imgs/Coin.png");
 
     ImageScaling isc = new ImageScaling();
@@ -49,7 +50,7 @@ public class Warehouse extends JFrame implements ActionListener {
     private class MenuButton extends JButton {    //表示する対象を切り替えるボタンの構造体
         MenuState state;
 
-        MenuButton(String label, MenuState state) {
+        MenuButton(ImageIcon label, MenuState state) {
             super(label);
             this.state = state;
         }
@@ -110,14 +111,26 @@ public class Warehouse extends JFrame implements ActionListener {
         bButton.button().addActionListener(this);
 
         /*表示する対象を選択するボタンの召喚*/
-        menuButtons[0] = new MenuButton("装備", MenuState.EQUIPMENT);
-        menuButtons[1] = new MenuButton("原型", MenuState.BLUEPRINT);
-        menuButtons[2] = new MenuButton("素材", MenuState.MATERIAL);
+        menuButtons[0] = new MenuButton(iconButton, MenuState.EQUIPMENT);
+        menuButtons[1] = new MenuButton(iconButton, MenuState.BLUEPRINT);
+        menuButtons[2] = new MenuButton(iconButton, MenuState.MATERIAL);
+        JLabel[] menuLabels = new JLabel[menuButtons.length];
+        menuLabels[0] = new JLabel("装備");
+        menuLabels[1] = new JLabel("原型");
+        menuLabels[2] = new JLabel("素材");
         for (int i = 0; i < menuButtons.length; i++) {
             menuButtons[i].setBounds(16 + i * 177, 64, 160, 32);
             menuButtons[i].addActionListener(this);
+            menuButtons[i].setBorderPainted(false);
+            menuButtons[i].setContentAreaFilled(false);
             menuPanel.add(menuButtons[i]);
             menuPanel.setLayer(menuButtons[i], 0);
+            menuLabels[i].setBounds(16 + i * 177, 64, 160, 32);
+            menuLabels[i].setHorizontalAlignment(JLabel.CENTER);
+            menuLabels[i].setVerticalAlignment(JLabel.CENTER);
+            menuLabels[i].setFont(new Font("PixelMplus10", Font.BOLD, 20));
+            menuPanel.add(menuLabels[i]);
+            menuPanel.setLayer(menuLabels[i], 5);
         }
 
         /*アイテム情報表示欄の召喚*/
@@ -224,7 +237,7 @@ public class Warehouse extends JFrame implements ActionListener {
         if (n > 462) pf = n;
         for (int i = 0; i * 80 - 64 <= pf; i++) {
             JLabel listLabel = new JLabel(iconList);
-            listLabel.setBounds(0, i * 80 - 64, 336, 80);
+            listLabel.setBounds(0, i * 80 - 64, 496, 80);
             listPane.add(listLabel);
             listPane.setLayer(listLabel, -10);
         }
@@ -318,7 +331,6 @@ public class Warehouse extends JFrame implements ActionListener {
             /*アイテムの数の表示*/
             String itemQuantity = String.valueOf(user.getMaterialQuantity(materials[i]));
             JLabel numLabel = new JLabel(itemQuantity);
-
             numLabel.setBounds(64 + 80 * (i % 6), 64 + 80 * (i / 6), 32, 32);
             numLabel.setFont(new Font("ＭＳ ゴシック", Font.PLAIN, 20));
             numLabel.setForeground(Color.YELLOW);

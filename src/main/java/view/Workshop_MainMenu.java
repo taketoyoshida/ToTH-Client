@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,18 +14,12 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     private final WindowBase base;
     private JLayeredPane p = new JLayeredPane();
     private ImageIcon icon1 = new ImageIcon("./assets/imgs/Equipment_backImg.png");    //画像のディレクトリは調整してもろて
-    //ImageIcon bIcon1 = new ImageIcon("./assets/imgs/TestButton1.png");
-    //ImageIcon bIcon2 = new ImageIcon("./assets/imgs/TestButton2.png");
-    //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
+    private final ImageIcon buttonIcon = new ImageIcon("./assets/imgs/WorkshopMainmenuButton.png");
 
     JLabel label1 = new JLabel(icon1);        //画像はlabelで取り込む
-    //JLabel label2 = new JLabel(icon2);
-    //Test7とかいう名前は適当に変えること
+    JLabel[] txtLabel = new JLabel[4];
 
-    JButton b1 = new JButton("ガチャ");
-    JButton b2 = new JButton("製造");
-    JButton b3 = new JButton("装備");
-    JButton b4 = new JButton("一覧");
+    JButton[] button = new JButton[4];
 
 
     public Workshop_MainMenu(WindowBase base, User user) {
@@ -38,6 +33,22 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
         bButton.setButtonRight(p);
         bButton.button().addMouseListener(this);
 
+        for(int i=0;i<txtLabel.length;i++){
+            txtLabel[i] = new JLabel();
+            txtLabel[i].setFont(new Font("PixelMplus10", Font.BOLD, 56));
+            txtLabel[i].setForeground(Color.DARK_GRAY);
+            txtLabel[i].setHorizontalAlignment(JLabel.CENTER);
+            txtLabel[i].setVerticalAlignment(JLabel.CENTER);
+            p.setLayer(txtLabel[i], 10);
+        }
+        for(int i=0;i<button.length;i++){
+            button[i] = new JButton(buttonIcon);
+            button[i].setBorderPainted(false);
+            button[i].setContentAreaFilled(false);
+            button[i].addMouseListener(this);
+            p.setLayer(button[i], 0);
+        }
+
         paint();
 
         base.change(p);
@@ -49,21 +60,33 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
 
         p.setLayout(null);      //ボタン配置の設定
 
-        b1.setBounds(100, 100, 200, 100);
-        b1.addMouseListener(this);
-        p.add(b1);
+        button[0].setBounds(64, 64, 256, 128);
+        button[0].addMouseListener(this);
+        p.add(button[0]);
+        txtLabel[0].setText("ガチャ");
+        txtLabel[0].setBounds(64, 64, 256, 128);
+        p.add(txtLabel[0]);
 
-        b2.setBounds(500, 100, 200, 100);
-        b2.addMouseListener(this);
-        p.add(b2);
+        button[1].setBounds(512, 64, 256, 128);
+        button[1].addMouseListener(this);
+        p.add(button[1]);
+        txtLabel[1].setText("製造");
+        txtLabel[1].setBounds(512, 64, 256, 128);
+        p.add(txtLabel[1]);
 
-        b3.setBounds(100, 300, 200, 100);
-        b3.addMouseListener(this);
-        p.add(b3);
+        button[2].setBounds(64, 320, 256, 128);
+        button[2].addMouseListener(this);
+        p.add(button[2]);
+        txtLabel[2].setText("装備");
+        txtLabel[2].setBounds(64, 320, 256, 128);
+        p.add(txtLabel[2]);
 
-        b4.setBounds(500, 300, 200, 100);
-        b4.addMouseListener(this);
-        p.add(b4);
+        button[3].setBounds(512, 320, 256, 128);
+        button[3].addMouseListener(this);
+        p.add(button[3]);
+        txtLabel[3].setText("アイテム");
+        txtLabel[3].setBounds(512, 320, 256, 128);
+        p.add(txtLabel[3]);
 
 
         //setContentPane(p);
@@ -83,19 +106,19 @@ public class Workshop_MainMenu extends JFrame implements MouseListener {
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (e.getSource() == b1) {
+        if (e.getSource() == button[0]) {
             System.out.println("ガチャは悪い文明…！破壊する…！");
             GachaWindow gachaTest = new GachaWindow(base, user);
         }
-        if (e.getSource() == b2) {
+        if (e.getSource() == button[1]) {
             System.out.println("2-4-11");
             Workshop workshopTest = new Workshop(base, user);
         }
-        if (e.getSource() == b3) {
+        if (e.getSource() == button[2]) {
             System.out.println("ここで装備していくかい？");
             EquipmentDock dockTest = new EquipmentDock(base, user);
         }
-        if (e.getSource() == b4) {
+        if (e.getSource() == button[3]) {
             System.out.println("宝物庫の鍵を開けてやろう");
             Warehouse warehouseTest = new Warehouse(base, user);
         }

@@ -31,6 +31,7 @@ public class GachaWindow extends JFrame implements ActionListener {
     ImageIcon cIcon = new ImageIcon("./assets/imgs/Coin.png");
     ImageIcon icon2 = new ImageIcon("./assets/imgs/Gachaikei.png");
     private final ImageIcon gachaInfo = new ImageIcon("./assets/imgs/GachaInfo.png");
+    private final ImageIcon gachaIcon = new ImageIcon("./assets/imgs/GachaButton.png");
     //ImageIcon icon2 = new ImageIcon("./assets/imgs/エルフ.jpg");
     ImageScaling isc = new ImageScaling();
 
@@ -38,14 +39,12 @@ public class GachaWindow extends JFrame implements ActionListener {
     JLabel cLabel = new JLabel(cIcon);
     JLabel label2 = new JLabel(icon2);
     JLabel textLabel1 = new JLabel();
-    JLabel textLabel2 = new JLabel();
-    JLabel[] puLabel = new JLabel[5];
 
     /*本当は「一回 回す\n<コインの画像>×何枚」みたいにしたい*/
     /*しかしどうやらコンストラクタで画像をはさむことはできないらしい*/
     /*丸ごと画像にしたほうが早いかも… 7/6 */
-    JButton b1 = new JButton("１回 回す");
-    JButton b2 = new JButton("10回 回す");
+    JButton b1 = new JButton(gachaIcon);
+    JButton b2 = new JButton(gachaIcon);
 
     Timer timer = new Timer(false);//待機画面表示用のタイマー
     private GachaGateway.IGachaGateway gateway;
@@ -99,13 +98,33 @@ public class GachaWindow extends JFrame implements ActionListener {
         p.add(label2);
         p.setLayer(label2, 0);
 
-        b1.setBounds(100, 300, 250, 150);
+        /*ガチャボタンの表示*/
+        b1.setBounds(91, 300, 256, 160);
+        b1.setBorderPainted(false);
+        b1.setContentAreaFilled(false);
         b1.addActionListener(this);
         p.add(b1);
+        p.setLayer(b1, 0);
+        JLabel b1Label = new JLabel("１回回す");
+        b1Label.setFont(new Font("PixelMplus10", Font.BOLD, 56));
+        b1Label.setHorizontalAlignment(JLabel.CENTER);
+        b1Label.setVerticalAlignment(JLabel.CENTER);
+        b1Label.setBounds(91, 300, 256, 160);
+        p.add(b1Label);
+        p.setLayer(b1Label, 10);
 
-        b2.setBounds(482, 300, 250, 150);
+        b2.setBounds(485, 300, 256, 160);
+        b2.setBorderPainted(false);
+        b2.setContentAreaFilled(false);
         b2.addActionListener(this);
         p.add(b2);
+        JLabel b2Label = new JLabel("10回回す");
+        b2Label.setFont(new Font("PixelMplus10", Font.BOLD, 56));
+        b2Label.setHorizontalAlignment(JLabel.CENTER);
+        b2Label.setVerticalAlignment(JLabel.CENTER);
+        b2Label.setBounds(485, 300, 256, 160);
+        p.add(b2Label);
+        p.setLayer(b2Label, 10);
 
         bButton.setButtonRight(p);
         bButton.button().addActionListener(this);
@@ -184,6 +203,7 @@ public class GachaWindow extends JFrame implements ActionListener {
         p2.setLayer(waitLabel, 0);
         b1.setEnabled(false);      //待機演出中はガチャボタンは無効化する
         b2.setEnabled(false);
+        bButton.button().setEnabled(false);
 
         p2.setBounds(316, 60, 200, 200);
         p.add(p2);
@@ -196,6 +216,7 @@ public class GachaWindow extends JFrame implements ActionListener {
         /*Timerクラスは使い捨てなのでTimerTask内で定義し直す操作も行っている*/
         /*TimerTaskクラスも使い捨てだが、このメソッドを実行する際にインスタンスを新規生成して使っているので問題ない*/
         GachaMock.GachaResult result;
+        double rand = Math.random();
         try {
             result = gateway.play(user);
         } catch (Exception e) {
@@ -224,6 +245,7 @@ public class GachaWindow extends JFrame implements ActionListener {
                 p.setLayer(p2, 10);
                 b1.setEnabled(true);    //忘れずにボタンを有効化する
                 b2.setEnabled(true);
+                bButton.button().setEnabled(true);
                 getUserCoin();  //コイン数を更新する
                 base.change(p);
 
@@ -231,13 +253,15 @@ public class GachaWindow extends JFrame implements ActionListener {
                 timer = new Timer(false);
             }
         };
-        timer.schedule(gachaSingle, 2000);
+        long delay = (long)(2000*(rand*0.4+0.8));
+        timer.schedule(gachaSingle, delay);
     }
 
     public void gachaTenTimes() {
         /*やってることはgachaSingleと同じ*/
         /*TimerTask内に10回分繰り返しがあるくらい*/
         GachaMock.GachaResult[] results;
+        double rand = Math.random();
         try {
             results = this.gateway.play10(user);
         } catch (Exception e) {
@@ -269,6 +293,7 @@ public class GachaWindow extends JFrame implements ActionListener {
                 p.setLayer(p2, 10);
                 b1.setEnabled(true);    //忘れずにボタンを有効化する
                 b2.setEnabled(true);
+                bButton.button().setEnabled(true);
                 getUserCoin();  //コイン数を更新する
                 base.change(p);
 
@@ -276,7 +301,8 @@ public class GachaWindow extends JFrame implements ActionListener {
                 timer = new Timer(false);
             }
         };
-        timer.schedule(gachaTenTimes, 3000);
+        long delay = (long)(3000*(rand*0.8+0.6));
+        timer.schedule(gachaTenTimes, delay);
     }
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == b1) {
