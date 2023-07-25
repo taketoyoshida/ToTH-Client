@@ -6,9 +6,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import java.io.IOException;
 import controller.game.GameController;
 import model.*;
 import model.util.User;
@@ -31,8 +33,10 @@ public class Game extends JFrame implements KeyListener, MouseListener {
     public static User testUser2 = new User(200, "test2", 100000, 5);
     private GameModel GM;
     private GameController GC = new GameController(testUser1,testUser2);
+    private  JTextArea textArea1 = new JTextArea();
+
+    JScrollPane sp =new JScrollPane(textArea1);
     JLabel[] textLabel2 = new JLabel[24];
-    JLabel[] textLabel1 = new JLabel[8];
 
     private Timer timer = new Timer(false);
     private JLayeredPane bgPanel = new JLayeredPane();
@@ -67,12 +71,16 @@ public class Game extends JFrame implements KeyListener, MouseListener {
         bgPanel.add(label1);
         bgPanel.setLayer(label1, -10);
 
+        sp.setBounds(64,320,384,162);
+        bgPanel.add(sp);
+        bgPanel.setLayer(sp,-5);
+        textArea1.setEditable(false);
+        textArea1.setFocusable(false);
+
         gamePanel.setBounds(64, 32, 384, 256);
         bgPanel.add(gamePanel);
         bgPanel.setLayer(gamePanel, 0);
-        cursorGuidePanel.setBounds(0, 0, 384, 256);
-        gamePanel.add(cursorGuidePanel);
-        gamePanel.setLayer(cursorGuidePanel, 10);
+
 
 
         for(int i=0;i<24;i++) {
@@ -84,14 +92,9 @@ public class Game extends JFrame implements KeyListener, MouseListener {
             bgPanel.setLayer(textLabel2[i], 10);
         }
 
-        for(int i=0;i<8;i++) {
-            textLabel1[i]=new JLabel();
-            textLabel1[i].setFont(new Font("ＭＳ ゴシック", BOLD, 15));
-            textLabel1[i].setForeground(Color.WHITE);
-            textLabel1[i].setBounds(64, 16*i,326 , 600);
-            bgPanel.add(textLabel2[i]);
-            bgPanel.setLayer(textLabel2[i], 10);
-        }
+
+
+
 
         start();
 
@@ -108,8 +111,9 @@ public class Game extends JFrame implements KeyListener, MouseListener {
 
     public void start() {
         setGameBG();
-        printBoard();
         setText2();
+        setText1();
+        printBoard();
     }
 
     public void setGameBG() {
@@ -124,7 +128,15 @@ public class Game extends JFrame implements KeyListener, MouseListener {
 
     }
     public  void setText1(){
-
+        File file = new File("./src/main/java/controller/game/GameLog.txt");
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            String str;
+            while((str=br.readLine())!=null){
+                textArea1.append(str+"\n");
+            }
+        }catch (IOException ioex){
+            ioex.printStackTrace();
+        }
     }
     public void setText2(){//各キャラクタと敵のHPが出る
         textLabel2[0].setText("┌------------------┐");
@@ -174,7 +186,7 @@ public class Game extends JFrame implements KeyListener, MouseListener {
         int x = e.getX() / 32; // マスのサイズ32に合わせて割る
         int y = e.getY() / 32;
 
-        GC.processClick(x, y); // GameControllerにクリックした座標を渡す
+        System.out.println(x+" "+y);// GameControllerにクリックした座標を渡す
         printBoard();
     }
     @Override
@@ -200,6 +212,7 @@ public class Game extends JFrame implements KeyListener, MouseListener {
                         moveCharacter(100,100);
                         keyFlag = true;
                     }
+                    break;
                 case KeyEvent.VK_W:
                     if (!keyFlag) {
                         moveCharacter(0,-1);
@@ -264,28 +277,35 @@ public class Game extends JFrame implements KeyListener, MouseListener {
 
     public void moveCharacter(int X, int Y) {//キャラクターを動かす。
         if(Y == 100 && X == 100){
-            GC.setPosition(100,100);//移動終了
+            System.out.println(100+","+100);//移動終了
+            setText2();
+            setText1();
+            printBoard();
         }else if (Y == -1 && X == 0 && charPosY > 0) {
             charPosY=charPosY-1;
-            GC.setPosition(charPosX,charPosY);
+            System.out.println(charPosX+ " " +charPosY);
             setText2();
+            setText1();
             printBoard();
         } else if (Y == 1 && X == 0 && charPosY < limY - 1) {
             charPosY=charPosY+1;
-            GC.setPosition(charPosX,charPosY);
+            System.out.println(charPosX+ " " +charPosY);
+            setText1();
             setText2();
             printBoard();
 
 
         } else if (X == -1 && Y == 0 && charPosX > 0) {
             charPosX=charPosX-1;
-            GC.setPosition(charPosX,charPosY);
+            System.out.println(charPosX+ " " +charPosY);
+            setText1();
             setText2();
             printBoard();
 
         } else if (X == 1 && Y == 0 && charPosX < limX - 1) {
             charPosX=charPosX+1;
-            GC.setPosition(charPosX,charPosY);
+            System.out.println(charPosX+ " " +charPosY);
+            setText1();
             setText2();
             printBoard();
 
