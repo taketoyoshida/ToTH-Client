@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import model.EquipmentItem;
+import model.Material;
 import model.Player;
 import model.Status;
 import model.util.User;
@@ -167,10 +168,16 @@ public class MainMenu extends JFrame implements MouseListener {
     }
 
     public static void main(String args[]) {
-        User user = new User(114514, "testUser", 45590, 3);
+        User user = new User(114514, "testUser", 7974, 3);
         WindowBase base = new WindowBase("test");
         MainMenu test = new MainMenu(base, user);
         base.setVisible(true);
+
+        user.addMaterial(Material.WOOD, 300);
+        user.addMaterial(Material.IRON, 200);
+        user.addMaterial(Material.DIAMOND, 100);
+        user.addMaterial(Material.LEATHER, 300);
+        user.addMaterial(Material.BRONZE, 200);
     }
 }
 
