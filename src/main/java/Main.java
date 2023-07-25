@@ -1,4 +1,6 @@
+import model.Material;
 import view.Login;
+import view.MainMenu;
 import view.WindowBase;
 import model.util.User;
 
@@ -12,10 +14,15 @@ public class Main {
         /*表示は額縁側をvisibleにすると中身ごと表示してくれる*/
         /*keyListenerはWindowBaseクラスにつけること*/
 
-        User user = new User(114514, "testUser", 45590, 3);
-
+        User user = new User(114514, "testUser", 7974, 3);
         WindowBase base = new WindowBase("test");
-        Login frame = new Login(base, user);
+        MainMenu test = new MainMenu(base, user);
         base.setVisible(true);
+
+        user.addMaterial(Material.WOOD, 300);
+        user.addMaterial(Material.IRON, 200);
+        user.addMaterial(Material.DIAMOND, 100);
+        user.addMaterial(Material.LEATHER, 300);
+        user.addMaterial(Material.BRONZE, 200);
     }
 }
